@@ -10,6 +10,14 @@ module javafx.prod.architecturemanager {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
 
-    opens javafx.prod.architecturemanager to javafx.fxml;
-    exports javafx.prod.architecturemanager;
+    requires org.slf4j;
+    requires java.sql;
+
+    opens javafx.prod to javafx.fxml;
+    exports javafx.prod;
+
+    exports javafx.prod.layout to javafx.fxml;
+    opens javafx.prod.layout to javafx.fxml;
+
+
 }

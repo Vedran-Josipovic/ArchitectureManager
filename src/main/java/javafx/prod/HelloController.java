@@ -1,4 +1,4 @@
-package javafx.prod.architecturemanager;
+package javafx.prod;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
