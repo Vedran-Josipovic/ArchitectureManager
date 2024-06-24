@@ -1,23 +1,8 @@
-2024-06-24 14:11:45,369 INFO [main] j.p.HelloApplication [HelloApplication.java:45] Launching JavaFX application
-2024-06-24 14:11:45,442 INFO [main] j.p.HelloApplication [HelloApplication.java:48] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
-2024-06-24 14:11:47,872 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:18] Showing location add screen
-2024-06-24 14:11:51,334 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:18] Showing location add screen
-2024-06-24 14:13:26,408 INFO [main] j.p.HelloApplication [HelloApplication.java:45] Launching JavaFX application
-2024-06-24 14:13:26,488 INFO [main] j.p.HelloApplication [HelloApplication.java:48] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
-2024-06-24 14:13:29,335 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:18] Showing location add screen
-2024-06-24 14:26:15,430 INFO [main] j.p.HelloApplication [HelloApplication.java:45] Launching JavaFX application
-2024-06-24 14:26:15,510 INFO [main] j.p.HelloApplication [HelloApplication.java:48] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
-2024-06-24 14:26:18,188 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:18] Showing location add screen
-2024-06-24 14:27:33,781 INFO [main] j.p.HelloApplication [HelloApplication.java:45] Launching JavaFX application
-2024-06-24 14:27:33,852 INFO [main] j.p.HelloApplication [HelloApplication.java:48] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
-2024-06-24 14:27:35,903 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:18] Showing location add screen
-2024-06-24 14:27:38,887 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:18] Showing location add screen
-2024-06-24 14:37:50,642 INFO [main] j.p.HelloApplication [HelloApplication.java:45] Launching JavaFX application
-2024-06-24 14:37:50,710 INFO [main] j.p.HelloApplication [HelloApplication.java:48] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
-2024-06-24 14:37:52,933 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:18] Showing location add screen
-2024-06-24 14:44:05,559 INFO [main] j.p.HelloApplication [HelloApplication.java:45] Launching JavaFX application
-2024-06-24 14:44:05,628 INFO [main] j.p.HelloApplication [HelloApplication.java:48] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
-2024-06-24 14:44:07,850 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:18] Showing location add screen
-2024-06-24 14:44:45,429 INFO [main] j.p.HelloApplication [HelloApplication.java:45] Launching JavaFX application
-2024-06-24 14:44:45,526 INFO [main] j.p.HelloApplication [HelloApplication.java:48] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
-2024-06-24 14:44:47,852 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:18] Showing location add screen
+2024-06-24 18:02:36,512 INFO [main] j.p.HelloApplication [HelloApplication.java:45] Launching JavaFX application
+2024-06-24 18:02:36,591 INFO [main] j.p.HelloApplication [HelloApplication.java:48] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-06-24 18:02:41,321 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:18] Showing location add screen
+2024-06-24 18:02:43,972 WARN [JavaFX Application Thread] j.p.l.LocationAddController [LocationAddController.java:96] Please select the location type.
+2024-06-24 18:02:47,158 WARN [JavaFX Application Thread] j.p.l.LocationAddController [LocationAddController.java:93] Please fill in all fields.
+2024-06-24 18:02:49,867 WARN [JavaFX Application Thread] j.p.l.LocationAddController [LocationAddController.java:93] Please fill in all fields.
+2024-06-24 18:03:02,833 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:42] Address saved successfully
+2024-06-24 18:03:37,171 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:55] Virtual location saved successfully

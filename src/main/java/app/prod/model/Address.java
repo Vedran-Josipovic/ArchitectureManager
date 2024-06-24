@@ -3,8 +3,20 @@ package app.prod.model;
 import java.util.Objects;
 
 public class Address implements Location {
+    private Long id;
     private String street, houseNumber, city;
 
+    @Override
+    public String getFullLocationDetails() {
+        return getStreet() + " " + getHouseNumber() + ", " + getCity();
+    }
+
+    public Address(Long id, String street, String houseNumber, String city) {
+        this.id = id;
+        this.street = street;
+        this.houseNumber = houseNumber;
+        this.city = city;
+    }
 
     public Address(String street, String houseNumber, String city) {
         this.street = street;
@@ -12,9 +24,12 @@ public class Address implements Location {
         this.city = city;
     }
 
-    @Override
-    public String getFullLocationDetails() {
-        return getStreet() + " " + getHouseNumber() + ", " + getCity();
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getStreet() {
@@ -46,16 +61,18 @@ public class Address implements Location {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return Objects.equals(getStreet(), address.getStreet()) && Objects.equals(getHouseNumber(), address.getHouseNumber()) && Objects.equals(getCity(), address.getCity());
+        return Objects.equals(getId(), address.getId()) && Objects.equals(getStreet(), address.getStreet()) && Objects.equals(getHouseNumber(), address.getHouseNumber()) && Objects.equals(getCity(), address.getCity());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getStreet(), getHouseNumber(), getCity());
+        return Objects.hash(getId(), getStreet(), getHouseNumber(), getCity());
     }
 
     @Override
     public String toString() {
-        return "Address{" + "street='" + street + '\'' + ", houseNumber='" + houseNumber + '\'' + ", city='" + city + '\'' + '}';
+        return "Address{" + "id=" + id + ", street='" + street + '\'' + ", houseNumber='" + houseNumber + '\'' + ", city='" + city + '\'' + '}';
     }
+
+
 }

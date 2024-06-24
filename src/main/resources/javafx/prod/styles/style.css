@@ -25,25 +25,28 @@
 }
 
 .label {
-    -fx-text-fill: #343254; /* Dark text to stand out against the lighter background */
+    -fx-text-fill: #343254; /* Dark text color */
+    -fx-font-size: 16px;
 }
 
 .text-field {
     -fx-background-color: #ffffff; /* White background */
-    -fx-background-insets: 0, 0, 1, 2 ; /* Adjust insets for inner shadows if necessary */
-    -fx-background-radius: 5; /* Rounded corners */
+    -fx-background-radius: 5px; /* Rounded corners */
     -fx-padding: 4 7 4 7; /* Padding inside the text field */
     -fx-prompt-text-fill: #343254; /* Color for prompt text */
     -fx-text-fill: #080919; /* Color for typed text */
+    -fx-border-color: #dcdce0; /* Border color */
+    -fx-border-radius: 5px;
 }
 
 .button {
     -fx-background-color: #343254, linear-gradient(#38424b 0%, #1f2332 20%, #191d29 100%), linear-gradient(#202e50, #191d29);
     -fx-background-insets: 0,1,2; /* Insets for different background layers */
-    -fx-background-radius: 5;
+    -fx-background-radius: 10px;
     -fx-text-fill: #ecebfd; /* Light text */
     -fx-padding: 7 14 7 14; /* Top, right, bottom, left padding */
-    -fx-font-size: 12px; /* Adjust size as needed */
+    -fx-font-size: 20px; /* Adjust size as needed */
+
 }
 
 .button:hover {
@@ -79,4 +82,19 @@
     -fx-font-size: 24px; /* Adjust size for header labels */
     -fx-text-fill: #343254;
     -fx-font-weight: bold; /* Bold font weight for headers */
+}
+
+.grid-pane {
+    -fx-padding: 20px;
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+}
+
+.combo-box {
+    -fx-background-color: #ffffff; /* White background */
+    -fx-background-radius: 5px; /* Rounded corners */
+    -fx-padding: 0 7 0 7; /* Padding inside the ComboBox */
+    -fx-prompt-text-fill: #343254; /* Color for prompt text */
+    -fx-border-color: #dcdce0; /* Border color */
+    -fx-border-radius: 5px;
 }

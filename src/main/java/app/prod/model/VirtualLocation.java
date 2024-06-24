@@ -3,8 +3,16 @@ package app.prod.model;
 import java.util.Objects;
 
 public class VirtualLocation implements Location {
+    private Long id;
     private String meetingLink;
     private String platform;
+
+
+    public VirtualLocation(Long id, String meetingLink, String platform) {
+        this.id = id;
+        this.meetingLink = meetingLink;
+        this.platform = platform;
+    }
 
     public VirtualLocation(String meetingLink, String platform) {
         this.meetingLink = meetingLink;
@@ -14,6 +22,14 @@ public class VirtualLocation implements Location {
     @Override
     public String getFullLocationDetails() {
         return "Join online via " + getPlatform() + ": " + getMeetingLink();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getMeetingLink() {
@@ -37,16 +53,16 @@ public class VirtualLocation implements Location {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         VirtualLocation that = (VirtualLocation) o;
-        return Objects.equals(getMeetingLink(), that.getMeetingLink()) && Objects.equals(getPlatform(), that.getPlatform());
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getMeetingLink(), that.getMeetingLink()) && Objects.equals(getPlatform(), that.getPlatform());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMeetingLink(), getPlatform());
+        return Objects.hash(getId(), getMeetingLink(), getPlatform());
     }
 
     @Override
     public String toString() {
-        return "VirtualLocation{" + "meetingLink='" + meetingLink + '\'' + ", platform='" + platform + '\'' + '}';
+        return "VirtualLocation{" + "id=" + id + ", meetingLink='" + meetingLink + '\'' + ", platform='" + platform + '\'' + '}';
     }
 }
