@@ -19,5 +19,8 @@ module javafx.prod.architecturemanager {
     exports javafx.prod.layout to javafx.fxml;
     opens javafx.prod.layout to javafx.fxml;
 
+    exports javafx.prod.location to javafx.fxml;
+    opens javafx.prod.location to javafx.fxml;
+
 
 }

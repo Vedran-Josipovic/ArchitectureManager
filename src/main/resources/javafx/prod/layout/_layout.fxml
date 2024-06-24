@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="javafx.prod.layout.LayoutController"
+            prefHeight="1000.0" prefWidth="1500.0">
+
+    <MenuBar minHeight="45.0" minWidth="-Infinity" opacity="0.8" prefWidth="1500.0" AnchorPane.topAnchor="0.0">
+        <menus>
+            <Menu mnemonicParsing="false" text="Locations">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#showLocationAddScreen" text="Add" />
+                </items>
+            </Menu>
+        </menus>
+        <opaqueInsets>
+            <Insets />
+        </opaqueInsets>
+        <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+        </padding>
+    </MenuBar>
+
+
+</AnchorPane>

@@ -1,0 +1,82 @@
+.root {
+    -fx-background-color: #ecebfd;
+    -fx-font-size: 14px;
+}
+
+.menu-bar {
+    -fx-background-color: #343254;
+    -fx-padding: 10px;
+}
+.menu-bar .menu{
+    -fx-background-radius: 10px;
+    -fx-background-clip: rounded;
+}
+.menu-bar .menu:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+}
+.menu-bar .menu-item .label {
+    -fx-text-fill: #080919;
+}
+.menu-bar .menu-item:hover {
+    -fx-background-color: rgba(8, 9, 25, 0.3);
+}
+.menu-bar .label {
+    -fx-text-fill: #ecebfd;
+}
+
+.label {
+    -fx-text-fill: #343254; /* Dark text to stand out against the lighter background */
+}
+
+.text-field {
+    -fx-background-color: #ffffff; /* White background */
+    -fx-background-insets: 0, 0, 1, 2 ; /* Adjust insets for inner shadows if necessary */
+    -fx-background-radius: 5; /* Rounded corners */
+    -fx-padding: 4 7 4 7; /* Padding inside the text field */
+    -fx-prompt-text-fill: #343254; /* Color for prompt text */
+    -fx-text-fill: #080919; /* Color for typed text */
+}
+
+.button {
+    -fx-background-color: #343254, linear-gradient(#38424b 0%, #1f2332 20%, #191d29 100%), linear-gradient(#202e50, #191d29);
+    -fx-background-insets: 0,1,2; /* Insets for different background layers */
+    -fx-background-radius: 5;
+    -fx-text-fill: #ecebfd; /* Light text */
+    -fx-padding: 7 14 7 14; /* Top, right, bottom, left padding */
+    -fx-font-size: 12px; /* Adjust size as needed */
+}
+
+.button:hover {
+    -fx-background-color: #50558b; /* Slightly lighter color on hover */
+}
+
+.table-view {
+    -fx-base: #ecebfd; /* Background of table rows */
+}
+
+.table-view .column-header-background .label {
+    -fx-background-color: #343254; /* Background color for column headers */
+    -fx-text-fill: #ecebfd; /* Text color for column headers */
+}
+
+.table-row-cell {
+    -fx-background-color: #f4f4f9; /* Lighter background for rows for better readability */
+    -fx-border-color: #dcdce0; /* Border color for rows */
+    -fx-table-cell-border-color: #dcdce0; /* Border color for cells */
+}
+
+.table-row-cell:filled:selected {
+    -fx-background-color: #adb2d8; /* Background color for selected row */
+    -fx-text-fill: #080919; /* Text color for selected row */
+}
+
+.table-cell {
+    -fx-padding: 0.5em; /* Padding inside cells */
+}
+
+/* Optional: Style for headers and titles */
+#title {
+    -fx-font-size: 24px; /* Adjust size for header labels */
+    -fx-text-fill: #343254;
+    -fx-font-weight: bold; /* Bold font weight for headers */
+}
