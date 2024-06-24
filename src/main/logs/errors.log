@@ -1,8 +1,39 @@
-2024-06-24 18:02:36,512 INFO [main] j.p.HelloApplication [HelloApplication.java:45] Launching JavaFX application
-2024-06-24 18:02:36,591 INFO [main] j.p.HelloApplication [HelloApplication.java:48] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
-2024-06-24 18:02:41,321 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:18] Showing location add screen
-2024-06-24 18:02:43,972 WARN [JavaFX Application Thread] j.p.l.LocationAddController [LocationAddController.java:96] Please select the location type.
-2024-06-24 18:02:47,158 WARN [JavaFX Application Thread] j.p.l.LocationAddController [LocationAddController.java:93] Please fill in all fields.
-2024-06-24 18:02:49,867 WARN [JavaFX Application Thread] j.p.l.LocationAddController [LocationAddController.java:93] Please fill in all fields.
-2024-06-24 18:03:02,833 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:42] Address saved successfully
-2024-06-24 18:03:37,171 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:55] Virtual location saved successfully
+2024-06-24 23:44:30,068 INFO [main] j.p.HelloApplication [HelloApplication.java:45] Launching JavaFX application
+2024-06-24 23:44:30,145 INFO [main] j.p.HelloApplication [HelloApplication.java:48] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-06-24 23:44:33,946 INFO [main] j.p.HelloApplication [HelloApplication.java:45] Launching JavaFX application
+2024-06-24 23:44:34,016 INFO [main] j.p.HelloApplication [HelloApplication.java:48] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-06-24 23:44:36,125 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:46] Showing transaction search screen
+2024-06-24 23:44:40,349 ERROR [JavaFX Application Thread] j.p.u.JavaFxUtils [JavaFxUtils.java:41] Invalid format for type java.math.BigDecimal: [null]
+2024-06-24 23:44:40,349 ERROR [JavaFX Application Thread] j.p.u.JavaFxUtils [JavaFxUtils.java:41] Invalid format for type java.math.BigDecimal: [null]
+2024-06-24 23:44:40,356 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:160] prep0: SELECT * FROM TRANSACTION WHERE 1=1 AND AMOUNT BETWEEN ? AND ?
+2024-06-24 23:44:40,360 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:175] rs0: columns: 6 rows: 10 pos: -1
+2024-06-24 23:44:40,362 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:177] [Entity{id=1, name='Projektni honorar'}, Entity{id=2, name='Konsultantske usluge'}, Entity{id=3, name='Prodaja nacrta'}, Entity{id=4, name='Subvencija'}, Entity{id=5, name='Donacija'}, Entity{id=6, name='Najam ureda'}, Entity{id=7, name='Režije'}, Entity{id=8, name='Nabava materijala'}, Entity{id=9, name='Softverske licence'}, Entity{id=10, name='Poslovni ručak'}]
+2024-06-24 23:44:54,808 ERROR [JavaFX Application Thread] j.p.u.JavaFxUtils [JavaFxUtils.java:41] Invalid format for type java.math.BigDecimal: [null]
+2024-06-24 23:44:54,809 ERROR [JavaFX Application Thread] j.p.u.JavaFxUtils [JavaFxUtils.java:41] Invalid format for type java.math.BigDecimal: [null]
+2024-06-24 23:44:54,812 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:160] prep1: SELECT * FROM TRANSACTION WHERE 1=1 AND TRANSACTION_TYPE = ? AND AMOUNT BETWEEN ? AND ?
+2024-06-24 23:44:54,813 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:175] rs1: columns: 6 rows: 5 pos: -1
+2024-06-24 23:44:54,814 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:177] [Entity{id=1, name='Projektni honorar'}, Entity{id=2, name='Konsultantske usluge'}, Entity{id=3, name='Prodaja nacrta'}, Entity{id=4, name='Subvencija'}, Entity{id=5, name='Donacija'}]
+2024-06-24 23:44:57,965 ERROR [JavaFX Application Thread] j.p.u.JavaFxUtils [JavaFxUtils.java:41] Invalid format for type java.math.BigDecimal: [null]
+2024-06-24 23:44:57,966 ERROR [JavaFX Application Thread] j.p.u.JavaFxUtils [JavaFxUtils.java:41] Invalid format for type java.math.BigDecimal: [null]
+2024-06-24 23:44:57,970 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:160] prep2: SELECT * FROM TRANSACTION WHERE 1=1 AND TRANSACTION_TYPE = ? AND AMOUNT BETWEEN ? AND ?
+2024-06-24 23:44:57,970 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:175] rs2: columns: 6 rows: 5 pos: -1
+2024-06-24 23:44:57,971 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:177] [Entity{id=6, name='Najam ureda'}, Entity{id=7, name='Režije'}, Entity{id=8, name='Nabava materijala'}, Entity{id=9, name='Softverske licence'}, Entity{id=10, name='Poslovni ručak'}]
+2024-06-24 23:45:04,816 ERROR [JavaFX Application Thread] j.p.u.JavaFxUtils [JavaFxUtils.java:41] Invalid format for type java.math.BigDecimal: [null]
+2024-06-24 23:45:04,821 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:160] prep3: SELECT * FROM TRANSACTION WHERE 1=1 AND TRANSACTION_TYPE = ? AND AMOUNT BETWEEN ? AND ?
+2024-06-24 23:45:04,821 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:175] rs3: columns: 6 rows: 2 pos: -1
+2024-06-24 23:45:04,821 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:177] [Entity{id=6, name='Najam ureda'}, Entity{id=8, name='Nabava materijala'}]
+2024-06-24 23:45:10,644 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:160] prep4: SELECT * FROM TRANSACTION WHERE 1=1 AND TRANSACTION_TYPE = ? AND AMOUNT BETWEEN ? AND ?
+2024-06-24 23:45:10,645 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:175] rs4: columns: 6 rows: 1 pos: -1
+2024-06-24 23:45:10,645 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:177] [Entity{id=8, name='Nabava materijala'}]
+2024-06-24 23:46:56,985 INFO [main] j.p.HelloApplication [HelloApplication.java:45] Launching JavaFX application
+2024-06-24 23:46:57,069 INFO [main] j.p.HelloApplication [HelloApplication.java:48] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-06-24 23:46:59,022 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:46] Showing transaction search screen
+2024-06-24 23:47:00,517 ERROR [JavaFX Application Thread] j.p.u.JavaFxUtils [JavaFxUtils.java:41] Invalid format for type java.math.BigDecimal: [null]
+2024-06-24 23:47:00,517 ERROR [JavaFX Application Thread] j.p.u.JavaFxUtils [JavaFxUtils.java:41] Invalid format for type java.math.BigDecimal: [null]
+2024-06-24 23:47:00,524 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:160] prep0: SELECT * FROM TRANSACTION WHERE 1=1 AND AMOUNT BETWEEN ? AND ?
+2024-06-24 23:47:00,528 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:175] rs0: columns: 6 rows: 10 pos: -1
+2024-06-24 23:47:00,530 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:177] [Entity{id=1, name='Projektni honorar'}, Entity{id=2, name='Konsultantske usluge'}, Entity{id=3, name='Prodaja nacrta'}, Entity{id=4, name='Subvencija'}, Entity{id=5, name='Donacija'}, Entity{id=6, name='Najam ureda'}, Entity{id=7, name='Režije'}, Entity{id=8, name='Nabava materijala'}, Entity{id=9, name='Softverske licence'}, Entity{id=10, name='Poslovni ručak'}]
+2024-06-24 23:47:15,203 INFO [main] j.p.HelloApplication [HelloApplication.java:45] Launching JavaFX application
+2024-06-24 23:47:15,268 INFO [main] j.p.HelloApplication [HelloApplication.java:48] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-06-24 23:47:17,617 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:32] Showing transaction add screen
+2024-06-24 23:47:27,094 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:46] Showing transaction search screen

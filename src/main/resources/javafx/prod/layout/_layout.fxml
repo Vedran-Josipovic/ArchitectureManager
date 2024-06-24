@@ -20,6 +20,13 @@
                     <MenuItem mnemonicParsing="false" onAction="#showLocationAddScreen" text="Add" />
                 </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Transactions">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#showTransactionAddScreen" text="Add" />
+                    <MenuItem mnemonicParsing="false" onAction="#showTransactionSearchScreen" text="Search" />
+                </items>
+            </Menu>
+
         </menus>
         <opaqueInsets>
             <Insets />

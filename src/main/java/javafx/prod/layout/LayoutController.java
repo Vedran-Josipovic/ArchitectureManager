@@ -28,6 +28,34 @@ public class LayoutController {
         }
     }
 
+    public void showTransactionAddScreen() {
+        logger.info("Showing transaction add screen");
+        FXMLLoader fxmlLoader = new FXMLLoader(javafx.prod.HelloApplication.class.getResource("/javafx/prod/transaction/transactionAdd.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.width, HelloApplication.height);
+            scene.getStylesheets().add(css);
+            HelloApplication.getMainStage().setTitle("Add a transaction");
+            HelloApplication.getMainStage().setScene(scene);
+            HelloApplication.getMainStage().show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void showTransactionSearchScreen() {
+        logger.info("Showing transaction search screen");
+        FXMLLoader fxmlLoader = new FXMLLoader(javafx.prod.HelloApplication.class.getResource("/javafx/prod/transaction/transactionSearch.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.width, HelloApplication.height);
+            scene.getStylesheets().add(css);
+            HelloApplication.getMainStage().setTitle("Search transactions");
+            HelloApplication.getMainStage().setScene(scene);
+            HelloApplication.getMainStage().show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
 }
