@@ -12,11 +12,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class TransactionAddController {
+    Logger logger = LoggerFactory.getLogger(TransactionAddController.class);
+
     @FXML
     private TextField transactionNameTextField;
     @FXML
@@ -50,10 +54,13 @@ public class TransactionAddController {
                     .build();
 
             DatabaseUtils.saveTransaction(transaction);
-            JavaFxUtils.clearForm();
+
+            JavaFxUtils.clearForm(transactionNameTextField, transactionTypeComboBox, amountTextField, descriptionTextField, dateDatePicker);
+
             JavaFxUtils.showAlert(Alert.AlertType.INFORMATION, "Success", "Transaction added successfully.");
         } catch (TransactionAmountException | entityInitializationException | ValidationException ex) {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Validation Error", ex.getMessage());
+            logger.error("Error while adding transaction: " + ex.getMessage());
         }
     }
 

@@ -13,11 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionSearchController {
-    private static final Logger logger = LoggerFactory.getLogger(TransactionSearchController.class);
     private final ObservableList<String> transactionTypeNames = FXCollections.observableArrayList();
 
     @FXML
@@ -32,8 +32,6 @@ public class TransactionSearchController {
     private TextField maxAmountTextField;
     @FXML
     private TableView<Transaction> transactionTableView;
-    @FXML
-    private TableColumn<Transaction, String> transactionIdTableColumn;
     @FXML
     private TableColumn<Transaction, String> transactionNameTableColumn;
     @FXML
@@ -60,33 +58,35 @@ public class TransactionSearchController {
         transactionNameTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getName()));
         transactionTypeTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getTransactionType().getName()));
         transactionAmountTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getAmount().toString()));
-        transactionDateTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getDate().toString()));
+
+        transactionDateTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getDate().format(DateTimeFormatter.ofPattern("dd. MMM yyyy."))));
+
         transactionDescriptionTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getDescription()));
+
     }
+
+
 
     public void transactionSearch() {
         BigDecimal minAmount = JavaFxUtils.parseNumberSafely(minAmountTextField.getText(), BigDecimal.class);
-        if (minAmount == null && !minAmountTextField.getText().isEmpty()) {
-            JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Error", "Invalid minimum amount format");
-            return;
-        }
-
-        if (minAmount == null && minAmountTextField.getText().isEmpty()){
+        if (minAmount == null) {
+            if (!minAmountTextField.getText().isEmpty()) {
+                JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Error", "Invalid minimum amount format");
+                return;
+            }
             minAmount = BigDecimal.valueOf(Long.MIN_VALUE);
         }
 
         BigDecimal maxAmount = JavaFxUtils.parseNumberSafely(maxAmountTextField.getText(), BigDecimal.class);
-        if (maxAmount == null && !maxAmountTextField.getText().isEmpty()) {
-            JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Error", "Invalid maximum amount format");
-            return;
-        }
-
-        if (maxAmount == null && maxAmountTextField.getText().isEmpty()){
+        if (maxAmount == null) {
+            if (!maxAmountTextField.getText().isEmpty()) {
+                JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Error", "Invalid maximum amount format");
+                return;
+            }
             maxAmount = BigDecimal.valueOf(Long.MAX_VALUE);
         }
 
-
-        if ((minAmount != null && maxAmount != null) && minAmount.compareTo(maxAmount) > 0) {
+        if (minAmount.compareTo(maxAmount) > 0) {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Error", "Minimum amount can't be greater than maximum amount");
             return;
         }
@@ -102,12 +102,10 @@ public class TransactionSearchController {
         if (!transactionNameTextField.getText().isEmpty()) {
             filter.setName(transactionNameTextField.getText());
         }
-        if (transactionTypeComboBox.getValue() != null && !transactionTypeComboBox.getValue().equals("All")) {
-            if (transactionTypeComboBox.getValue().equals(TransactionType.INCOME.getName())) {
-                filter.setTransactionType(TransactionType.INCOME);
-            } else if (transactionTypeComboBox.getValue().equals(TransactionType.EXPENSE.getName())) {
-                filter.setTransactionType(TransactionType.EXPENSE);
-            }
+        String type = transactionTypeComboBox.getValue();
+        if (type != null && !type.equals("All")) {
+            if (type.equals(TransactionType.INCOME.getName())) filter.setTransactionType(TransactionType.INCOME);
+            else if (type.equals(TransactionType.EXPENSE.getName())) filter.setTransactionType(TransactionType.EXPENSE);
         }
         if (transactionDateDatePicker.getValue() != null) {
             filter.setDate(transactionDateDatePicker.getValue());

@@ -1,15 +1,13 @@
 package javafx.prod.utils;
 
-import app.prod.utils.DatabaseUtils;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextInputControl;
+import javafx.scene.control.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 
 public class JavaFxUtils {
-    private static Logger logger = LoggerFactory.getLogger(JavaFxUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(JavaFxUtils.class);
 
     public static void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
@@ -19,8 +17,16 @@ public class JavaFxUtils {
         alert.showAndWait();
     }
 
-    public static void clearForm(TextInputControl... fields) {
-        for (var f : fields) f.clear();
+    public static void clearForm(Control... controls) {
+        for (Control control : controls) {
+            if (control instanceof TextInputControl) {
+                ((TextInputControl) control).clear();
+            } else if (control instanceof ComboBox) {
+                ((ComboBox<?>) control).getSelectionModel().clearSelection();
+            } else if (control instanceof DatePicker) {
+                ((DatePicker) control).setValue(null);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -14,7 +14,7 @@ import app.prod.model.VirtualLocation;
 import org.slf4j.*;
 
 public class DatabaseUtils {
-    private static Logger logger = LoggerFactory.getLogger(DatabaseUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseUtils.class);
     private static final String DATABASE_FILE = "conf/database.properties";
 
     //Make private when it won't be used in Main
@@ -101,9 +101,7 @@ public class DatabaseUtils {
             Transaction transaction = new Transaction();
             transaction.setId(resultSet.getLong("ID"));
             transaction.setName(resultSet.getString("NAME"));
-
             transaction.setTransactionType(TransactionType.valueOf(resultSet.getString("TRANSACTION_TYPE").toUpperCase()));
-
             transaction.setAmount(resultSet.getBigDecimal("AMOUNT"));
             transaction.setDescription(resultSet.getString("DESCRIPTION"));
             transaction.setDate(resultSet.getDate("DATE").toLocalDate());
@@ -121,11 +119,6 @@ public class DatabaseUtils {
         try (Connection connection = connectToDatabase()) {
             StringBuilder baseSqlQuery = new StringBuilder("SELECT * FROM TRANSACTION WHERE 1=1");
 
-            if (Optional.ofNullable(transactionFilter.getId()).isPresent()) {
-                baseSqlQuery.append(" AND ID = ?");
-                queryParams.put(paramOrdinalNumber++, transactionFilter.getId());
-            }
-
             if (Optional.ofNullable(transactionFilter.getName()).filter(s -> !s.isEmpty()).isPresent()) {
                 baseSqlQuery.append(" AND LOWER(NAME) LIKE ?");
                 queryParams.put(paramOrdinalNumber++, "%" + transactionFilter.getName().toLowerCase() + "%");
@@ -141,8 +134,6 @@ public class DatabaseUtils {
                 queryParams.put(paramOrdinalNumber++, Date.valueOf(transactionFilter.getDate()));
             }
 
-
-            //Možda popraviti poslije
             if (minAmount != null && maxAmount != null) {
                 baseSqlQuery.append(" AND AMOUNT BETWEEN ? AND ?");
                 queryParams.put(paramOrdinalNumber++, minAmount);
@@ -174,11 +165,10 @@ public class DatabaseUtils {
             ResultSet resultSet = preparedStatement.executeQuery();
             logger.info(resultSet.toString());
             transactions = mapResultSetToTransactionList(resultSet);
-            logger.info(transactions.toString());
+            transactions.forEach(t -> logger.info(t.toString()));
         } catch (SQLException | IOException ex) {
             String message = "An error occurred while retrieving filtered transactions from the database!";
             logger.error(message, ex);
-            System.out.println(message);
         }
         return transactions;
     }

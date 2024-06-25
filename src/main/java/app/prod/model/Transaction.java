@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Transaction extends Entity {
     private static final Logger logger = LoggerFactory.getLogger(Transaction.class);
@@ -53,6 +54,32 @@ public class Transaction extends Entity {
         this.date = date;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Transaction that = (Transaction) o;
+        return getTransactionType() == that.getTransactionType() && Objects.equals(getAmount(), that.getAmount()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getDate(), that.getDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getTransactionType(), getAmount(), getDescription(), getDate());
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "transactionType=" + transactionType +
+                ", amount=" + amount +
+                ", description='" + description + '\'' +
+                ", date=" + date +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                "} " + super.toString();
+    }
+
     public static class Builder {
         private Long id;
         private String name;
@@ -95,10 +122,9 @@ public class Transaction extends Entity {
             Transaction transaction = new Transaction();
             //Pri korištenju tapraviti while petlju sa try-catch
             //Ovo se koristi negdje drugdje, možda dodati klasu/sučelje sa statičkim validation metodama
-            if (id == null || name == null || name.isEmpty()) {
-                throw new entityInitializationException("Task must have a non-null id and a non-empty name.");
+            if (name == null || name.isEmpty()) {
+                throw new entityInitializationException("Transaction must have a non-empty name.");
             }
-            //logger.info("Transaction {" + id + "} amount: {" + amount + "}");
             validateTransactionAmount();
 
 
