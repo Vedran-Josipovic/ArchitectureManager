@@ -22,8 +22,14 @@
                     <MenuItem mnemonicParsing="false" onAction="#showTransactionSearchScreen" text="Search" />
                 </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Clients">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#showClientAddScreen" text="Add" />
+                    <MenuItem mnemonicParsing="false" onAction="#showClientSearchScreen" text="Search" />
+                </items>
+            </Menu>
 
-                          </menus>
+        </menus>
         <opaqueInsets>
             <Insets />
         </opaqueInsets>

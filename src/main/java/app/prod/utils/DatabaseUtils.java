@@ -189,6 +189,69 @@ public class DatabaseUtils {
         return transactionDataList;
     }
 
+    public static List<Client> getClientsByFilters(Client clientFilter) {
+        List<Client> clients = new ArrayList<>();
+        Map<Integer, Object> queryParams = new HashMap<>();
+        int paramOrdinalNumber = 1;
+
+        try (Connection connection = connectToDatabase()) {
+            StringBuilder baseSqlQuery = new StringBuilder("SELECT * FROM CLIENT WHERE 1=1");
+
+            if (Optional.ofNullable(clientFilter.getId()).isPresent()) {
+                baseSqlQuery.append(" AND ID = ?");
+                queryParams.put(paramOrdinalNumber++, clientFilter.getId());
+            }
+
+            if (Optional.ofNullable(clientFilter.getName()).filter(s -> !s.isEmpty()).isPresent()) {
+                baseSqlQuery.append(" AND LOWER(NAME) LIKE ?");
+                queryParams.put(paramOrdinalNumber++, "%" + clientFilter.getName().toLowerCase() + "%");
+            }
+
+            if (Optional.ofNullable(clientFilter.getEmail()).filter(s -> !s.isEmpty()).isPresent()) {
+                baseSqlQuery.append(" AND LOWER(EMAIL) LIKE ?");
+                queryParams.put(paramOrdinalNumber++, "%" + clientFilter.getEmail().toLowerCase() + "%");
+            }
+
+            if (Optional.ofNullable(clientFilter.getCompanyName()).filter(s -> !s.isEmpty()).isPresent()) {
+                baseSqlQuery.append(" AND LOWER(COMPANY_NAME) LIKE ?");
+                queryParams.put(paramOrdinalNumber++, "%" + clientFilter.getCompanyName().toLowerCase() + "%");
+            }
+
+            PreparedStatement preparedStatement = connection.prepareStatement(baseSqlQuery.toString());
+            logger.info(preparedStatement.toString());
+
+            for (Integer paramNumber : queryParams.keySet()) {
+                if (queryParams.get(paramNumber) instanceof String stringQueryParam) {
+                    preparedStatement.setString(paramNumber, stringQueryParam);
+                } else if (queryParams.get(paramNumber) instanceof Long longQueryParam) {
+                    preparedStatement.setLong(paramNumber, longQueryParam);
+                }
+            }
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            logger.info(resultSet.toString());
+            clients = mapResultSetToClientList(resultSet);
+            clients.forEach(c -> logger.info(c.toString()));
+        } catch (SQLException | IOException ex) {
+            String message = "An error occurred while retrieving filtered clients from the database!";
+            logger.error(message, ex);
+        }
+        return clients;
+    }
+
+    private static List<Client> mapResultSetToClientList(ResultSet resultSet) throws SQLException {
+        List<Client> clients = new ArrayList<>();
+        while (resultSet.next()) {
+            Client client = new Client();
+            client.setId(resultSet.getLong("ID"));
+            client.setName(resultSet.getString("NAME"));
+            client.setEmail(resultSet.getString("EMAIL"));
+            client.setCompanyName(resultSet.getString("COMPANY_NAME"));
+            clients.add(client);
+        }
+        return clients;
+    }
+
 
 
 

@@ -2,7 +2,7 @@ package app.prod.model;
 
 import app.prod.enumeration.TransactionType;
 import app.prod.exception.TransactionAmountException;
-import app.prod.exception.entityInitializationException;
+import app.prod.exception.EntityInitializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,12 +118,12 @@ public class Transaction extends Entity {
             return this;
         }
 
-        public Transaction build() throws entityInitializationException, TransactionAmountException {
+        public Transaction build() throws EntityInitializationException, TransactionAmountException {
             Transaction transaction = new Transaction();
             //Pri korištenju tapraviti while petlju sa try-catch
             //Ovo se koristi negdje drugdje, možda dodati klasu/sučelje sa statičkim validation metodama
             if (name == null || name.isEmpty()) {
-                throw new entityInitializationException("Transaction must have a non-empty name.");
+                throw new EntityInitializationException("Transaction must have a non-empty name.");
             }
             validateTransactionAmount();
 

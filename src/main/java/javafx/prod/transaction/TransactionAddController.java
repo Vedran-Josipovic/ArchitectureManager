@@ -3,7 +3,7 @@ package javafx.prod.transaction;
 import app.prod.enumeration.TransactionType;
 import app.prod.exception.TransactionAmountException;
 import app.prod.exception.ValidationException;
-import app.prod.exception.entityInitializationException;
+import app.prod.exception.EntityInitializationException;
 import app.prod.model.Transaction;
 import app.prod.utils.DatabaseUtils;
 import javafx.fxml.FXML;
@@ -58,7 +58,7 @@ public class TransactionAddController {
             JavaFxUtils.clearForm(transactionNameTextField, transactionTypeComboBox, amountTextField, descriptionTextField, dateDatePicker);
 
             JavaFxUtils.showAlert(Alert.AlertType.INFORMATION, "Success", "Transaction added successfully.");
-        } catch (TransactionAmountException | entityInitializationException | ValidationException ex) {
+        } catch (TransactionAmountException | EntityInitializationException | ValidationException ex) {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Validation Error", ex.getMessage());
             logger.error("Error while adding transaction: " + ex.getMessage());
         }
