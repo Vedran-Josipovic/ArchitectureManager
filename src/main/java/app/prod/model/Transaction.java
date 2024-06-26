@@ -127,21 +127,12 @@ public class Transaction extends Entity {
             }
             validateTransactionAmount();
 
-
             transaction.id = this.id;
             transaction.name = this.name;
             transaction.transactionType = this.transactionType;
             transaction.amount = this.amount;
             transaction.description = this.description;
             transaction.date = this.date;
-
-            //Ažuriranje bilance računa
-            if (transaction.transactionType == TransactionType.EXPENSE) {
-                BankAccount.subtractAmount(this.amount);
-            } else if (transaction.transactionType == TransactionType.INCOME) {
-                BankAccount.addAmount(this.amount);
-            }
-            //Ažuriranje bilance računa
 
             return transaction;
         }

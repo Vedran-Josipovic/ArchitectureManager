@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-
 <?import javafx.geometry.Insets?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="javafx.prod.layout.LayoutController"
-            prefHeight="1000.0" prefWidth="1500.0">
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
 
-    <MenuBar minHeight="45.0" minWidth="-Infinity" opacity="0.8" prefWidth="1500.0" AnchorPane.topAnchor="0.0">
+<AnchorPane prefHeight="1000.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.prod.layout.LayoutController">
+
+                      <MenuBar minHeight="45.0" minWidth="-Infinity" opacity="0.8" prefHeight="45.0" prefWidth="1200.0" AnchorPane.topAnchor="0.0">
         <menus>
             <Menu mnemonicParsing="false" text="Locations">
                 <items>
@@ -27,7 +23,7 @@
                 </items>
             </Menu>
 
-        </menus>
+                          </menus>
         <opaqueInsets>
             <Insets />
         </opaqueInsets>
@@ -35,6 +31,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
         </padding>
     </MenuBar>
+   <Label id="balanceLabel" fx:id="AccountBalance" alignment="CENTER_RIGHT" layoutX="1200.0" prefHeight="45.0" prefWidth="300.0" text="Account Balance: " textAlignment="CENTER" />
 
 
 </AnchorPane>

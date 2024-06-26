@@ -7,10 +7,7 @@ import java.io.*;
 import java.sql.*;
 
 import app.prod.enumeration.TransactionType;
-import app.prod.model.Address;
-import app.prod.model.Location;
-import app.prod.model.Transaction;
-import app.prod.model.VirtualLocation;
+import app.prod.model.*;
 import org.slf4j.*;
 
 public class DatabaseUtils {
@@ -172,6 +169,27 @@ public class DatabaseUtils {
         }
         return transactions;
     }
+
+    public static List<TransactionRecord<TransactionType, BigDecimal>> getTransactionData() {
+        List<TransactionRecord<TransactionType, BigDecimal>> transactionDataList = new ArrayList<>();
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT TRANSACTION_TYPE, AMOUNT FROM TRANSACTION";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            while (resultSet.next()) {
+                TransactionType transactionType = TransactionType.valueOf(resultSet.getString("TRANSACTION_TYPE").toUpperCase());
+                BigDecimal amount = resultSet.getBigDecimal("AMOUNT");
+                transactionDataList.add(new TransactionRecord<>(transactionType, amount));
+            }
+        } catch (SQLException | IOException e) {
+            String message = "An error occurred while connecting to the database!";
+            logger.error(message, e);
+            System.out.println(message);
+        }
+        return transactionDataList;
+    }
+
+
 
 
 

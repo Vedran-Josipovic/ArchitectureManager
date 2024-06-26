@@ -1,9 +1,15 @@
 package javafx.prod.layout;
 
+import app.prod.thread.BankAccountThread;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.prod.HelloApplication;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.scene.control.Label;
+import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,8 +17,24 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class LayoutController {
+    @FXML
+    private Label AccountBalance;
+
     private static final Logger logger = LoggerFactory.getLogger(LayoutController.class);
     public String css = Objects.requireNonNull(getClass().getResource("/javafx/prod/styles/style.css")).toExternalForm();
+
+    public void initialize() {
+        BankAccountThread.startBalanceRefresher();
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            Platform.runLater(() -> {
+                AccountBalance.setText("Account balance: " + BankAccountThread.getAccountBalance() + " €");
+            });
+        }));
+
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
 
     public void showLocationAddScreen() {
         logger.info("Showing location add screen");
@@ -55,7 +77,4 @@ public class LayoutController {
             throw new RuntimeException(e);
         }
     }
-
-
-
 }

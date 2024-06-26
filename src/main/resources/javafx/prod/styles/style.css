@@ -29,6 +29,14 @@
     -fx-font-size: 16px;
 }
 
+#balanceLabel {
+    -fx-background-color: rgba(52, 50, 84, 0.8);
+    -fx-text-fill: #ecebfd;
+    -fx-padding: 10px;
+}
+
+
+
 .text-field {
     -fx-background-color: #ffffff; /* White background */
     -fx-background-radius: 5px; /* Rounded corners */
