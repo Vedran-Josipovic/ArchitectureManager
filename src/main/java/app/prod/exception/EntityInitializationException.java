@@ -1,6 +1,6 @@
 package app.prod.exception;
 
-public class EntityInitializationException extends Exception{
+public class EntityInitializationException extends RuntimeException{
     public EntityInitializationException() {
     }
 

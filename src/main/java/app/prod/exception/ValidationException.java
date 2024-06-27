@@ -2,7 +2,7 @@ package app.prod.exception;
 
 import java.security.PrivilegedActionException;
 
-public class ValidationException extends Exception{
+public class ValidationException extends RuntimeException{
     /**
      * Constructs a new exception with {@code null} as its detail message.
      * The cause is not initialized, and may subsequently be initialized by a

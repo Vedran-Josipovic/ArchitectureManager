@@ -28,6 +28,13 @@
                     <MenuItem mnemonicParsing="false" onAction="#showClientSearchScreen" text="Search" />
                 </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Projects">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#showProjectAddScreen" text="Add" />
+                    <MenuItem mnemonicParsing="false" onAction="#showProjectSearchScreen" text="Search" />
+                </items>
+            </Menu>
+
 
         </menus>
         <opaqueInsets>

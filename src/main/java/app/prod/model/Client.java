@@ -77,10 +77,6 @@ public class Client extends Entity {
 
     @Override
     public String toString() {
-        return "Client{" +
-                "email='" + email + '\'' +
-                ", companyName='" + companyName + '\'' +
-                ", projects=" + projects +
-                "} " + super.toString();
+        return getCompanyName();
     }
 }

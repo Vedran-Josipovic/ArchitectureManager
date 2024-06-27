@@ -31,5 +31,8 @@ module javafx.prod.architecturemanager {
     exports javafx.prod.client to javafx.fxml;
     opens javafx.prod.client to javafx.fxml;
 
+    exports javafx.prod.project to javafx.fxml;
+    opens javafx.prod.project to javafx.fxml;
+
 
 }

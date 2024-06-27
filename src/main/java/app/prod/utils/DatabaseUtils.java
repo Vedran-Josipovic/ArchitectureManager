@@ -6,6 +6,7 @@ import java.util.*;
 import java.io.*;
 import java.sql.*;
 
+import app.prod.enumeration.Status;
 import app.prod.enumeration.TransactionType;
 import app.prod.model.*;
 import org.slf4j.*;
@@ -252,21 +253,132 @@ public class DatabaseUtils {
         return clients;
     }
 
-public static void saveClient(Client client) {
+    public static void saveClient(Client client) {
+            try (Connection connection = connectToDatabase()) {
+                String insertClientSql = "INSERT INTO CLIENT (NAME, EMAIL, COMPANY_NAME) VALUES (?, ?, ?);";
+                PreparedStatement preparedStatement = connection.prepareStatement(insertClientSql);
+                preparedStatement.setString(1, client.getName());
+                preparedStatement.setString(2, client.getEmail());
+                preparedStatement.setString(3, client.getCompanyName());
+                preparedStatement.execute();
+                logger.info("Client saved successfully.");
+            } catch (SQLException | IOException ex) {
+                String message = "An error occurred while saving client to database!";
+                logger.error(message, ex);
+                System.out.println(message);
+            }
+        }
+
+    public static List<Client> getClients() {
+        List<Client> clients = new ArrayList<>();
         try (Connection connection = connectToDatabase()) {
-            String insertClientSql = "INSERT INTO CLIENT (NAME, EMAIL, COMPANY_NAME) VALUES (?, ?, ?);";
-            PreparedStatement preparedStatement = connection.prepareStatement(insertClientSql);
-            preparedStatement.setString(1, client.getName());
-            preparedStatement.setString(2, client.getEmail());
-            preparedStatement.setString(3, client.getCompanyName());
-            preparedStatement.execute();
-            logger.info("Client saved successfully.");
-        } catch (SQLException | IOException ex) {
-            String message = "An error occurred while saving client to database!";
-            logger.error(message, ex);
+            String sqlQuery = "SELECT * FROM CLIENT";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            clients = mapResultSetToClientList(resultSet);
+        } catch (SQLException | IOException e) {
+            String message = "An error occurred while connecting to the database!";
+            logger.error(message, e);
             System.out.println(message);
         }
+        return clients;
     }
+
+    private static List<Project> mapResultSetToProjectList(ResultSet resultSet) throws SQLException {
+        List<Project> projects = new ArrayList<>();
+        while (resultSet.next()) {
+            Client client = getClientById(resultSet.getLong("CLIENT_ID"));
+            Project project = new Project(
+                    resultSet.getLong("ID"),
+                    resultSet.getString("NAME"),
+                    resultSet.getString("DESCRIPTION"),
+                    resultSet.getDate("START_DATE").toLocalDate(),
+                    resultSet.getDate("DEADLINE").toLocalDate(),
+                    Status.valueOf(resultSet.getString("STATUS")),
+                    client,
+                    null,
+                    null,
+                    null
+            );
+            projects.add(project);
+        }
+        return projects;
+    }
+
+    public static List<Project> getProjectsByFilters(Project projectFilter) {
+        List<Project> projects = new ArrayList<>();
+        Map<Integer, Object> queryParams = new HashMap<>();
+        int paramOrdinalNumber = 1;
+
+        try (Connection connection = connectToDatabase()) {
+            StringBuilder baseSqlQuery = new StringBuilder("SELECT * FROM PROJECT WHERE 1=1");
+
+            if (Optional.ofNullable(projectFilter.getName()).filter(s -> !s.isEmpty()).isPresent()) {
+                baseSqlQuery.append(" AND LOWER(NAME) LIKE ?");
+                queryParams.put(paramOrdinalNumber++, "%" + projectFilter.getName().toLowerCase() + "%");
+            }
+
+            if (Optional.ofNullable(projectFilter.getDescription()).filter(s -> !s.isEmpty()).isPresent()) {
+                baseSqlQuery.append(" AND LOWER(DESCRIPTION) LIKE ?");
+                queryParams.put(paramOrdinalNumber++, "%" + projectFilter.getDescription().toLowerCase() + "%");
+            }
+
+            if (Optional.ofNullable(projectFilter.getStartDate()).isPresent()) {
+                baseSqlQuery.append(" AND START_DATE >= ?");
+                queryParams.put(paramOrdinalNumber++, Date.valueOf(projectFilter.getStartDate()));
+            }
+
+            if (Optional.ofNullable(projectFilter.getDeadline()).isPresent()) {
+                baseSqlQuery.append(" AND DEADLINE <= ?");
+                queryParams.put(paramOrdinalNumber++, Date.valueOf(projectFilter.getDeadline()));
+            }
+
+            if (Optional.ofNullable(projectFilter.getStatus()).isPresent()) {
+                baseSqlQuery.append(" AND STATUS = ?");
+                queryParams.put(paramOrdinalNumber++, projectFilter.getStatus().name());
+            }
+
+            if (Optional.ofNullable(projectFilter.getClient()).isPresent()) {
+                baseSqlQuery.append(" AND CLIENT_ID = ?");
+                queryParams.put(paramOrdinalNumber++, projectFilter.getClient().getId());
+            }
+
+            PreparedStatement preparedStatement = connection.prepareStatement(baseSqlQuery.toString());
+            for (Map.Entry<Integer, Object> entry : queryParams.entrySet()) {
+                preparedStatement.setObject(entry.getKey(), entry.getValue());
+            }
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            projects = mapResultSetToProjectList(resultSet);
+        } catch (SQLException | IOException e) {
+            String message = "An error occurred while retrieving filtered projects from the database!";
+            logger.error(message, e);
+        }
+        return projects;
+    }
+
+    private static Client getClientById(Long clientId) {
+        Client client = null;
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT * FROM CLIENT WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, clientId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                client = new Client(
+                        resultSet.getLong("ID"),
+                        resultSet.getString("NAME"),
+                        resultSet.getString("EMAIL"),
+                        resultSet.getString("COMPANY_NAME")
+                );
+            }
+        } catch (SQLException | IOException e) {
+            logger.error("An error occurred while retrieving client by id from the database!", e);
+        }
+        return client;
+    }
+
+
 
 
 
