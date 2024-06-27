@@ -252,6 +252,24 @@ public class DatabaseUtils {
         return clients;
     }
 
+public static void saveClient(Client client) {
+        try (Connection connection = connectToDatabase()) {
+            String insertClientSql = "INSERT INTO CLIENT (NAME, EMAIL, COMPANY_NAME) VALUES (?, ?, ?);";
+            PreparedStatement preparedStatement = connection.prepareStatement(insertClientSql);
+            preparedStatement.setString(1, client.getName());
+            preparedStatement.setString(2, client.getEmail());
+            preparedStatement.setString(3, client.getCompanyName());
+            preparedStatement.execute();
+            logger.info("Client saved successfully.");
+        } catch (SQLException | IOException ex) {
+            String message = "An error occurred while saving client to database!";
+            logger.error(message, ex);
+            System.out.println(message);
+        }
+    }
+
+
+
 
 
 

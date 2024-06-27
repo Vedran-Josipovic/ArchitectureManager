@@ -63,6 +63,8 @@ public class TransactionSearchController {
 
         transactionDescriptionTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getDescription()));
 
+        List<Transaction> filteredTransactions = DatabaseUtils.getTransactionsByFilters(new Transaction(), BigDecimal.valueOf(Long.MIN_VALUE), BigDecimal.valueOf(Long.MAX_VALUE));
+        transactionTableView.setItems(FXCollections.observableArrayList(filteredTransactions));
     }
 
 

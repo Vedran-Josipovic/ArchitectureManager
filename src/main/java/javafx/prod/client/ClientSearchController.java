@@ -41,6 +41,9 @@ public class ClientSearchController {
         clientEmailColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getEmail()));
         companyNameColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getCompanyName()));
 
+        List<Client> clients = DatabaseUtils.getClientsByFilters(new Client());
+        clientList.setAll(clients);
+
         clientTableView.setItems(clientList);
     }
 
