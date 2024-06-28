@@ -378,6 +378,25 @@ public class DatabaseUtils {
         return client;
     }
 
+    public static void saveProject(Project project) {
+        try (Connection connection = connectToDatabase()) {
+            String insertProjectSql = "INSERT INTO PROJECT (NAME, DESCRIPTION, START_DATE, DEADLINE, STATUS, CLIENT_ID) VALUES (?, ?, ?, ?, ?, ?);";
+            PreparedStatement preparedStatement = connection.prepareStatement(insertProjectSql);
+            preparedStatement.setString(1, project.getName());
+            preparedStatement.setString(2, project.getDescription());
+            preparedStatement.setDate(3, Date.valueOf(project.getStartDate()));
+            preparedStatement.setDate(4, Date.valueOf(project.getDeadline()));
+            preparedStatement.setString(5, project.getStatus().name());
+            preparedStatement.setLong(6, project.getClient().getId());
+            preparedStatement.execute();
+            logger.info("Project saved successfully.");
+        } catch (SQLException | IOException ex) {
+            String message = "An error occurred while saving project to database!";
+            logger.error(message, ex);
+            System.out.println(message);
+        }
+    }
+
 
 
 
