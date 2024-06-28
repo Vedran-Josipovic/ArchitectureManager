@@ -15,7 +15,7 @@ public class DatabaseUtils {
     private static final Logger logger = LoggerFactory.getLogger(DatabaseUtils.class);
     private static final String DATABASE_FILE = "conf/database.properties";
 
-    //Make private when it won't be used in Main
+    // Make private when it won't be used in Main
     public static Connection connectToDatabase() throws SQLException, IOException {
         Properties properties = new Properties();
         properties.load(new FileReader(DATABASE_FILE));
@@ -25,50 +25,17 @@ public class DatabaseUtils {
         return DriverManager.getConnection(databaseUrl, username, password);
     }
 
-    public static void saveLocation(Location newLocation, String selectedType){
-        if("Address".equals(selectedType)){
-            saveAddress((Address) newLocation);
-        } else if("VirtualLocation".equals(selectedType)){
-            saveVirtualLocation((VirtualLocation) newLocation);
-        }
-    }
-
-    private static void saveAddress(Address address){
-        try(Connection connection = connectToDatabase()){
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO LOCATION (TYPE, STREET, HOUSE_NUMBER, CITY) VALUES (?, ?, ?, ?)");
-            preparedStatement.setString(1, "Address");
-            preparedStatement.setString(2, address.getStreet());
-            preparedStatement.setString(3, address.getHouseNumber());
-            preparedStatement.setString(4, address.getCity());
-            preparedStatement.execute();
-            logger.info("Address saved successfully");
-        } catch (SQLException | IOException e) {
-            logger.error("Error while saving address: " + e.getMessage());
-        }
-    }
-
-    private static void saveVirtualLocation(VirtualLocation virtualLocation){
-        try(Connection connection = connectToDatabase()){
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO LOCATION (TYPE, MEETING_LINK, PLATFORM) VALUES (?, ?, ?)");
-            preparedStatement.setString(1, "VirtualLocation");
-            preparedStatement.setString(2, virtualLocation.getMeetingLink());
-            preparedStatement.setString(3, virtualLocation.getPlatform());
-            preparedStatement.execute();
-            logger.info("Virtual location saved successfully");
-        } catch (SQLException | IOException e) {
-            logger.error("Error while saving virtual location", e);
-        }
-    }
-
     public static void saveTransaction(Transaction transaction) {
         try (Connection connection = connectToDatabase()) {
-            String insertTransactionSql = "INSERT INTO TRANSACTION (NAME, TRANSACTION_TYPE, AMOUNT, DESCRIPTION, DATE) VALUES (?, ?, ?, ?, ?);";
+            String insertTransactionSql = "INSERT INTO TRANSACTION (NAME, TRANSACTION_TYPE, AMOUNT, DESCRIPTION, DATE, PROJECT_ID) VALUES (?, ?, ?, ?, ?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(insertTransactionSql);
             preparedStatement.setString(1, transaction.getName());
             preparedStatement.setString(2, transaction.getTransactionType().getName());
             preparedStatement.setBigDecimal(3, transaction.getAmount());
             preparedStatement.setString(4, transaction.getDescription());
             preparedStatement.setDate(5, Date.valueOf(transaction.getDate()));
+            preparedStatement.setLong(6, transaction.getProject().getId());
+
             preparedStatement.execute();
             logger.info("Transaction saved successfully.");
         } catch (SQLException | IOException ex) {
@@ -103,6 +70,8 @@ public class DatabaseUtils {
             transaction.setAmount(resultSet.getBigDecimal("AMOUNT"));
             transaction.setDescription(resultSet.getString("DESCRIPTION"));
             transaction.setDate(resultSet.getDate("DATE").toLocalDate());
+            transaction.setProject(getProjectById(resultSet.getLong("PROJECT_ID")));
+
             transactions.add(transaction);
         }
         return transactions;
@@ -112,7 +81,6 @@ public class DatabaseUtils {
         List<Transaction> transactions = new ArrayList<>();
         Map<Integer, Object> queryParams = new HashMap<>();
         int paramOrdinalNumber = 1;
-
 
         try (Connection connection = connectToDatabase()) {
             StringBuilder baseSqlQuery = new StringBuilder("SELECT * FROM TRANSACTION WHERE 1=1");
@@ -144,6 +112,11 @@ public class DatabaseUtils {
                 queryParams.put(paramOrdinalNumber++, maxAmount);
             }
 
+            if(Optional.ofNullable(transactionFilter.getProject()).isPresent()){
+                baseSqlQuery.append(" AND PROJECT_ID = ?");
+                queryParams.put(paramOrdinalNumber++, transactionFilter.getProject().getId());
+            }
+
 
             PreparedStatement preparedStatement = connection.prepareStatement(baseSqlQuery.toString());
             logger.info(preparedStatement.toString());
@@ -169,25 +142,6 @@ public class DatabaseUtils {
             logger.error(message, ex);
         }
         return transactions;
-    }
-
-    public static List<TransactionRecord<TransactionType, BigDecimal>> getTransactionData() {
-        List<TransactionRecord<TransactionType, BigDecimal>> transactionDataList = new ArrayList<>();
-        try (Connection connection = connectToDatabase()) {
-            String sqlQuery = "SELECT TRANSACTION_TYPE, AMOUNT FROM TRANSACTION";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlQuery);
-            while (resultSet.next()) {
-                TransactionType transactionType = TransactionType.valueOf(resultSet.getString("TRANSACTION_TYPE").toUpperCase());
-                BigDecimal amount = resultSet.getBigDecimal("AMOUNT");
-                transactionDataList.add(new TransactionRecord<>(transactionType, amount));
-            }
-        } catch (SQLException | IOException e) {
-            String message = "An error occurred while connecting to the database!";
-            logger.error(message, e);
-            System.out.println(message);
-        }
-        return transactionDataList;
     }
 
     public static List<Client> getClientsByFilters(Client clientFilter) {
@@ -254,20 +208,20 @@ public class DatabaseUtils {
     }
 
     public static void saveClient(Client client) {
-            try (Connection connection = connectToDatabase()) {
-                String insertClientSql = "INSERT INTO CLIENT (NAME, EMAIL, COMPANY_NAME) VALUES (?, ?, ?);";
-                PreparedStatement preparedStatement = connection.prepareStatement(insertClientSql);
-                preparedStatement.setString(1, client.getName());
-                preparedStatement.setString(2, client.getEmail());
-                preparedStatement.setString(3, client.getCompanyName());
-                preparedStatement.execute();
-                logger.info("Client saved successfully.");
-            } catch (SQLException | IOException ex) {
-                String message = "An error occurred while saving client to database!";
-                logger.error(message, ex);
-                System.out.println(message);
-            }
+        try (Connection connection = connectToDatabase()) {
+            String insertClientSql = "INSERT INTO CLIENT (NAME, EMAIL, COMPANY_NAME) VALUES (?, ?, ?);";
+            PreparedStatement preparedStatement = connection.prepareStatement(insertClientSql);
+            preparedStatement.setString(1, client.getName());
+            preparedStatement.setString(2, client.getEmail());
+            preparedStatement.setString(3, client.getCompanyName());
+            preparedStatement.execute();
+            logger.info("Client saved successfully.");
+        } catch (SQLException | IOException ex) {
+            String message = "An error occurred while saving client to database!";
+            logger.error(message, ex);
+            System.out.println(message);
         }
+    }
 
     public static List<Client> getClients() {
         List<Client> clients = new ArrayList<>();
@@ -297,7 +251,7 @@ public class DatabaseUtils {
                     Status.valueOf(resultSet.getString("STATUS")),
                     client,
                     null,
-                    null,
+                    getTransactionsByProjectId(resultSet.getLong("ID")),
                     null
             );
             projects.add(project);
@@ -397,12 +351,117 @@ public class DatabaseUtils {
         }
     }
 
+    public static List<Project> getProjects() {
+        List<Project> projects = new ArrayList<>();
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT * FROM PROJECT";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            projects = mapResultSetToProjectList(resultSet);
+        } catch (SQLException | IOException e) {
+            String message = "An error occurred while connecting to the database!";
+            logger.error(message, e);
+            System.out.println(message);
+        }
+        return projects;
+    }
+
+    public static Project getProjectById(Long projectId) {
+        Project project = null;
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT * FROM PROJECT WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, projectId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Client client = getClientById(resultSet.getLong("CLIENT_ID"));
+                project = new Project(
+                        resultSet.getLong("ID"),
+                        resultSet.getString("NAME"),
+                        resultSet.getString("DESCRIPTION"),
+                        resultSet.getDate("START_DATE").toLocalDate(),
+                        resultSet.getDate("DEADLINE").toLocalDate(),
+                        Status.valueOf(resultSet.getString("STATUS")),
+                        client,
+                        null,
+                        null,
+                        null
+                );
+            }
+        } catch (SQLException | IOException e) {
+            logger.error("An error occurred while retrieving project by id from the database!", e);
+        }
+        return project;
+    }
+
+    private static Set<Transaction> getTransactionsByProjectId(Long projectId) {
+        Set<Transaction> transactions = new HashSet<>();
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT * FROM TRANSACTION WHERE PROJECT_ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, projectId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            transactions.addAll(mapResultSetToTransactionList(resultSet));
+        } catch (SQLException | IOException e) {
+            logger.error("An error occurred while retrieving transactions by project id from the database!", e);
+        }
+        return transactions;
+    }
 
 
+    public static void saveLocation(Location newLocation, String selectedType){
+        if("Address".equals(selectedType)){
+            saveAddress((Address) newLocation);
+        } else if("VirtualLocation".equals(selectedType)){
+            saveVirtualLocation((VirtualLocation) newLocation);
+        }
+    }
+
+    private static void saveAddress(Address address){
+        try(Connection connection = connectToDatabase()){
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO LOCATION (TYPE, STREET, HOUSE_NUMBER, CITY) VALUES (?, ?, ?, ?)");
+            preparedStatement.setString(1, "Address");
+            preparedStatement.setString(2, address.getStreet());
+            preparedStatement.setString(3, address.getHouseNumber());
+            preparedStatement.setString(4, address.getCity());
+            preparedStatement.execute();
+            logger.info("Address saved successfully");
+        } catch (SQLException | IOException e) {
+            logger.error("Error while saving address: " + e.getMessage());
+        }
+    }
+
+    private static void saveVirtualLocation(VirtualLocation virtualLocation){
+        try(Connection connection = connectToDatabase()){
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO LOCATION (TYPE, MEETING_LINK, PLATFORM) VALUES (?, ?, ?)");
+            preparedStatement.setString(1, "VirtualLocation");
+            preparedStatement.setString(2, virtualLocation.getMeetingLink());
+            preparedStatement.setString(3, virtualLocation.getPlatform());
+            preparedStatement.execute();
+            logger.info("Virtual location saved successfully");
+        } catch (SQLException | IOException e) {
+            logger.error("Error while saving virtual location", e);
+        }
+    }
 
 
-
-
-
+    public static List<TransactionRecord<TransactionType, BigDecimal>> getTransactionData() {
+        List<TransactionRecord<TransactionType, BigDecimal>> transactionDataList = new ArrayList<>();
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT TRANSACTION_TYPE, AMOUNT FROM TRANSACTION";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            while (resultSet.next()) {
+                TransactionType transactionType = TransactionType.valueOf(resultSet.getString("TRANSACTION_TYPE").toUpperCase());
+                BigDecimal amount = resultSet.getBigDecimal("AMOUNT");
+                transactionDataList.add(new TransactionRecord<>(transactionType, amount));
+            }
+        } catch (SQLException | IOException e) {
+            String message = "An error occurred while connecting to the database!";
+            logger.error(message, e);
+            System.out.println(message);
+        }
+        return transactionDataList;
+    }
 
 }

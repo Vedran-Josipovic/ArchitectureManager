@@ -4,6 +4,7 @@ import app.prod.enumeration.TransactionType;
 import app.prod.exception.TransactionAmountException;
 import app.prod.exception.ValidationException;
 import app.prod.exception.EntityInitializationException;
+import app.prod.model.Project;
 import app.prod.model.Transaction;
 import app.prod.utils.DatabaseUtils;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public class TransactionAddController {
     Logger logger = LoggerFactory.getLogger(TransactionAddController.class);
@@ -31,9 +33,14 @@ public class TransactionAddController {
     private TextField descriptionTextField;
     @FXML
     private DatePicker dateDatePicker;
+    @FXML
+    private ComboBox<Project> projectComboBox;
 
     public void initialize() {
         transactionTypeComboBox.getItems().setAll(TransactionType.values());
+
+        List<Project> projects = DatabaseUtils.getProjects();
+        projectComboBox.getItems().setAll(projects);
     }
 
     public void addTransaction() {
@@ -44,6 +51,7 @@ public class TransactionAddController {
             BigDecimal amount = new BigDecimal(amountTextField.getText().trim());
             String description = descriptionTextField.getText().trim();
             LocalDate date = dateDatePicker.getValue();
+            Project selectedProject = projectComboBox.getValue();
 
             Transaction transaction = new Transaction.Builder()
                     .withName(name)
@@ -51,11 +59,12 @@ public class TransactionAddController {
                     .withAmount(amount)
                     .withDescription(description)
                     .withDate(date)
+                    .withProject(selectedProject)
                     .build();
 
             DatabaseUtils.saveTransaction(transaction);
 
-            JavaFxUtils.clearForm(transactionNameTextField, transactionTypeComboBox, amountTextField, descriptionTextField, dateDatePicker);
+            JavaFxUtils.clearForm(transactionNameTextField, transactionTypeComboBox, amountTextField, descriptionTextField, dateDatePicker, projectComboBox);
 
             JavaFxUtils.showAlert(Alert.AlertType.INFORMATION, "Success", "Transaction added successfully.");
         } catch (TransactionAmountException | EntityInitializationException | ValidationException ex) {
@@ -69,7 +78,8 @@ public class TransactionAddController {
                 transactionTypeComboBox.getValue() == null ||
                 amountTextField.getText().isEmpty() ||
                 descriptionTextField.getText().isEmpty() ||
-                dateDatePicker.getValue() == null) {
+                dateDatePicker.getValue() == null ||
+                projectComboBox.getValue() == null) {
             throw new ValidationException("Please fill in all fields.");
         }
 

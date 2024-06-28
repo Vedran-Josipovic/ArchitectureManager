@@ -10,12 +10,18 @@ import app.prod.enumeration.Status;
 public final class Project extends Issue implements Issuable {
     private Client client;
     private Set<Task> tasks;
-    private List<Transaction> transactions;
+    private Set<Transaction> transactions;
     private Set<Employee> employees;
 
     public Project() {
         super();
     }
+
+    public Project(String name){
+        super(name);
+    }
+
+
 
     @Override
     public double getExpectedProgress() {
@@ -37,7 +43,7 @@ public final class Project extends Issue implements Issuable {
         return (double) elapsedDuration / totalDuration * 100;
     }
 
-    public Project(Long id, String name, String description, LocalDate startDate, LocalDate deadline, Status status, Client client, Set<Task> tasks, List<Transaction> transactions, Set<Employee> employees) {
+    public Project(Long id, String name, String description, LocalDate startDate, LocalDate deadline, Status status, Client client, Set<Task> tasks, Set<Transaction> transactions, Set<Employee> employees) {
         super(id, name, description, startDate, deadline, status);
         this.client = client;
         this.tasks = tasks;
@@ -45,7 +51,7 @@ public final class Project extends Issue implements Issuable {
         this.employees = employees;
     }
 
-    public Project(String name, String description, LocalDate startDate, LocalDate deadline, Status status, Client client, Set<Task> tasks, List<Transaction> transactions, Set<Employee> employees) {
+    public Project(String name, String description, LocalDate startDate, LocalDate deadline, Status status, Client client, Set<Task> tasks, Set<Transaction> transactions, Set<Employee> employees) {
         super(name, description, startDate, deadline, status);
         this.client = client;
         this.tasks = tasks;
@@ -69,11 +75,11 @@ public final class Project extends Issue implements Issuable {
         this.tasks = tasks;
     }
 
-    public List<Transaction> getTransactions() {
+    public Set<Transaction> getTransactions() {
         return transactions;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
+    public void setTransactions(Set<Transaction> transactions) {
         this.transactions = transactions;
     }
 
@@ -101,12 +107,7 @@ public final class Project extends Issue implements Issuable {
 
     @Override
     public String toString() {
-        return "Project{" +
-                "client=" + client +
-                ", tasks=" + tasks +
-                ", transactions=" + transactions +
-                ", employees=" + employees +
-                "} " + super.toString();
+        return getName();
     }
 
 }

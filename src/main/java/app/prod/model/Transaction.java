@@ -17,6 +17,7 @@ public class Transaction extends Entity {
     private BigDecimal amount;
     private String description;
     private LocalDate date;
+    private Project project; // Add Project reference
 
     public Transaction() {
 
@@ -54,18 +55,26 @@ public class Transaction extends Entity {
         this.date = date;
     }
 
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Transaction that = (Transaction) o;
-        return getTransactionType() == that.getTransactionType() && Objects.equals(getAmount(), that.getAmount()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getDate(), that.getDate());
+        return getTransactionType() == that.getTransactionType() && Objects.equals(getAmount(), that.getAmount()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getDate(), that.getDate()) && Objects.equals(getProject(), that.getProject());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getTransactionType(), getAmount(), getDescription(), getDate());
+        return Objects.hash(super.hashCode(), getTransactionType(), getAmount(), getDescription(), getDate(), getProject());
     }
 
     @Override
@@ -75,6 +84,7 @@ public class Transaction extends Entity {
                 ", amount=" + amount +
                 ", description='" + description + '\'' +
                 ", date=" + date +
+                ", project=" + project +
                 ", id=" + id +
                 ", name='" + name + '\'' +
                 "} " + super.toString();
@@ -87,6 +97,7 @@ public class Transaction extends Entity {
         private BigDecimal amount;
         private String description;
         private LocalDate date;
+        private Project project; // Add Project reference
 
         public Builder withId(Long id) {
             this.id = id;
@@ -118,10 +129,13 @@ public class Transaction extends Entity {
             return this;
         }
 
+        public Builder withProject(Project project) {
+            this.project = project;
+            return this;
+        }
+
         public Transaction build() throws EntityInitializationException, TransactionAmountException {
             Transaction transaction = new Transaction();
-            //Pri korištenju tapraviti while petlju sa try-catch
-            //Ovo se koristi negdje drugdje, možda dodati klasu/sučelje sa statičkim validation metodama
             if (name == null || name.isEmpty()) {
                 throw new EntityInitializationException("Transaction must have a non-empty name.");
             }
@@ -133,11 +147,11 @@ public class Transaction extends Entity {
             transaction.amount = this.amount;
             transaction.description = this.description;
             transaction.date = this.date;
+            transaction.project = this.project; // Set project
 
             return transaction;
         }
 
-        //Pri korištenju napraviti while petlju sa try-catch
         private void validateTransactionAmount() throws TransactionAmountException {
             if (amount.compareTo(BigDecimal.ZERO) < 0) {
                 throw new TransactionAmountException("Transactions must have a non-negative amount.");
@@ -147,5 +161,4 @@ public class Transaction extends Entity {
             }
         }
     }
-
 }

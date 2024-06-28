@@ -30,6 +30,10 @@ public sealed abstract class Issue extends Entity implements Issuable permits Ta
 
     }
 
+    public Issue(String name){
+        super(name);
+    }
+
     public String getDescription() {
         return description;
     }
