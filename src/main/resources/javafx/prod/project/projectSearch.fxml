@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.StackPane?>
 <AnchorPane prefHeight="1000.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.prod.project.ProjectSearchController">
     <fx:include source="../layout/_layout.fxml" />
     <GridPane layoutX="-45.0" layoutY="3.0" prefHeight="1000.0" prefWidth="1500.0" translateX="45.0" translateY="35.0">
@@ -121,12 +120,15 @@
             </font></Button>
             <TableView fx:id="projectTableView" GridPane.columnSpan="2" GridPane.rowIndex="8">
                 <columns>
-                    <TableColumn fx:id="projectNameColumn" prefWidth="200.0" text="Name" />
-                    <TableColumn fx:id="projectDescriptionColumn" prefWidth="335.0" text="Description" />
-                    <TableColumn fx:id="projectClientColumn" prefWidth="210.0" text="Client" />
-                    <TableColumn fx:id="projectStartDateColumn" prefWidth="177.0" text="Start Date" />
-                    <TableColumn fx:id="projectEndDateColumn" prefWidth="312.0" text="End Date" />
-                    <TableColumn fx:id="projectStatusColumn" prefWidth="265.0" text="Status" />
+                    <TableColumn fx:id="projectNameColumn" prefWidth="270.0" text="Name" />
+                    <TableColumn fx:id="projectDescriptionColumn" prefWidth="230.0" text="Description" />
+                    <TableColumn fx:id="projectClientColumn" prefWidth="124.0" text="Client" />
+                    <TableColumn fx:id="projectStartDateColumn" prefWidth="91.0" text="Start Date" />
+                    <TableColumn fx:id="projectEndDateColumn" prefWidth="99.0" text="End Date" />
+                    <TableColumn fx:id="projectStatusColumn" prefWidth="104.0" text="Status" />
+                    <TableColumn fx:id="projectTransactionsColumn" prefWidth="331.0" text="Transactions" />
+                    <TableColumn fx:id="projectValueColumn" prefWidth="150.0" text="Project value" />
+                    <TableColumn fx:id="estimatedProgressColumn" prefWidth="100.0" text="Progress" />
                 </columns>
             </TableView>
             <Label id="title" fx:id="title" alignment="CENTER" prefHeight="35.0" prefWidth="285.0" text="Project Search" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">

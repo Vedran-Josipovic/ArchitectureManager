@@ -5,9 +5,12 @@ import java.util.Objects;
 import java.util.Set;
 
 import app.prod.enumeration.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //To be implemented in the future
 public final class Project extends Issue implements Issuable {
+    private Logger logger = LoggerFactory.getLogger(Project.class);
     private Client client;
     private Set<Task> tasks;
     private Set<Transaction> transactions;
@@ -35,10 +38,13 @@ public final class Project extends Issue implements Issuable {
 
         long totalDuration = startDate.until(endDate).getDays();
         long elapsedDuration = startDate.until(currentDate).getDays();
+        logger.debug(this + ": Total Duration: " + totalDuration);
+        logger.debug(this + ": Elapsed Duration: " + elapsedDuration);
 
-        if (elapsedDuration >= totalDuration) {
+        if (elapsedDuration >= totalDuration || currentDate.isAfter(endDate)) {
             return 100.0;
         }
+
 
         return (double) elapsedDuration / totalDuration * 100;
     }
@@ -108,6 +114,15 @@ public final class Project extends Issue implements Issuable {
     @Override
     public String toString() {
         return getName();
+    }
+
+    public String displayProject(){
+        return "Project{" +
+                "client=" + client +
+                ", tasks=" + tasks +
+                ", transactions=" + transactions +
+                ", employees=" + employees +
+                "} " + super.toString();
     }
 
 }

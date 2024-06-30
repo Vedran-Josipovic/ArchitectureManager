@@ -71,9 +71,10 @@
             <Button mnemonicParsing="false" onAction="#searchClients" text="Search Clients" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
             <TableView fx:id="clientTableView" GridPane.columnSpan="2" GridPane.rowIndex="5">
                 <columns>
-                    <TableColumn fx:id="clientNameColumn" prefWidth="466.0" text="Name" />
+                    <TableColumn fx:id="clientNameColumn" prefWidth="200.0" text="Name" />
                     <TableColumn fx:id="clientEmailColumn" prefWidth="404.0" text="Email" />
-                    <TableColumn fx:id="companyNameColumn" minWidth="0.0" prefWidth="629.0" text="Company Name" />
+                    <TableColumn fx:id="companyNameColumn" minWidth="0.0" prefWidth="329.0" text="Company Name" />
+                    <TableColumn fx:id="clientProjectsColumn" minWidth="0.0" prefWidth="566.0" text="Projects" />
                 </columns>
             </TableView>
             <Label id="title" fx:id="title" alignment="CENTER" prefHeight="35.0" prefWidth="285.0" text="Client Search" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">

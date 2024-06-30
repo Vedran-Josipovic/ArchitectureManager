@@ -304,9 +304,28 @@ public class DatabaseUtils {
 
             ResultSet resultSet = preparedStatement.executeQuery();
             projects = mapResultSetToProjectList(resultSet);
+            projects.forEach(p -> logger.info(p.displayProject()));
+
         } catch (SQLException | IOException e) {
             String message = "An error occurred while retrieving filtered projects from the database!";
             logger.error(message, e);
+        }
+
+        return projects;
+    }
+
+    public static List<Project> getProjectsByClientId(Long clientId) {
+        List<Project> projects = new ArrayList<>();
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT * FROM PROJECT WHERE CLIENT_ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, clientId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            projects = mapResultSetToProjectList(resultSet);
+        } catch (SQLException | IOException e) {
+            String message = "An error occurred while connecting to the database!";
+            logger.error(message, e);
+            System.out.println(message);
         }
         return projects;
     }

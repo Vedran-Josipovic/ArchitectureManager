@@ -2,6 +2,8 @@ package javafx.prod.client;
 
 import app.prod.exception.ValidationException;
 import app.prod.model.Client;
+import app.prod.model.Entity;
+import app.prod.model.Project;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,6 +34,8 @@ public class ClientSearchController {
     private TableColumn<Client, String> clientEmailColumn;
     @FXML
     private TableColumn<Client, String> companyNameColumn;
+    @FXML
+    private TableColumn<Client, String> clientProjectsColumn;
 
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private static final Logger logger = LoggerFactory.getLogger(ClientSearchController.class);
@@ -40,6 +44,11 @@ public class ClientSearchController {
         clientNameColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getName()));
         clientEmailColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getEmail()));
         companyNameColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getCompanyName()));
+
+        clientProjectsColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(
+                DatabaseUtils.getProjectsByClientId(param.getValue().getId()).stream()
+                .map(Entity::getName)
+                .reduce((a, b) -> a + ", " + b).orElse("")));
 
         List<Client> clients = DatabaseUtils.getClientsByFilters(new Client());
         clientList.setAll(clients);
