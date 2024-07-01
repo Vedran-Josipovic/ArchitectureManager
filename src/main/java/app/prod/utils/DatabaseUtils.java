@@ -483,4 +483,142 @@ public class DatabaseUtils {
         return transactionDataList;
     }
 
-}
+    public static void saveEmployee(Employee employee) {
+        try (Connection connection = connectToDatabase()) {
+            String insertEmployeeSql = "INSERT INTO EMPLOYEE (NAME, EMAIL, POSITION, PROJECT_ID) VALUES (?, ?, ?, ?);";
+            PreparedStatement preparedStatement = connection.prepareStatement(insertEmployeeSql);
+            preparedStatement.setString(1, employee.getName());
+            preparedStatement.setString(2, employee.getEmail());
+            preparedStatement.setString(3, employee.getPosition());
+            preparedStatement.setLong(4, employee.getProject().getId());
+
+            preparedStatement.execute();
+            logger.info("Employee saved successfully.");
+        } catch (SQLException | IOException ex) {
+            String message = "An error occurred while saving employee to database!";
+            logger.error(message, ex);
+        }
+    }
+
+    public static List<Employee> getEmployeesByProjectId(Long projectId) {
+        List<Employee> employees = new ArrayList<>();
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT * FROM EMPLOYEE WHERE PROJECT_ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, projectId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Employee employee = new Employee(
+                        resultSet.getLong("ID"),
+                        resultSet.getString("NAME"),
+                        resultSet.getString("EMAIL"),
+                        resultSet.getString("POSITION"),
+                        getProjectById(resultSet.getLong("PROJECT_ID"))
+                );
+                employees.add(employee);
+            }
+        } catch (SQLException | IOException e) {
+            logger.error("An error occurred while retrieving employees by project id from the database!", e);
+        }
+        return employees;
+    }
+
+    public static List<Employee> getEmployees() {
+        List<Employee> employees = new ArrayList<>();
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT * FROM EMPLOYEE";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            while (resultSet.next()) {
+                Employee employee = new Employee(
+                        resultSet.getLong("ID"),
+                        resultSet.getString("NAME"),
+                        resultSet.getString("EMAIL"),
+                        resultSet.getString("POSITION"),
+                        getProjectById(resultSet.getLong("PROJECT_ID"))
+                );
+                employees.add(employee);
+            }
+        } catch (SQLException | IOException e) {
+            logger.error("An error occurred while retrieving employees from the database!", e);
+        }
+        return employees;
+    }
+
+    public static List<Employee> getEmployeesByFilters(Employee employeeFilter) {
+        List<Employee> employees = new ArrayList<>();
+        Map<Integer, Object> queryParams = new HashMap<>();
+        int paramOrdinalNumber = 1;
+
+        try (Connection connection = connectToDatabase()) {
+            StringBuilder baseSqlQuery = new StringBuilder("SELECT * FROM EMPLOYEE WHERE 1=1");
+
+            if (Optional.ofNullable(employeeFilter.getId()).isPresent()) {
+                baseSqlQuery.append(" AND ID = ?");
+                queryParams.put(paramOrdinalNumber++, employeeFilter.getId());
+            }
+
+            if (Optional.ofNullable(employeeFilter.getName()).filter(s -> !s.isEmpty()).isPresent()) {
+                baseSqlQuery.append(" AND LOWER(NAME) LIKE ?");
+                queryParams.put(paramOrdinalNumber++, "%" + employeeFilter.getName().toLowerCase() + "%");
+            }
+
+            if (Optional.ofNullable(employeeFilter.getEmail()).filter(s -> !s.isEmpty()).isPresent()) {
+                baseSqlQuery.append(" AND LOWER(EMAIL) LIKE ?");
+                queryParams.put(paramOrdinalNumber++, "%" + employeeFilter.getEmail().toLowerCase() + "%");
+            }
+
+            if (Optional.ofNullable(employeeFilter.getPosition()).filter(s -> !s.isEmpty()).isPresent()) {
+                baseSqlQuery.append(" AND LOWER(POSITION) LIKE ?");
+                queryParams.put(paramOrdinalNumber++, "%" + employeeFilter.getPosition().toLowerCase() + "%");
+            }
+
+            if (Optional.ofNullable(employeeFilter.getProject()).isPresent()) {
+                baseSqlQuery.append(" AND PROJECT_ID = ?");
+                queryParams.put(paramOrdinalNumber++, employeeFilter.getProject().getId());
+            }
+
+            PreparedStatement preparedStatement = connection.prepareStatement(baseSqlQuery.toString());
+            logger.info(preparedStatement.toString());
+
+            for (Integer paramNumber : queryParams.keySet()) {
+                if (queryParams.get(paramNumber) instanceof String stringQueryParam) {
+                    preparedStatement.setString(paramNumber, stringQueryParam);
+                } else if (queryParams.get(paramNumber) instanceof Long longQueryParam) {
+                    preparedStatement.setLong(paramNumber, longQueryParam);
+                }
+            }
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            logger.info(resultSet.toString());
+            employees = mapResultSetToEmployeeList(resultSet);
+            employees.forEach(e -> logger.info(e.toString()));
+        } catch (SQLException | IOException ex) {
+            String message = "An error occurred while retrieving filtered employees from the database!";
+            logger.error(message, ex);
+        }
+        return employees;
+    }
+
+    private static List<Employee> mapResultSetToEmployeeList(ResultSet resultSet) throws SQLException {
+        List<Employee> employees = new ArrayList<>();
+        while (resultSet.next()) {
+            Employee employee = new Employee(
+                    resultSet.getLong("ID"),
+                    resultSet.getString("NAME"),
+                    resultSet.getString("EMAIL"),
+                    resultSet.getString("POSITION"),
+                    getProjectById(resultSet.getLong("PROJECT_ID"))
+            );
+            employees.add(employee);
+        }
+        return employees;
+    }
+
+
+
+
+
+
+
+    }

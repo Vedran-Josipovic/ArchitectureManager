@@ -14,7 +14,7 @@
 
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.prod.location.LocationAddController">
 
-    <GridPane prefHeight="1000" prefWidth="1500">
+    <GridPane prefHeight="1250" prefWidth="1875">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

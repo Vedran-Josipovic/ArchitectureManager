@@ -25,6 +25,10 @@ public final class Project extends Issue implements Issuable {
     }
 
 
+    @Override
+    public boolean isCompleted() {
+        return getStatus() == Status.DONE;
+    }
 
     @Override
     public double getExpectedProgress() {

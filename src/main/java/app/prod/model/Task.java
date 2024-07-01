@@ -23,6 +23,11 @@ public final class Task extends Issue implements Issuable{
     }
 
     @Override
+    public boolean isCompleted() {
+        return false;
+    }
+
+    @Override
     public double getExpectedProgress() {
         LocalDate startDate = super.getStartDate();
         LocalDate endDate = super.getDeadline();

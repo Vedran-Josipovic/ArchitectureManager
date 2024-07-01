@@ -7,9 +7,9 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="1000.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.prod.layout.LayoutController">
+<AnchorPane prefHeight="1250.0" prefWidth="1875.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.prod.layout.LayoutController">
 
-                      <MenuBar minHeight="45.0" minWidth="-Infinity" opacity="0.8" prefHeight="45.0" prefWidth="1200.0" AnchorPane.topAnchor="0.0">
+                      <MenuBar minHeight="45.0" minWidth="-Infinity" opacity="0.8" prefHeight="45.0" prefWidth="1500.0" AnchorPane.topAnchor="0.0">
         <menus>
             <Menu mnemonicParsing="false" text="Locations">
                 <items>
@@ -34,6 +34,12 @@
                     <MenuItem mnemonicParsing="false" onAction="#showProjectSearchScreen" text="Search" />
                 </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Employees">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#showEmployeeAddScreen" text="Add" />
+                    <MenuItem mnemonicParsing="false" onAction="#showEmployeeSearchScreen" text="Search" />
+                </items>
+            </Menu>
 
 
         </menus>
@@ -44,7 +50,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
         </padding>
     </MenuBar>
-   <Label id="balanceLabel" fx:id="AccountBalance" alignment="CENTER_RIGHT" layoutX="1200.0" prefHeight="45.0" prefWidth="300.0" text="Account Balance: " textAlignment="CENTER" />
+   <Label id="balanceLabel" fx:id="AccountBalance" alignment="CENTER_RIGHT" layoutX="1499.0" prefHeight="45.0" prefWidth="378.0" text="Account Balance: " textAlignment="CENTER" />
 
 
 </AnchorPane>

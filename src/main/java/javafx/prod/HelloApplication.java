@@ -17,7 +17,7 @@ import java.util.Objects;
 public class HelloApplication extends Application {
     private static final Logger logger = LoggerFactory.getLogger(HelloApplication.class);
     public static Stage mainStage;
-    public static final int width = 1500, height = 1000;
+    public static final int width = 1875, height = 1250;
 
     public String css = Objects.requireNonNull(getClass().getResource("/javafx/prod/styles/style.css")).toExternalForm();
 

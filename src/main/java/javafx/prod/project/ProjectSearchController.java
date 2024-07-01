@@ -2,6 +2,7 @@ package javafx.prod.project;
 
 import app.prod.enumeration.Status;
 import app.prod.model.Client;
+import app.prod.model.Entity;
 import app.prod.model.Project;
 import app.prod.thread.ProjectBalanceThread;
 import app.prod.utils.DatabaseUtils;
@@ -57,6 +58,8 @@ public class ProjectSearchController {
     private TableColumn<Project, String> projectValueColumn;
     @FXML
     private TableColumn<Project, String> estimatedProgressColumn;
+    @FXML
+    private TableColumn<Project, String> projectEmployeesColumn;
 
     private final ObservableList<Project> projectList = FXCollections.observableArrayList();
     private static final Logger logger = LoggerFactory.getLogger(ProjectSearchController.class);
@@ -73,13 +76,19 @@ public class ProjectSearchController {
                 .reduce((a, b) -> a + ", " + b).orElse("")));
 
 
+
         projectValueColumn.setCellValueFactory(param -> {
             BigDecimal balance = ProjectBalanceThread.getProjectBalance(param.getValue().getId());
             return new ReadOnlyStringWrapper(balance.toString() + " €");
         });
 
+        projectEmployeesColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(
+                DatabaseUtils.getEmployeesByProjectId(param.getValue().getId()).stream()
+                        .map(e -> e.getName() + " [" + e.getPosition() + "]" )
+                        .reduce((a, b) -> a + ", " + b).orElse("")));
+
         estimatedProgressColumn.setCellValueFactory(param -> {
-            if(param.getValue().getStatus() == Status.DONE) {
+            if(param.getValue().isCompleted()) {
                 return new ReadOnlyStringWrapper("100.00%");
             }
             else if (param.getValue().getStatus() == Status.TO_DO) {
@@ -90,6 +99,8 @@ public class ProjectSearchController {
                 return new ReadOnlyStringWrapper(String.format("%.2f", progress) + "%");
             }
         });
+
+
 
         List<Project> projects = DatabaseUtils.getProjectsByFilters(new Project());
         projectList.setAll(projects);

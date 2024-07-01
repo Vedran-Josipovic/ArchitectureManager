@@ -132,5 +132,33 @@ public class LayoutController {
         }
     }
 
+    public void showEmployeeSearchScreen() {
+        logger.info("Showing employee search screen");
+        FXMLLoader fxmlLoader = new FXMLLoader(javafx.prod.HelloApplication.class.getResource("/javafx/prod/employee/employeeSearch.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.width, HelloApplication.height);
+            scene.getStylesheets().add(css);
+            HelloApplication.getMainStage().setTitle("Search employees");
+            HelloApplication.getMainStage().setScene(scene);
+            HelloApplication.getMainStage().show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void showEmployeeAddScreen() {
+        logger.info("Showing employee add screen");
+        FXMLLoader fxmlLoader = new FXMLLoader(javafx.prod.HelloApplication.class.getResource("/javafx/prod/employee/employeeAdd.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.width, HelloApplication.height);
+            scene.getStylesheets().add(css);
+            HelloApplication.getMainStage().setTitle("Add an employee");
+            HelloApplication.getMainStage().setScene(scene);
+            HelloApplication.getMainStage().show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }
