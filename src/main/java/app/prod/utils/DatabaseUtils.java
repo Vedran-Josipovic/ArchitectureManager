@@ -9,6 +9,7 @@ import java.sql.*;
 
 import app.prod.enumeration.Status;
 import app.prod.enumeration.TransactionType;
+import app.prod.exception.NoSuchTransactionTypeException;
 import app.prod.model.*;
 import org.slf4j.*;
 
@@ -16,7 +17,6 @@ public class DatabaseUtils {
     private static final Logger logger = LoggerFactory.getLogger(DatabaseUtils.class);
     private static final String DATABASE_FILE = "conf/database.properties";
 
-    // Make private when it won't be used in Main
     public static Connection connectToDatabase() throws SQLException, IOException {
         Properties properties = new Properties();
         properties.load(new FileReader(DATABASE_FILE));
@@ -26,12 +26,26 @@ public class DatabaseUtils {
         return DriverManager.getConnection(databaseUrl, username, password);
     }
 
+    public static void closeConnection(Connection connection) {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            logger.error("An error occurred while closing the connection!", e);
+        }
+    }
+
     public static void saveTransaction(Transaction transaction) {
-        try (Connection connection = connectToDatabase()) {
+        Connection connection = null;
+        try {
+            connection = connectToDatabase();
             String insertTransactionSql = "INSERT INTO TRANSACTION (NAME, TRANSACTION_TYPE, AMOUNT, DESCRIPTION, DATE, PROJECT_ID) VALUES (?, ?, ?, ?, ?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(insertTransactionSql);
             preparedStatement.setString(1, transaction.getName());
+
+
             preparedStatement.setString(2, transaction.getTransactionType().getName());
+
+
             preparedStatement.setBigDecimal(3, transaction.getAmount());
             preparedStatement.setString(4, transaction.getDescription());
             preparedStatement.setDate(5, Date.valueOf(transaction.getDate()));
@@ -44,6 +58,10 @@ public class DatabaseUtils {
             logger.error(message, ex);
             System.out.println(message);
         }
+        finally {
+            closeConnection(connection);
+        }
+
     }
 
     public static List<Transaction> getTransactions() {
@@ -78,6 +96,15 @@ public class DatabaseUtils {
         return transactions;
     }
 
+    private static void verifyTransactionType(Transaction transaction) throws NoSuchTransactionTypeException {
+        if (
+                !Objects.equals(transaction.getTransactionType().getName(), "Income") &&
+                !Objects.equals(transaction.getTransactionType().getName(), "Expense")
+        ){
+            throw new NoSuchTransactionTypeException("Transaction type does not exist! Defaulting to EXPENSE.");
+        }
+    }
+
     public static List<Transaction> getTransactionsByFilters(Transaction transactionFilter, BigDecimal minAmount, BigDecimal maxAmount) {
         List<Transaction> transactions = new ArrayList<>();
         Map<Integer, Object> queryParams = new HashMap<>();
@@ -93,7 +120,13 @@ public class DatabaseUtils {
 
             if (Optional.ofNullable(transactionFilter.getTransactionType()).isPresent()) {
                 baseSqlQuery.append(" AND TRANSACTION_TYPE = ?");
-                queryParams.put(paramOrdinalNumber++, transactionFilter.getTransactionType().getName());
+                try {
+                    verifyTransactionType(transactionFilter);
+                    queryParams.put(paramOrdinalNumber++, transactionFilter.getTransactionType().getName());
+                } catch (NoSuchTransactionTypeException e) {
+                    logger.error(e.getMessage());
+                    queryParams.put(paramOrdinalNumber++, TransactionType.EXPENSE.getName() );
+                }
             }
 
             if (Optional.ofNullable(transactionFilter.getDate()).isPresent()) {
