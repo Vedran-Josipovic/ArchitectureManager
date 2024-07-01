@@ -5,6 +5,10 @@ import java.util.Objects;
 public abstract class Contact extends Entity {
     protected String email;
 
+    public String getContactDetails() {
+        return getEmail() + " [" + getName() + "]";
+    }
+
     public Contact(Long id, String name, String email) {
         super(id, name);
         this.email = email;

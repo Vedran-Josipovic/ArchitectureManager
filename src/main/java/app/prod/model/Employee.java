@@ -53,6 +53,10 @@ public class Employee extends Contact {
 
     @Override
     public String toString() {
+        return getName() + " [" + position + "]";
+    }
+
+    public String getEmployeeDetails() {
         return "Employee{" +
                 "position='" + position + '\'' +
                 ", project=" + project +

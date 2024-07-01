@@ -2,6 +2,7 @@ package app.prod.utils;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.io.*;
 import java.sql.*;
@@ -436,6 +437,36 @@ public class DatabaseUtils {
         }
     }
 
+    public static List<Location> getLocations(){
+        List<Location> locations = new ArrayList<>();
+        try(Connection connection = connectToDatabase()){
+            String sqlQuery = "SELECT * FROM LOCATION";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            while(resultSet.next()){
+                Location location = null;
+                if("Address".equals(resultSet.getString("TYPE"))){
+                    location = new Address(
+                            resultSet.getLong("ID"),
+                            resultSet.getString("STREET"),
+                            resultSet.getString("HOUSE_NUMBER"),
+                            resultSet.getString("CITY")
+                    );
+                } else if("VirtualLocation".equals(resultSet.getString("TYPE"))){
+                    location = new VirtualLocation(
+                            resultSet.getLong("ID"),
+                            resultSet.getString("MEETING_LINK"),
+                            resultSet.getString("PLATFORM")
+                    );
+                }
+                locations.add(location);
+            }
+        } catch (SQLException | IOException e) {
+            logger.error("An error occurred while retrieving locations from the database!", e);
+        }
+        return locations;
+    }
+
     private static void saveAddress(Address address){
         try(Connection connection = connectToDatabase()){
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO LOCATION (TYPE, STREET, HOUSE_NUMBER, CITY) VALUES (?, ?, ?, ?)");
@@ -619,6 +650,224 @@ public class DatabaseUtils {
 
 
 
+    public static void saveMeeting(Meeting meeting) {
+        try (Connection connection = connectToDatabase()) {
+            String insertMeetingSql = "INSERT INTO MEETING (NAME, MEETING_START, MEETING_END, LOCATION_ID, NOTES) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(insertMeetingSql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, meeting.getName());
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(meeting.getMeetingStart()));
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(meeting.getMeetingEnd()));
 
+            if (meeting.getLocation() instanceof Address) {
+                Address address = (Address) meeting.getLocation();
+                preparedStatement.setLong(4, address.getId());
+            } else if (meeting.getLocation() instanceof VirtualLocation) {
+                VirtualLocation virtualLocation = (VirtualLocation) meeting.getLocation();
+                preparedStatement.setLong(4, virtualLocation.getId());
+            }
 
+            preparedStatement.setString(5, meeting.getNotes());
+
+            preparedStatement.executeUpdate();
+
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                long meetingId = generatedKeys.getLong(1);
+                saveParticipants(meetingId, meeting.getParticipants());
+            }
+
+            logger.info("Meeting saved successfully.");
+        } catch (SQLException | IOException ex) {
+            logger.error("An error occurred while saving the meeting to the database!", ex);
+        }
     }
+
+    private static void saveParticipants(long meetingId, Set<Contact> participants) {
+        try(Connection connection = connectToDatabase()) {
+            String insertParticipantSql = "INSERT INTO PARTICIPANT (MEETING_ID, PARTICIPANT_ID, PARTICIPANT_TYPE) VALUES (?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(insertParticipantSql);
+            for (Contact participant : participants) {
+                preparedStatement.setLong(1, meetingId);
+                preparedStatement.setLong(2, participant.getId());
+                preparedStatement.setString(3, participant instanceof Client ? "CLIENT" : "EMPLOYEE");
+                preparedStatement.addBatch();
+            }
+            preparedStatement.executeBatch();
+            logger.info("Participants saved successfully.");
+        } catch (SQLException | IOException ex) {
+            logger.error("An error occurred while saving participants to the database!", ex);
+        }
+    }
+
+
+    public static List<Meeting> getMeetings() {
+        List<Meeting> meetings = new ArrayList<>();
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT * FROM MEETING";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            while (resultSet.next()) {
+                Meeting meeting = mapResultSetToMeeting(resultSet);
+                meeting.setParticipants(getParticipantsByMeetingId(connection, meeting.getId()));
+                meetings.add(meeting);
+            }
+        } catch (SQLException | IOException e) {
+            logger.error("An error occurred while retrieving meetings from the database!", e);
+        }
+        return meetings;
+    }
+
+
+    private static Meeting mapResultSetToMeeting(ResultSet resultSet) throws SQLException, IOException {
+        long id = resultSet.getLong("ID");
+        String name = resultSet.getString("NAME");
+        LocalDateTime meetingStart = resultSet.getTimestamp("MEETING_START").toLocalDateTime();
+        LocalDateTime meetingEnd = resultSet.getTimestamp("MEETING_END").toLocalDateTime();
+        Location location = getLocationById(resultSet.getLong("LOCATION_ID"));
+        String notes = resultSet.getString("NOTES");
+        return new Meeting(id, name, meetingStart, meetingEnd, location, new HashSet<>(), notes);
+    }
+
+    private static Location getLocationById(long locationId) throws SQLException, IOException {
+        Location location = null;
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT * FROM LOCATION WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, locationId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String type = resultSet.getString("TYPE");
+                if ("Address".equals(type)) {
+                    location = new Address(
+                            resultSet.getLong("ID"),
+                            resultSet.getString("STREET"),
+                            resultSet.getString("HOUSE_NUMBER"),
+                            resultSet.getString("CITY")
+                    );
+                } else if ("VirtualLocation".equals(type)) {
+                    location = new VirtualLocation(
+                            resultSet.getLong("ID"),
+                            resultSet.getString("MEETING_LINK"),
+                            resultSet.getString("PLATFORM")
+                    );
+                }
+            }
+        }
+        return location;
+    }
+
+    private static Set<Contact> getParticipantsByMeetingId(Connection connection, long meetingId) {
+        Set<Contact> participants = new HashSet<>();
+        try {
+            String sqlQuery = "SELECT * FROM PARTICIPANT WHERE MEETING_ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, meetingId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                long participantId = resultSet.getLong("PARTICIPANT_ID");
+                String participantType = resultSet.getString("PARTICIPANT_TYPE");
+                if ("CLIENT".equals(participantType)) {
+                    participants.add(getClientById(participantId));
+                } else if ("EMPLOYEE".equals(participantType)) {
+                    participants.add(getEmployeeById(participantId));
+                }
+            }
+        } catch (SQLException | IOException ex) {
+            logger.error("An error occurred while retrieving participants by meeting ID!", ex);
+        }
+        return participants;
+    }
+
+    private static Employee getEmployeeById(long employeeId) throws SQLException, IOException {
+        Employee employee = null;
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT * FROM EMPLOYEE WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, employeeId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                employee = new Employee(
+                        resultSet.getLong("ID"),
+                        resultSet.getString("NAME"),
+                        resultSet.getString("EMAIL"),
+                        resultSet.getString("POSITION"),
+                        getProjectById(resultSet.getLong("PROJECT_ID"))
+                );
+            }
+        }
+        return employee;
+    }
+
+    public static List<Meeting> getMeetingsByFilters(Meeting meetingFilter) {
+        List<Meeting> meetings = new ArrayList<>();
+        Map<Integer, Object> queryParams = new HashMap<>();
+        int paramOrdinalNumber = 1;
+
+        try (Connection connection = connectToDatabase()) {
+            StringBuilder baseSqlQuery = new StringBuilder("SELECT * FROM MEETING WHERE 1=1");
+
+            if (Optional.ofNullable(meetingFilter.getName()).filter(s -> !s.isEmpty()).isPresent()) {
+                baseSqlQuery.append(" AND LOWER(NAME) LIKE ?");
+                queryParams.put(paramOrdinalNumber++, "%" + meetingFilter.getName().toLowerCase() + "%");
+            }
+
+            if (Optional.ofNullable(meetingFilter.getMeetingStart()).isPresent()) {
+                baseSqlQuery.append(" AND MEETING_START >= ?");
+                queryParams.put(paramOrdinalNumber++, Timestamp.valueOf(meetingFilter.getMeetingStart()));
+            }
+
+            if (Optional.ofNullable(meetingFilter.getMeetingEnd()).isPresent()) {
+                baseSqlQuery.append(" AND MEETING_END <= ?");
+                queryParams.put(paramOrdinalNumber++, Timestamp.valueOf(meetingFilter.getMeetingEnd()));
+            }
+
+            if (Optional.ofNullable(meetingFilter.getLocation()).isPresent()) {
+                baseSqlQuery.append(" AND LOCATION_ID = ?");
+                if(meetingFilter.getLocation() instanceof Address address){
+                    queryParams.put(paramOrdinalNumber++, address.getId());
+                } else if(meetingFilter.getLocation() instanceof VirtualLocation virtualLocation){
+                    queryParams.put(paramOrdinalNumber++, virtualLocation.getId());
+                }
+
+            }
+
+            PreparedStatement preparedStatement = connection.prepareStatement(baseSqlQuery.toString());
+            logger.info(preparedStatement.toString());
+
+            for (Integer paramNumber : queryParams.keySet()) {
+                if (queryParams.get(paramNumber) instanceof String stringQueryParam) {
+                    preparedStatement.setString(paramNumber, stringQueryParam);
+                } else if (queryParams.get(paramNumber) instanceof Long longQueryParam) {
+                    preparedStatement.setLong(paramNumber, longQueryParam);
+                } else if (queryParams.get(paramNumber) instanceof Timestamp timestampQueryParam) {
+                    preparedStatement.setTimestamp(paramNumber, timestampQueryParam);
+                }
+            }
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            logger.info(resultSet.toString());
+            while (resultSet.next()) {
+                Meeting meeting = mapResultSetToMeeting(resultSet);
+                meeting.setParticipants(getParticipantsByMeetingId(connection, meeting.getId()));
+                meetings.add(meeting);
+            }
+        } catch (SQLException | IOException ex) {
+            String message = "An error occurred while retrieving filtered meetings from the database!";
+            logger.error(message, ex);
+        }
+        return meetings;
+    }
+
+    public static List<Contact> getAllContacts() {
+        List<Contact> contacts = new ArrayList<>();
+        contacts.addAll(getClients());
+        contacts.addAll(getEmployees());
+        return contacts;
+    }
+
+
+
+
+
+
+}

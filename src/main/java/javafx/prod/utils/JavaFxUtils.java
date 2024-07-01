@@ -1,6 +1,7 @@
 package javafx.prod.utils;
 
 import javafx.scene.control.*;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +48,37 @@ public class JavaFxUtils {
             logger.error("Invalid format for type " + type.getName() + ": " + value + "[" + e.getMessage() + "]");
             return null;
         }
+    }
+
+    public static <T> void setCustomCellFactory(ComboBox<T> comboBox, Callback<T, String> displayTextCallback) {
+        comboBox.setCellFactory(new Callback<>() {
+            @Override
+            public ListCell<T> call(ListView<T> param) {
+                return new ListCell<>() {
+                    @Override
+                    protected void updateItem(T item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                        } else {
+                            setText(displayTextCallback.call(item));
+                        }
+                    }
+                };
+            }
+        });
+
+        comboBox.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                } else {
+                    setText(displayTextCallback.call(item));
+                }
+            }
+        });
     }
 
 }

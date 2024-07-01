@@ -40,6 +40,12 @@
                     <MenuItem mnemonicParsing="false" onAction="#showEmployeeSearchScreen" text="Search" />
                 </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Meetings">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#showMeetingAddScreen" text="Add" />
+                    <MenuItem mnemonicParsing="false" onAction="#showMeetingSearchScreen" text="Search" />
+                </items>
+            </Menu>
 
 
         </menus>
