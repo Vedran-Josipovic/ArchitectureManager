@@ -4,6 +4,7 @@ import app.prod.enumeration.Status;
 import app.prod.model.Client;
 import app.prod.model.Entity;
 import app.prod.model.Project;
+import app.prod.service.DatabaseService;
 import app.prod.thread.ProjectBalanceThread;
 import app.prod.utils.DatabaseUtils;
 import javafx.animation.KeyFrame;
@@ -102,7 +103,7 @@ public class ProjectSearchController {
 
 
 
-        List<Project> projects = DatabaseUtils.getProjectsByFilters(new Project());
+        List<Project> projects = DatabaseService.getProjectsByFilters(new Project());
         projectList.setAll(projects);
         projectTableView.setItems(projectList);
 
@@ -133,7 +134,7 @@ public class ProjectSearchController {
             Status status = statusComboBox.getValue();
 
             Project filter = new Project(name, description, startDate, endDate, status, client, null, null);
-            List<Project> projects = DatabaseUtils.getProjectsByFilters(filter);
+            List<Project> projects = DatabaseService.getProjectsByFilters(filter);
             projectList.setAll(projects);
         } catch (Exception ex) {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Error", "An error occurred while searching for projects: " + ex.getMessage());

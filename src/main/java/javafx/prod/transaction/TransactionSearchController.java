@@ -3,6 +3,7 @@ package javafx.prod.transaction;
 import app.prod.enumeration.TransactionType;
 import app.prod.model.Project;
 import app.prod.model.Transaction;
+import app.prod.service.DatabaseService;
 import app.prod.utils.DatabaseUtils;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -68,7 +69,7 @@ public class TransactionSearchController {
         transactionDescriptionTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getDescription()));
         transactionProjectTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getProject().getName()));
 
-        List<Transaction> filteredTransactions = DatabaseUtils.getTransactionsByFilters(new Transaction(), BigDecimal.valueOf(Long.MIN_VALUE), BigDecimal.valueOf(Long.MAX_VALUE));
+        List<Transaction> filteredTransactions = DatabaseService.getTransactionsByFilters(new Transaction(), BigDecimal.valueOf(Long.MIN_VALUE), BigDecimal.valueOf(Long.MAX_VALUE));
         transactionTableView.setItems(FXCollections.observableArrayList(filteredTransactions));
     }
 
@@ -97,7 +98,7 @@ public class TransactionSearchController {
         }
 
         Transaction filter = createTransactionFilter();
-        List<Transaction> filteredTransactions = DatabaseUtils.getTransactionsByFilters(filter, minAmount, maxAmount);
+        List<Transaction> filteredTransactions = DatabaseService.getTransactionsByFilters(filter, minAmount, maxAmount);
         transactionTableView.setItems(FXCollections.observableArrayList(filteredTransactions));
     }
 

@@ -4,6 +4,7 @@ import app.prod.exception.ValidationException;
 import app.prod.model.Client;
 import app.prod.model.Entity;
 import app.prod.model.Project;
+import app.prod.service.DatabaseService;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,11 +47,11 @@ public class ClientSearchController {
         companyNameColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getCompanyName()));
 
         clientProjectsColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(
-                DatabaseUtils.getProjectsByClientId(param.getValue().getId()).stream()
+                DatabaseService.getProjectsByClientId(param.getValue().getId()).stream()
                 .map(Entity::getName)
                 .reduce((a, b) -> a + ", " + b).orElse("")));
 
-        List<Client> clients = DatabaseUtils.getClientsByFilters(new Client());
+        List<Client> clients = DatabaseService.getClientsByFilters(new Client());
         clientList.setAll(clients);
 
         clientTableView.setItems(clientList);
@@ -63,7 +64,7 @@ public class ClientSearchController {
             String email = clientEmailTextField.getText().trim();
             String companyName = companyNameTextField.getText().trim();
 
-            List<Client> clients = DatabaseUtils.getClientsByFilters(new Client(name, email, companyName));
+            List<Client> clients = DatabaseService.getClientsByFilters(new Client(name, email, companyName));
             clientList.setAll(clients);
         } catch (Exception ex) {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Error", "An error occurred while searching for clients: " + ex.getMessage());

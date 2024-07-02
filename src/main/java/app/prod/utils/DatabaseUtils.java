@@ -11,6 +11,7 @@ import app.prod.enumeration.Status;
 import app.prod.enumeration.TransactionType;
 import app.prod.exception.NoSuchTransactionTypeException;
 import app.prod.model.*;
+import app.prod.service.DatabaseService;
 import org.slf4j.*;
 
 public class DatabaseUtils {
@@ -41,16 +42,11 @@ public class DatabaseUtils {
             String insertTransactionSql = "INSERT INTO TRANSACTION (NAME, TRANSACTION_TYPE, AMOUNT, DESCRIPTION, DATE, PROJECT_ID) VALUES (?, ?, ?, ?, ?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(insertTransactionSql);
             preparedStatement.setString(1, transaction.getName());
-
-
             preparedStatement.setString(2, transaction.getTransactionType().getName());
-
-
             preparedStatement.setBigDecimal(3, transaction.getAmount());
             preparedStatement.setString(4, transaction.getDescription());
             preparedStatement.setDate(5, Date.valueOf(transaction.getDate()));
             preparedStatement.setLong(6, transaction.getProject().getId());
-
             preparedStatement.execute();
             logger.info("Transaction saved successfully.");
         } catch (SQLException | IOException ex) {
@@ -61,7 +57,6 @@ public class DatabaseUtils {
         finally {
             closeConnection(connection);
         }
-
     }
 
     public static List<Transaction> getTransactions() {
@@ -79,153 +74,38 @@ public class DatabaseUtils {
         return transactions;
     }
 
+    private static void verifyTransactionType(String transactionTypeName) throws NoSuchTransactionTypeException {
+        if (!"Income".equals(transactionTypeName) && !"Expense".equals(transactionTypeName)) {
+            throw new NoSuchTransactionTypeException("Transaction type does not exist! Defaulting to EXPENSE.");
+        }
+    }
+
     private static List<Transaction> mapResultSetToTransactionList(ResultSet resultSet) throws SQLException {
         List<Transaction> transactions = new ArrayList<>();
         while (resultSet.next()) {
             Transaction transaction = new Transaction();
             transaction.setId(resultSet.getLong("ID"));
             transaction.setName(resultSet.getString("NAME"));
-            transaction.setTransactionType(TransactionType.valueOf(resultSet.getString("TRANSACTION_TYPE").toUpperCase()));
+
+            String transactionTypeName = resultSet.getString("TRANSACTION_TYPE");
+            TransactionType transactionType;
+            try {
+                verifyTransactionType(transactionTypeName);
+                transactionType = TransactionType.valueOf(transactionTypeName.toUpperCase());
+            } catch (NoSuchTransactionTypeException e) {
+                logger.error(e.getMessage());
+                transactionType = TransactionType.EXPENSE;
+            }
+            transaction.setTransactionType(transactionType);
+
             transaction.setAmount(resultSet.getBigDecimal("AMOUNT"));
             transaction.setDescription(resultSet.getString("DESCRIPTION"));
             transaction.setDate(resultSet.getDate("DATE").toLocalDate());
-            transaction.setProject(getProjectById(resultSet.getLong("PROJECT_ID")));
+            transaction.setProject(DatabaseUtils.getProjectById(resultSet.getLong("PROJECT_ID")));
 
             transactions.add(transaction);
         }
         return transactions;
-    }
-
-    private static void verifyTransactionType(Transaction transaction) throws NoSuchTransactionTypeException {
-        if (
-                !Objects.equals(transaction.getTransactionType().getName(), "Income") &&
-                !Objects.equals(transaction.getTransactionType().getName(), "Expense")
-        ){
-            throw new NoSuchTransactionTypeException("Transaction type does not exist! Defaulting to EXPENSE.");
-        }
-    }
-
-    public static List<Transaction> getTransactionsByFilters(Transaction transactionFilter, BigDecimal minAmount, BigDecimal maxAmount) {
-        List<Transaction> transactions = new ArrayList<>();
-        Map<Integer, Object> queryParams = new HashMap<>();
-        int paramOrdinalNumber = 1;
-
-        try (Connection connection = connectToDatabase()) {
-            StringBuilder baseSqlQuery = new StringBuilder("SELECT * FROM TRANSACTION WHERE 1=1");
-
-            if (Optional.ofNullable(transactionFilter.getName()).filter(s -> !s.isEmpty()).isPresent()) {
-                baseSqlQuery.append(" AND LOWER(NAME) LIKE ?");
-                queryParams.put(paramOrdinalNumber++, "%" + transactionFilter.getName().toLowerCase() + "%");
-            }
-
-            if (Optional.ofNullable(transactionFilter.getTransactionType()).isPresent()) {
-                baseSqlQuery.append(" AND TRANSACTION_TYPE = ?");
-                try {
-                    verifyTransactionType(transactionFilter);
-                    queryParams.put(paramOrdinalNumber++, transactionFilter.getTransactionType().getName());
-                } catch (NoSuchTransactionTypeException e) {
-                    logger.error(e.getMessage());
-                    queryParams.put(paramOrdinalNumber++, TransactionType.EXPENSE.getName() );
-                }
-            }
-
-            if (Optional.ofNullable(transactionFilter.getDate()).isPresent()) {
-                baseSqlQuery.append(" AND DATE = ?");
-                queryParams.put(paramOrdinalNumber++, Date.valueOf(transactionFilter.getDate()));
-            }
-
-            if (minAmount != null && maxAmount != null) {
-                baseSqlQuery.append(" AND AMOUNT BETWEEN ? AND ?");
-                queryParams.put(paramOrdinalNumber++, minAmount);
-                queryParams.put(paramOrdinalNumber++, maxAmount);
-            } else if (minAmount != null) {
-                baseSqlQuery.append(" AND AMOUNT >= ?");
-                queryParams.put(paramOrdinalNumber++, minAmount);
-            } else if (maxAmount != null) {
-                baseSqlQuery.append(" AND AMOUNT <= ?");
-                queryParams.put(paramOrdinalNumber++, maxAmount);
-            }
-
-            if(Optional.ofNullable(transactionFilter.getProject()).isPresent()){
-                baseSqlQuery.append(" AND PROJECT_ID = ?");
-                queryParams.put(paramOrdinalNumber++, transactionFilter.getProject().getId());
-            }
-
-
-            PreparedStatement preparedStatement = connection.prepareStatement(baseSqlQuery.toString());
-            logger.info(preparedStatement.toString());
-
-            for (Integer paramNumber : queryParams.keySet()) {
-                if (queryParams.get(paramNumber) instanceof String stringQueryParam) {
-                    preparedStatement.setString(paramNumber, stringQueryParam);
-                } else if (queryParams.get(paramNumber) instanceof Long longQueryParam) {
-                    preparedStatement.setLong(paramNumber, longQueryParam);
-                } else if (queryParams.get(paramNumber) instanceof Date dateQueryParam) {
-                    preparedStatement.setDate(paramNumber, dateQueryParam);
-                } else if (queryParams.get(paramNumber) instanceof BigDecimal bigDecimal) {
-                    preparedStatement.setBigDecimal(paramNumber, bigDecimal);
-                }
-            }
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            logger.info(resultSet.toString());
-            transactions = mapResultSetToTransactionList(resultSet);
-            transactions.forEach(t -> logger.info(t.toString()));
-        } catch (SQLException | IOException ex) {
-            String message = "An error occurred while retrieving filtered transactions from the database!";
-            logger.error(message, ex);
-        }
-        return transactions;
-    }
-
-    public static List<Client> getClientsByFilters(Client clientFilter) {
-        List<Client> clients = new ArrayList<>();
-        Map<Integer, Object> queryParams = new HashMap<>();
-        int paramOrdinalNumber = 1;
-
-        try (Connection connection = connectToDatabase()) {
-            StringBuilder baseSqlQuery = new StringBuilder("SELECT * FROM CLIENT WHERE 1=1");
-
-            if (Optional.ofNullable(clientFilter.getId()).isPresent()) {
-                baseSqlQuery.append(" AND ID = ?");
-                queryParams.put(paramOrdinalNumber++, clientFilter.getId());
-            }
-
-            if (Optional.ofNullable(clientFilter.getName()).filter(s -> !s.isEmpty()).isPresent()) {
-                baseSqlQuery.append(" AND LOWER(NAME) LIKE ?");
-                queryParams.put(paramOrdinalNumber++, "%" + clientFilter.getName().toLowerCase() + "%");
-            }
-
-            if (Optional.ofNullable(clientFilter.getEmail()).filter(s -> !s.isEmpty()).isPresent()) {
-                baseSqlQuery.append(" AND LOWER(EMAIL) LIKE ?");
-                queryParams.put(paramOrdinalNumber++, "%" + clientFilter.getEmail().toLowerCase() + "%");
-            }
-
-            if (Optional.ofNullable(clientFilter.getCompanyName()).filter(s -> !s.isEmpty()).isPresent()) {
-                baseSqlQuery.append(" AND LOWER(COMPANY_NAME) LIKE ?");
-                queryParams.put(paramOrdinalNumber++, "%" + clientFilter.getCompanyName().toLowerCase() + "%");
-            }
-
-            PreparedStatement preparedStatement = connection.prepareStatement(baseSqlQuery.toString());
-            logger.info(preparedStatement.toString());
-
-            for (Integer paramNumber : queryParams.keySet()) {
-                if (queryParams.get(paramNumber) instanceof String stringQueryParam) {
-                    preparedStatement.setString(paramNumber, stringQueryParam);
-                } else if (queryParams.get(paramNumber) instanceof Long longQueryParam) {
-                    preparedStatement.setLong(paramNumber, longQueryParam);
-                }
-            }
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            logger.info(resultSet.toString());
-            clients = mapResultSetToClientList(resultSet);
-            clients.forEach(c -> logger.info(c.toString()));
-        } catch (SQLException | IOException ex) {
-            String message = "An error occurred while retrieving filtered clients from the database!";
-            logger.error(message, ex);
-        }
-        return clients;
     }
 
     private static List<Client> mapResultSetToClientList(ResultSet resultSet) throws SQLException {
@@ -275,7 +155,7 @@ public class DatabaseUtils {
     private static List<Project> mapResultSetToProjectList(ResultSet resultSet) throws SQLException {
         List<Project> projects = new ArrayList<>();
         while (resultSet.next()) {
-            Client client = getClientById(resultSet.getLong("CLIENT_ID"));
+            Client client = DatabaseService.getClientById(resultSet.getLong("CLIENT_ID"));
             Project project = new Project(
                     resultSet.getLong("ID"),
                     resultSet.getString("NAME"),
@@ -284,104 +164,12 @@ public class DatabaseUtils {
                     resultSet.getDate("DEADLINE").toLocalDate(),
                     Status.valueOf(resultSet.getString("STATUS")),
                     client,
-                    getTransactionsByProjectId(resultSet.getLong("ID")),
+                    DatabaseService.getTransactionsByProjectId(resultSet.getLong("ID")),
                     null
             );
             projects.add(project);
         }
         return projects;
-    }
-
-    public static List<Project> getProjectsByFilters(Project projectFilter) {
-        List<Project> projects = new ArrayList<>();
-        Map<Integer, Object> queryParams = new HashMap<>();
-        int paramOrdinalNumber = 1;
-
-        try (Connection connection = connectToDatabase()) {
-            StringBuilder baseSqlQuery = new StringBuilder("SELECT * FROM PROJECT WHERE 1=1");
-
-            if (Optional.ofNullable(projectFilter.getName()).filter(s -> !s.isEmpty()).isPresent()) {
-                baseSqlQuery.append(" AND LOWER(NAME) LIKE ?");
-                queryParams.put(paramOrdinalNumber++, "%" + projectFilter.getName().toLowerCase() + "%");
-            }
-
-            if (Optional.ofNullable(projectFilter.getDescription()).filter(s -> !s.isEmpty()).isPresent()) {
-                baseSqlQuery.append(" AND LOWER(DESCRIPTION) LIKE ?");
-                queryParams.put(paramOrdinalNumber++, "%" + projectFilter.getDescription().toLowerCase() + "%");
-            }
-
-            if (Optional.ofNullable(projectFilter.getStartDate()).isPresent()) {
-                baseSqlQuery.append(" AND START_DATE >= ?");
-                queryParams.put(paramOrdinalNumber++, Date.valueOf(projectFilter.getStartDate()));
-            }
-
-            if (Optional.ofNullable(projectFilter.getDeadline()).isPresent()) {
-                baseSqlQuery.append(" AND DEADLINE <= ?");
-                queryParams.put(paramOrdinalNumber++, Date.valueOf(projectFilter.getDeadline()));
-            }
-
-            if (Optional.ofNullable(projectFilter.getStatus()).isPresent()) {
-                baseSqlQuery.append(" AND STATUS = ?");
-                queryParams.put(paramOrdinalNumber++, projectFilter.getStatus().name());
-            }
-
-            if (Optional.ofNullable(projectFilter.getClient()).isPresent()) {
-                baseSqlQuery.append(" AND CLIENT_ID = ?");
-                queryParams.put(paramOrdinalNumber++, projectFilter.getClient().getId());
-            }
-
-            PreparedStatement preparedStatement = connection.prepareStatement(baseSqlQuery.toString());
-            for (Map.Entry<Integer, Object> entry : queryParams.entrySet()) {
-                preparedStatement.setObject(entry.getKey(), entry.getValue());
-            }
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            projects = mapResultSetToProjectList(resultSet);
-            projects.forEach(p -> logger.info(p.displayProject()));
-
-        } catch (SQLException | IOException e) {
-            String message = "An error occurred while retrieving filtered projects from the database!";
-            logger.error(message, e);
-        }
-
-        return projects;
-    }
-
-    public static List<Project> getProjectsByClientId(Long clientId) {
-        List<Project> projects = new ArrayList<>();
-        try (Connection connection = connectToDatabase()) {
-            String sqlQuery = "SELECT * FROM PROJECT WHERE CLIENT_ID = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-            preparedStatement.setLong(1, clientId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            projects = mapResultSetToProjectList(resultSet);
-        } catch (SQLException | IOException e) {
-            String message = "An error occurred while connecting to the database!";
-            logger.error(message, e);
-            System.out.println(message);
-        }
-        return projects;
-    }
-
-    private static Client getClientById(Long clientId) {
-        Client client = null;
-        try (Connection connection = connectToDatabase()) {
-            String sqlQuery = "SELECT * FROM CLIENT WHERE ID = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-            preparedStatement.setLong(1, clientId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                client = new Client(
-                        resultSet.getLong("ID"),
-                        resultSet.getString("NAME"),
-                        resultSet.getString("EMAIL"),
-                        resultSet.getString("COMPANY_NAME")
-                );
-            }
-        } catch (SQLException | IOException e) {
-            logger.error("An error occurred while retrieving client by id from the database!", e);
-        }
-        return client;
     }
 
     public static void saveProject(Project project) {
@@ -426,7 +214,7 @@ public class DatabaseUtils {
             preparedStatement.setLong(1, projectId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                Client client = getClientById(resultSet.getLong("CLIENT_ID"));
+                Client client = DatabaseService.getClientById(resultSet.getLong("CLIENT_ID"));
                 project = new Project(
                         resultSet.getLong("ID"),
                         resultSet.getString("NAME"),
@@ -444,21 +232,6 @@ public class DatabaseUtils {
         }
         return project;
     }
-
-    private static Set<Transaction> getTransactionsByProjectId(Long projectId) {
-        Set<Transaction> transactions = new HashSet<>();
-        try (Connection connection = connectToDatabase()) {
-            String sqlQuery = "SELECT * FROM TRANSACTION WHERE PROJECT_ID = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-            preparedStatement.setLong(1, projectId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            transactions.addAll(mapResultSetToTransactionList(resultSet));
-        } catch (SQLException | IOException e) {
-            logger.error("An error occurred while retrieving transactions by project id from the database!", e);
-        }
-        return transactions;
-    }
-
 
     public static void saveLocation(Location newLocation, String selectedType){
         if("Address".equals(selectedType)){
@@ -525,7 +298,6 @@ public class DatabaseUtils {
         }
     }
 
-
     public static List<TransactionRecord<TransactionType, BigDecimal>> getTransactionData() {
         List<TransactionRecord<TransactionType, BigDecimal>> transactionDataList = new ArrayList<>();
         try (Connection connection = connectToDatabase()) {
@@ -575,7 +347,7 @@ public class DatabaseUtils {
                         resultSet.getString("NAME"),
                         resultSet.getString("EMAIL"),
                         resultSet.getString("POSITION"),
-                        getProjectById(resultSet.getLong("PROJECT_ID"))
+                        DatabaseUtils.getProjectById(resultSet.getLong("PROJECT_ID"))
                 );
                 employees.add(employee);
             }
@@ -597,67 +369,12 @@ public class DatabaseUtils {
                         resultSet.getString("NAME"),
                         resultSet.getString("EMAIL"),
                         resultSet.getString("POSITION"),
-                        getProjectById(resultSet.getLong("PROJECT_ID"))
+                        DatabaseUtils.getProjectById(resultSet.getLong("PROJECT_ID"))
                 );
                 employees.add(employee);
             }
         } catch (SQLException | IOException e) {
             logger.error("An error occurred while retrieving employees from the database!", e);
-        }
-        return employees;
-    }
-
-    public static List<Employee> getEmployeesByFilters(Employee employeeFilter) {
-        List<Employee> employees = new ArrayList<>();
-        Map<Integer, Object> queryParams = new HashMap<>();
-        int paramOrdinalNumber = 1;
-
-        try (Connection connection = connectToDatabase()) {
-            StringBuilder baseSqlQuery = new StringBuilder("SELECT * FROM EMPLOYEE WHERE 1=1");
-
-            if (Optional.ofNullable(employeeFilter.getId()).isPresent()) {
-                baseSqlQuery.append(" AND ID = ?");
-                queryParams.put(paramOrdinalNumber++, employeeFilter.getId());
-            }
-
-            if (Optional.ofNullable(employeeFilter.getName()).filter(s -> !s.isEmpty()).isPresent()) {
-                baseSqlQuery.append(" AND LOWER(NAME) LIKE ?");
-                queryParams.put(paramOrdinalNumber++, "%" + employeeFilter.getName().toLowerCase() + "%");
-            }
-
-            if (Optional.ofNullable(employeeFilter.getEmail()).filter(s -> !s.isEmpty()).isPresent()) {
-                baseSqlQuery.append(" AND LOWER(EMAIL) LIKE ?");
-                queryParams.put(paramOrdinalNumber++, "%" + employeeFilter.getEmail().toLowerCase() + "%");
-            }
-
-            if (Optional.ofNullable(employeeFilter.getPosition()).filter(s -> !s.isEmpty()).isPresent()) {
-                baseSqlQuery.append(" AND LOWER(POSITION) LIKE ?");
-                queryParams.put(paramOrdinalNumber++, "%" + employeeFilter.getPosition().toLowerCase() + "%");
-            }
-
-            if (Optional.ofNullable(employeeFilter.getProject()).isPresent()) {
-                baseSqlQuery.append(" AND PROJECT_ID = ?");
-                queryParams.put(paramOrdinalNumber++, employeeFilter.getProject().getId());
-            }
-
-            PreparedStatement preparedStatement = connection.prepareStatement(baseSqlQuery.toString());
-            logger.info(preparedStatement.toString());
-
-            for (Integer paramNumber : queryParams.keySet()) {
-                if (queryParams.get(paramNumber) instanceof String stringQueryParam) {
-                    preparedStatement.setString(paramNumber, stringQueryParam);
-                } else if (queryParams.get(paramNumber) instanceof Long longQueryParam) {
-                    preparedStatement.setLong(paramNumber, longQueryParam);
-                }
-            }
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            logger.info(resultSet.toString());
-            employees = mapResultSetToEmployeeList(resultSet);
-            employees.forEach(e -> logger.info(e.toString()));
-        } catch (SQLException | IOException ex) {
-            String message = "An error occurred while retrieving filtered employees from the database!";
-            logger.error(message, ex);
         }
         return employees;
     }
@@ -670,16 +387,12 @@ public class DatabaseUtils {
                     resultSet.getString("NAME"),
                     resultSet.getString("EMAIL"),
                     resultSet.getString("POSITION"),
-                    getProjectById(resultSet.getLong("PROJECT_ID"))
+                    DatabaseUtils.getProjectById(resultSet.getLong("PROJECT_ID"))
             );
             employees.add(employee);
         }
         return employees;
     }
-
-
-
-
 
     public static void saveMeeting(Meeting meeting) {
         try (Connection connection = connectToDatabase()) {
@@ -730,7 +443,6 @@ public class DatabaseUtils {
         }
     }
 
-
     public static List<Meeting> getMeetings() {
         List<Meeting> meetings = new ArrayList<>();
         try (Connection connection = connectToDatabase()) {
@@ -747,7 +459,6 @@ public class DatabaseUtils {
         }
         return meetings;
     }
-
 
     private static Meeting mapResultSetToMeeting(ResultSet resultSet) throws SQLException, IOException {
         long id = resultSet.getLong("ID");
@@ -798,7 +509,7 @@ public class DatabaseUtils {
                 long participantId = resultSet.getLong("PARTICIPANT_ID");
                 String participantType = resultSet.getString("PARTICIPANT_TYPE");
                 if ("CLIENT".equals(participantType)) {
-                    participants.add(getClientById(participantId));
+                    participants.add(DatabaseService.getClientById(participantId));
                 } else if ("EMPLOYEE".equals(participantType)) {
                     participants.add(getEmployeeById(participantId));
                 }
@@ -822,7 +533,7 @@ public class DatabaseUtils {
                         resultSet.getString("NAME"),
                         resultSet.getString("EMAIL"),
                         resultSet.getString("POSITION"),
-                        getProjectById(resultSet.getLong("PROJECT_ID"))
+                        DatabaseUtils.getProjectById(resultSet.getLong("PROJECT_ID"))
                 );
             }
         }
@@ -888,17 +599,10 @@ public class DatabaseUtils {
         }
         return meetings;
     }
-
     public static List<Contact> getAllContacts() {
         List<Contact> contacts = new ArrayList<>();
         contacts.addAll(getClients());
         contacts.addAll(getEmployees());
         return contacts;
     }
-
-
-
-
-
-
 }

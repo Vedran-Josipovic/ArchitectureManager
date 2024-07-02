@@ -1,4 +1,5 @@
 package javafx.prod.employee;
+import app.prod.service.DatabaseService;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,7 +43,7 @@ public class EmployeeSearchController {
         employeePositionColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getPosition()));
         employeeProjectColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getProject().getName()));
 
-        List<Employee> employees = DatabaseUtils.getEmployeesByFilters(new Employee());
+        List<Employee> employees = DatabaseService.getEmployeesByFilters(new Employee());
         employeeList.setAll(employees);
         employeeTableView.setItems(employeeList);
     }
@@ -59,7 +60,7 @@ public class EmployeeSearchController {
             filter.setEmail(email);
             filter.setPosition(position);
 
-            List<Employee> employees = DatabaseUtils.getEmployeesByFilters(filter);
+            List<Employee> employees = DatabaseService.getEmployeesByFilters(filter);
             employeeList.setAll(employees);
         } catch (Exception ex) {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Error", "An error occurred while searching for employees: " + ex.getMessage());
