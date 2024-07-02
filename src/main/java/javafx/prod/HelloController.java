@@ -1,5 +1,6 @@
 package javafx.prod;
 
+import app.prod.exception.ValidationException;
 import javafx.fxml.FXML;
 import javafx.prod.utils.JavaFxUtils;
 import javafx.scene.control.Label;
@@ -74,6 +75,10 @@ public class HelloController {
 
         if (isAuthenticated) {
             JavaFxUtils.showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + username + "!");
+            HelloApplication.user = users.stream()
+                    .filter(user -> user.getUsername().equals(username))
+                    .findFirst()
+                    .orElse(null);
             logger.info("User {} logged in.", username);
         } else {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
@@ -82,19 +87,35 @@ public class HelloController {
     }
 
     private void handleRegister() {
-        String username = usernameTextField.getText();
-        String password = passwordField.getText();
-        String confirmPassword = confirmPasswordField.getText();
-        String role = roleComboBox.getValue();
+        try{
+            validateInputs();
+            String username = usernameTextField.getText();
+            String password = passwordField.getText();
+            String confirmPassword = confirmPasswordField.getText();
+            String role = roleComboBox.getValue();
 
-        if (!password.equals(confirmPassword)) {
-            JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Registration Failed", "Passwords do not match.");
-            return;
+            if (!password.equals(confirmPassword)) {
+                JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Registration Failed", "Passwords do not match.");
+                return;
+            }
+
+            String hashedPassword = FileUtils.hashPassword(password);
+            FileUtils.addUserToFile(username, hashedPassword, role);
+            JavaFxUtils.showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "User " + username + " registered successfully.");
+            switchMode();
         }
-
-        String hashedPassword = FileUtils.hashPassword(password);
-        FileUtils.addUserToFile(username, hashedPassword, role);
-        JavaFxUtils.showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "User " + username + " registered successfully.");
-        switchMode();
+        catch (ValidationException ex) {
+            JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Validation Error", ex.getMessage());
+            logger.error("Error while adding employee: " + ex.getMessage());
+        }
     }
+
+    public void validateInputs() throws ValidationException {
+        if (usernameTextField.getText().isEmpty() || passwordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty() || roleComboBox.getValue() == null) {
+            throw new ValidationException("Please fill in all fields.");
+        }
+    }
+
+
+
 }

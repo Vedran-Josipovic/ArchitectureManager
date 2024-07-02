@@ -132,7 +132,7 @@ public class ProjectSearchController {
             Client client = clientComboBox.getValue();
             Status status = statusComboBox.getValue();
 
-            Project filter = new Project(name, description, startDate, endDate, status, client, null, null, null);
+            Project filter = new Project(name, description, startDate, endDate, status, client, null, null);
             List<Project> projects = DatabaseUtils.getProjectsByFilters(filter);
             projectList.setAll(projects);
         } catch (Exception ex) {

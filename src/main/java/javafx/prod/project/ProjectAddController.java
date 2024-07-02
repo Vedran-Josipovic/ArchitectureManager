@@ -49,7 +49,7 @@ public class ProjectAddController {
             Status status = statusComboBox.getValue();
             Client client = clientComboBox.getValue();
 
-            Project project = new Project(name, description, startDate, endDate, status, client, null, null, null);
+            Project project = new Project(name, description, startDate, endDate, status, client, null, null);
 
             DatabaseUtils.saveProject(project);
 

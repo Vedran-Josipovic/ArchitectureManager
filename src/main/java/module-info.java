@@ -25,9 +25,6 @@ module javafx.prod.architecturemanager {
     exports javafx.prod.transaction to javafx.fxml;
     opens javafx.prod.transaction to javafx.fxml;
 
-    exports javafx.prod.task to javafx.fxml;
-    opens javafx.prod.task to javafx.fxml;
-
     exports javafx.prod.client to javafx.fxml;
     opens javafx.prod.client to javafx.fxml;
 

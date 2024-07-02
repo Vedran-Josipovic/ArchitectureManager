@@ -50,6 +50,20 @@ public class LayoutController {
         }
     }
 
+    public void showLocationSearchScreen() {
+        logger.info("Showing location search screen");
+        FXMLLoader fxmlLoader = new FXMLLoader(javafx.prod.HelloApplication.class.getResource("/javafx/prod/location/_locationSearch.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.width, HelloApplication.height);
+            scene.getStylesheets().add(css);
+            HelloApplication.getMainStage().setTitle("Search locations");
+            HelloApplication.getMainStage().setScene(scene);
+            HelloApplication.getMainStage().show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void showTransactionAddScreen() {
         logger.info("Showing transaction add screen");
         FXMLLoader fxmlLoader = new FXMLLoader(javafx.prod.HelloApplication.class.getResource("/javafx/prod/transaction/transactionAdd.fxml"));

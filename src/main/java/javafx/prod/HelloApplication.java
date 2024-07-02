@@ -1,5 +1,6 @@
 package javafx.prod;
 
+import app.prod.model.User;
 import app.prod.utils.DatabaseUtils;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,7 @@ public class HelloApplication extends Application {
     private static final Logger logger = LoggerFactory.getLogger(HelloApplication.class);
     public static Stage mainStage;
     public static final int width = 1875, height = 1250;
+    public static User user;
 
     public String css = Objects.requireNonNull(getClass().getResource("/javafx/prod/styles/style.css")).toExternalForm();
 

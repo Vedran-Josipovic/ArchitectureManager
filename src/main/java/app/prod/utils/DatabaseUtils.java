@@ -284,7 +284,6 @@ public class DatabaseUtils {
                     resultSet.getDate("DEADLINE").toLocalDate(),
                     Status.valueOf(resultSet.getString("STATUS")),
                     client,
-                    null,
                     getTransactionsByProjectId(resultSet.getLong("ID")),
                     null
             );
@@ -436,7 +435,6 @@ public class DatabaseUtils {
                         resultSet.getDate("DEADLINE").toLocalDate(),
                         Status.valueOf(resultSet.getString("STATUS")),
                         client,
-                        null,
                         null,
                         null
                 );
