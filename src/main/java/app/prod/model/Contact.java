@@ -1,8 +1,9 @@
 package app.prod.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Contact extends Entity {
+public abstract class Contact extends Entity implements Serializable {
     protected String email;
 
     public String getContactDetails() {

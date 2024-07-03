@@ -3,10 +3,13 @@ package javafx.prod.location;
 import app.prod.exception.EntityEditException;
 import app.prod.exception.ValidationException;
 import app.prod.model.Address;
+import app.prod.model.ChangeLogEntry;
 import app.prod.model.Location;
 import app.prod.model.VirtualLocation;
 import app.prod.utils.DatabaseUtils;
+import app.prod.utils.FileUtils;
 import javafx.fxml.FXML;
+import javafx.prod.HelloApplication;
 import javafx.prod.utils.JavaFxUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
@@ -14,6 +17,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.LocalDateTime;
 
 public class LocationAddController {
     Logger logger = LoggerFactory.getLogger(LocationAddController.class);
@@ -101,21 +106,58 @@ public class LocationAddController {
         }
         if (location != null) {
             DatabaseUtils.saveLocation(location, selectedType);
+
+            ChangeLogEntry<Location> entry = new ChangeLogEntry<>(
+                    LocalDateTime.now(),
+                    "Location",
+                    "CREATE",
+                    null,
+                    location,
+                    HelloApplication.getUser().getRole()
+            );
+            FileUtils.logChange(entry);
         }
     }
 
     private void updateExistingLocation(String selectedType) throws EntityEditException {
         logger.info("Location before update: " + locationToEdit);
+
+        Location oldValue = locationToEdit;
+
         if ("Address".equals(selectedType) && locationToEdit instanceof Address address) {
             address.setStreet(streetTextField.getText().trim());
             address.setHouseNumber(houseNumberTextField.getText().trim());
             address.setCity(cityTextField.getText().trim());
             DatabaseUtils.updateLocation(address);
+
+            ChangeLogEntry<Location> entry = new ChangeLogEntry<>(
+                    LocalDateTime.now(),
+                    "Location",
+                    "UPDATE",
+                    oldValue,
+                    address,
+                    HelloApplication.getUser().getRole()
+            );
+            FileUtils.logChange(entry);
+
             logger.info("Location after update: " + address);
         } else if ("VirtualLocation".equals(selectedType) && locationToEdit instanceof VirtualLocation virtualLocation) {
             virtualLocation.setMeetingLink(meetingLinkTextField.getText().trim());
             virtualLocation.setPlatform(platformTextField.getText().trim());
+
             DatabaseUtils.updateLocation(virtualLocation);
+
+            ChangeLogEntry<Location> entry = new ChangeLogEntry<>(
+                    LocalDateTime.now(),
+                    "Location",
+                    "UPDATE",
+                    oldValue,
+                    virtualLocation,
+                    HelloApplication.getUser().getRole()
+            );
+            FileUtils.logChange(entry);
+
+
             logger.info("Location after update:  " + virtualLocation);
         }
         else {

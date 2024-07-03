@@ -1,8 +1,9 @@
 package app.prod.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Entity {
+public abstract class Entity implements Serializable {
     protected Long id;
     protected String name;
 

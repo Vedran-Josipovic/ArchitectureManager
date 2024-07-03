@@ -1,12 +1,10 @@
 package javafx.prod.location;
 
 import app.prod.exception.EntityDeleteException;
-import app.prod.model.Address;
-import app.prod.model.Location;
-import app.prod.model.Project;
-import app.prod.model.VirtualLocation;
+import app.prod.model.*;
 import app.prod.service.DatabaseService;
 import app.prod.utils.DatabaseUtils;
+import app.prod.utils.FileUtils;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -150,6 +149,17 @@ public class LocationSearchController {
             if (confirmed) {
                 try {
                     DatabaseUtils.deleteLocation(selectedLocation);
+
+                    ChangeLogEntry<Location> entry = new ChangeLogEntry<>(
+                            LocalDateTime.now(),
+                            "Location",
+                            "DELETE",
+                            selectedLocation,
+                            null,
+                            HelloApplication.getUser().getRole()
+                    );
+                    FileUtils.logChange(entry);
+
                 } catch (EntityDeleteException e) {
                     JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
                     logger.error("Cannot delete location! It is referenced by another entity.");

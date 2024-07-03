@@ -6,11 +6,12 @@ import app.prod.exception.EntityInitializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Transaction extends Entity {
+public class Transaction extends Entity implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(Transaction.class);
 
     private TransactionType transactionType;

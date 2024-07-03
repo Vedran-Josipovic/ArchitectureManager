@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class JavaFxUtils {
@@ -51,7 +53,7 @@ public class JavaFxUtils {
         }
     }
 
-    public static <T> void setCustomCellFactory(ComboBox<T> comboBox, Callback<T, String> displayTextCallback) {
+    public static <T> void setCustomComboBoxCellFactory(ComboBox<T> comboBox, Callback<T, String> displayTextCallback) {
         comboBox.setCellFactory(new Callback<>() {
             @Override
             public ListCell<T> call(ListView<T> param) {
@@ -81,6 +83,27 @@ public class JavaFxUtils {
             }
         });
     }
+
+    public static <T> void setCustomTableColumnCellFactory(TableColumn<T, LocalDateTime> column, DateTimeFormatter formatter) {
+        column.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<T, LocalDateTime> call(TableColumn<T, LocalDateTime> param) {
+                return new TableCell<>() {
+                    @Override
+                    protected void updateItem(LocalDateTime item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                        } else {
+                            setText(formatter.format(item));
+                        }
+                    }
+                };
+            }
+        });
+    }
+
+
 
     public static boolean showConfirmationDialog(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

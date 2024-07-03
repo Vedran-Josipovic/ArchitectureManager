@@ -1,13 +1,11 @@
 package app.prod.utils;
 
+import app.prod.model.ChangeLogEntry;
 import app.prod.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -18,6 +16,9 @@ public class FileUtils {
     //logger
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
     private static final String FILE_PATH = "src/main/files/";
+    private static final String USERS_PATH = FILE_PATH + "users.txt";
+    private static final String CHANGELOG_PATH = FILE_PATH + "changelog.dat";
+    //private static List<ChangeLogEntry<?>> changeLog = new ArrayList<>();
 
     public static String hashPassword(String password) {
         try {
@@ -32,7 +33,7 @@ public class FileUtils {
     }
 
     public static void addUserToFile(String username, String password, String role) {
-        try (FileWriter writer = new FileWriter(FILE_PATH + "users.txt", true)) {
+        try (FileWriter writer = new FileWriter(USERS_PATH, true)) {
             writer.write(username + "," + password + "," + role + "\n");
         } catch (IOException ex) {
             String message = "Error writing to the users file!";
@@ -58,4 +59,32 @@ public class FileUtils {
         }
         return users;
     }
+
+    public static void serializeChangeLog(List<ChangeLogEntry<?>> changeLog) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CHANGELOG_PATH))) {
+            oos.writeObject(changeLog);
+        } catch (IOException e) {
+            logger.error("Serialization error", e);
+        }
+    }
+
+    public static List<ChangeLogEntry<?>> deserializeChangeLog() {
+        List<ChangeLogEntry<?>> changeLog = new ArrayList<>();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(CHANGELOG_PATH))) {
+            changeLog = (List<ChangeLogEntry<?>>) ois.readObject();
+        } catch (FileNotFoundException e) {
+            logger.info("Change log file not found. Creating file.");
+        } catch (IOException | ClassNotFoundException e) {
+            logger.error("Deserialization error", e);
+        }
+        return changeLog;
+    }
+
+    public static <T> void logChange(ChangeLogEntry<T> entry) {
+        List<ChangeLogEntry<?>> changeLog = deserializeChangeLog();
+        changeLog.add(entry);
+        serializeChangeLog(changeLog);
+        logger.info("Change logged: {}", entry);
+    }
+
 }

@@ -2,10 +2,11 @@ package app.prod.model;
 
 import app.prod.enumeration.Status;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public sealed abstract class Issue extends Entity implements Issuable permits Project{
+public sealed abstract class Issue extends Entity implements Issuable, Serializable permits Project{
     private String description;
     private LocalDate startDate, deadline;
     private Status status;

@@ -1,8 +1,9 @@
 package app.prod.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Address implements Location {
+public class Address implements Location, Serializable {
     private Long id;
     private String street, houseNumber, city;
 

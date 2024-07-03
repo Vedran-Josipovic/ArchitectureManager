@@ -1,4 +1,5 @@
 package app.prod.model;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -8,8 +9,8 @@ import app.prod.enumeration.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//To be implemented in the future
-public final class Project extends Issue implements Issuable {
+
+public final class Project extends Issue implements Issuable, Serializable {
     private final static Logger logger = LoggerFactory.getLogger(Project.class);
     private Client client;
     private Set<Transaction> transactions;

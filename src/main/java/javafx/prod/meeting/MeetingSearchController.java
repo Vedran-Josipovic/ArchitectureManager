@@ -1,6 +1,5 @@
 package javafx.prod.meeting;
 
-import app.prod.model.Employee;
 import app.prod.model.Location;
 import app.prod.model.Meeting;
 import app.prod.utils.DatabaseUtils;
@@ -10,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.prod.utils.JavaFxUtils;
 import javafx.scene.control.*;
-import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +45,7 @@ public class MeetingSearchController {
 
     public void initialize() {
         List<Location> locations = DatabaseUtils.getLocations();
-        JavaFxUtils.setCustomCellFactory(locationComboBox, Location::getFullLocationDetails);
+        JavaFxUtils.setCustomComboBoxCellFactory(locationComboBox, Location::getFullLocationDetails);
         locationComboBox.setItems(FXCollections.observableArrayList(locations));
 
         meetingNameColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getName()));

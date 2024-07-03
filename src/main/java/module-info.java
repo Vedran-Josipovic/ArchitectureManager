@@ -40,5 +40,6 @@ module javafx.prod.architecturemanager {
     exports javafx.prod.changes to javafx.fxml;
     opens javafx.prod.changes to javafx.fxml;
 
+    opens app.prod.model to javafx.base;
 
 }

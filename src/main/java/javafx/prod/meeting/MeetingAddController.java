@@ -16,7 +16,6 @@ import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 public class MeetingAddController {
@@ -38,7 +37,7 @@ public class MeetingAddController {
     public void initialize() {
         List<Location> locations = DatabaseUtils.getLocations();
 
-        JavaFxUtils.setCustomCellFactory(locationComboBox, Location::getFullLocationDetails);
+        JavaFxUtils.setCustomComboBoxCellFactory(locationComboBox, Location::getFullLocationDetails);
         locationComboBox.setItems(FXCollections.observableArrayList(locations));
 
         List<Contact> participants = DatabaseUtils.getAllContacts();

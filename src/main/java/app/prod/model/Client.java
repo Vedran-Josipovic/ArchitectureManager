@@ -1,9 +1,10 @@
 package app.prod.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class Client extends Contact {
+public class Client extends Contact implements Serializable {
     private String companyName;
     private List<Project> projects;
 

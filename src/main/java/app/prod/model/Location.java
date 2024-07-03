@@ -1,5 +1,5 @@
 package app.prod.model;
 
-public interface Location {
+public interface Location{
     String getFullLocationDetails();
 }

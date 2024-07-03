@@ -1,10 +1,11 @@
 package app.prod.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
-public class Meeting extends Entity{
+public class Meeting extends Entity implements Serializable {
     private LocalDateTime meetingStart;
     private LocalDateTime meetingEnd;
     private Location location;

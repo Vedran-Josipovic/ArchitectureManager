@@ -1,8 +1,9 @@
 package app.prod.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Employee extends Contact {
+public class Employee extends Contact implements Serializable {
     private String position;
     private Project project;
 

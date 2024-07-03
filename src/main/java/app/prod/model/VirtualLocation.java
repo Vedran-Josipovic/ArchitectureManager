@@ -1,8 +1,9 @@
 package app.prod.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class VirtualLocation implements Location {
+public class VirtualLocation implements Location, Serializable {
     private Long id;
     private String meetingLink;
     private String platform;
