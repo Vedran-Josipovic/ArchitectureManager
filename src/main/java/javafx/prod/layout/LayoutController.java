@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.prod.HelloApplication;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +20,48 @@ import java.util.Objects;
 public class LayoutController {
     @FXML
     private Label AccountBalance;
+    @FXML
+    private MenuItem addLocationMenuItem;
+    @FXML
+    private MenuItem searchLocationMenuItem;
+    @FXML
+    private MenuItem addTransactionMenuItem;
+    @FXML
+    private MenuItem searchTransactionMenuItem;
+    @FXML
+    private MenuItem addClientMenuItem;
+    @FXML
+    private MenuItem searchClientMenuItem;
+    @FXML
+    private MenuItem addProjectMenuItem;
+    @FXML
+    private MenuItem searchProjectMenuItem;
+    @FXML
+    private MenuItem addEmployeeMenuItem;
+    @FXML
+    private MenuItem searchEmployeeMenuItem;
+    @FXML
+    private MenuItem addMeetingMenuItem;
+    @FXML
+    private MenuItem searchMeetingMenuItem;
+
 
     private static final Logger logger = LoggerFactory.getLogger(LayoutController.class);
     public String css = Objects.requireNonNull(getClass().getResource("/javafx/prod/styles/style.css")).toExternalForm();
 
     public void initialize() {
         BankAccountThread.startBalanceRefresher();
+
+        String userRole = null;
+        try {
+            userRole = HelloApplication.getUser().getRole();
+        } catch (NullPointerException e) {
+            logger.warn("User isn't logged in: [currently null]");
+        }
+        finally {
+            configureMenuItemsForRole(userRole);
+            logger.info("User role: " + userRole);
+        }
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             Platform.runLater(() -> {
@@ -34,6 +71,65 @@ public class LayoutController {
 
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+    }
+
+    private void configureMenuItemsForRole(String role) {
+        if ("USER".equals(role)) {
+            addLocationMenuItem.setVisible(true);
+            searchLocationMenuItem.setVisible(true);
+            addTransactionMenuItem.setVisible(false);
+            searchTransactionMenuItem.setVisible(false);
+            addClientMenuItem.setVisible(false);
+            searchClientMenuItem.setVisible(true);
+            addProjectMenuItem.setVisible(false);
+            searchProjectMenuItem.setVisible(true);
+            addEmployeeMenuItem.setVisible(false);
+            searchEmployeeMenuItem.setVisible(true);
+            addMeetingMenuItem.setVisible(true);
+            searchMeetingMenuItem.setVisible(true);
+        }
+        else if ("ADMIN".equals(role)) {
+            addLocationMenuItem.setVisible(true);
+            searchLocationMenuItem.setVisible(true);
+            addTransactionMenuItem.setVisible(true);
+            searchTransactionMenuItem.setVisible(true);
+            addClientMenuItem.setVisible(true);
+            searchClientMenuItem.setVisible(true);
+            addProjectMenuItem.setVisible(true);
+            searchProjectMenuItem.setVisible(true);
+            addEmployeeMenuItem.setVisible(true);
+            searchEmployeeMenuItem.setVisible(true);
+            addMeetingMenuItem.setVisible(true);
+            searchMeetingMenuItem.setVisible(true);
+        }
+        else {
+            addLocationMenuItem.setVisible(false);
+            searchLocationMenuItem.setVisible(false);
+            addTransactionMenuItem.setVisible(false);
+            searchTransactionMenuItem.setVisible(false);
+            addClientMenuItem.setVisible(false);
+            searchClientMenuItem.setVisible(false);
+            addProjectMenuItem.setVisible(false);
+            searchProjectMenuItem.setVisible(false);
+            addEmployeeMenuItem.setVisible(false);
+            searchEmployeeMenuItem.setVisible(false);
+            addMeetingMenuItem.setVisible(false);
+            searchMeetingMenuItem.setVisible(false);
+        }
+    }
+
+    public void showHomeScreen() {
+        logger.info("Showing home screen");
+        FXMLLoader fxmlLoader = new FXMLLoader(javafx.prod.HelloApplication.class.getResource("/javafx/prod/hello-view.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.width, HelloApplication.height);
+            scene.getStylesheets().add(css);
+            HelloApplication.getMainStage().setTitle("Home");
+            HelloApplication.getMainStage().setScene(scene);
+            HelloApplication.getMainStage().show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void showLocationAddScreen() {

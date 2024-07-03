@@ -23,6 +23,9 @@ public class HelloApplication extends Application {
 
     public String css = Objects.requireNonNull(getClass().getResource("/javafx/prod/styles/style.css")).toExternalForm();
 
+    public static User getUser() {
+        return user;
+    }
 
     @Override
     public void start(Stage stage) throws IOException {

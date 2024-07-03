@@ -2,6 +2,7 @@ package javafx.prod;
 
 import app.prod.exception.ValidationException;
 import javafx.fxml.FXML;
+import javafx.prod.layout.LayoutController;
 import javafx.prod.utils.JavaFxUtils;
 import javafx.scene.control.Label;
 import app.prod.model.User;
@@ -80,6 +81,9 @@ public class HelloController {
                     .findFirst()
                     .orElse(null);
             logger.info("User {} logged in.", username);
+
+            LayoutController layoutController = new LayoutController();
+            layoutController.showHomeScreen();
         } else {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
             logger.error("Failed login attempt for user {}.", username);

@@ -8,48 +8,50 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="1250.0" prefWidth="1875.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.prod.layout.LayoutController">
-
-                      <MenuBar minHeight="45.0" minWidth="-Infinity" opacity="0.8" prefHeight="45.0" prefWidth="1500.0" AnchorPane.topAnchor="0.0">
-        <menus>
-            <Menu mnemonicParsing="false" text="Locations">
-                <items>
-                    <MenuItem mnemonicParsing="false" onAction="#showLocationAddScreen" text="Add" />
-                    <MenuItem mnemonicParsing="false" onAction="#showLocationSearchScreen" text="Search" />
-                </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Transactions">
-                <items>
-                    <MenuItem mnemonicParsing="false" onAction="#showTransactionAddScreen" text="Add" />
-                    <MenuItem mnemonicParsing="false" onAction="#showTransactionSearchScreen" text="Search" />
-                </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Clients">
-                <items>
-                    <MenuItem mnemonicParsing="false" onAction="#showClientAddScreen" text="Add" />
-                    <MenuItem mnemonicParsing="false" onAction="#showClientSearchScreen" text="Search" />
-                </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Projects">
-                <items>
-                    <MenuItem mnemonicParsing="false" onAction="#showProjectAddScreen" text="Add" />
-                    <MenuItem mnemonicParsing="false" onAction="#showProjectSearchScreen" text="Search" />
-                </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Employees">
-                <items>
-                    <MenuItem mnemonicParsing="false" onAction="#showEmployeeAddScreen" text="Add" />
-                    <MenuItem mnemonicParsing="false" onAction="#showEmployeeSearchScreen" text="Search" />
-                </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Meetings">
-                <items>
-                    <MenuItem mnemonicParsing="false" onAction="#showMeetingAddScreen" text="Add" />
-                    <MenuItem mnemonicParsing="false" onAction="#showMeetingSearchScreen" text="Search" />
-                </items>
-            </Menu>
-
-
-        </menus>
+      <MenuBar minHeight="45.0" minWidth="-Infinity" opacity="0.8" prefHeight="45.0" prefWidth="1500.0" AnchorPane.topAnchor="0.0">
+          <menus>
+              <Menu mnemonicParsing="false" text="Login/Register">
+                  <items>
+                      <MenuItem mnemonicParsing="false" onAction="#showHomeScreen" text="Go to Home Screen" />
+                  </items>
+              </Menu>
+              <Menu mnemonicParsing="false" text="Locations">
+                  <items>
+                      <MenuItem fx:id="addLocationMenuItem" mnemonicParsing="false" onAction="#showLocationAddScreen" text="Add" />
+                      <MenuItem fx:id="searchLocationMenuItem" mnemonicParsing="false" onAction="#showLocationSearchScreen" text="Search" />
+                  </items>
+              </Menu>
+              <Menu mnemonicParsing="false" text="Transactions">
+                  <items>
+                      <MenuItem fx:id="addTransactionMenuItem" mnemonicParsing="false" onAction="#showTransactionAddScreen" text="Add" />
+                      <MenuItem fx:id="searchTransactionMenuItem" mnemonicParsing="false" onAction="#showTransactionSearchScreen" text="Search" />
+                  </items>
+              </Menu>
+              <Menu mnemonicParsing="false" text="Clients">
+                  <items>
+                      <MenuItem fx:id="addClientMenuItem" mnemonicParsing="false" onAction="#showClientAddScreen" text="Add" />
+                      <MenuItem fx:id="searchClientMenuItem" mnemonicParsing="false" onAction="#showClientSearchScreen" text="Search" />
+                  </items>
+              </Menu>
+              <Menu mnemonicParsing="false" text="Projects">
+                  <items>
+                      <MenuItem fx:id="addProjectMenuItem" mnemonicParsing="false" onAction="#showProjectAddScreen" text="Add" />
+                      <MenuItem fx:id="searchProjectMenuItem" mnemonicParsing="false" onAction="#showProjectSearchScreen" text="Search" />
+                  </items>
+              </Menu>
+              <Menu mnemonicParsing="false" text="Employees">
+                  <items>
+                      <MenuItem fx:id="addEmployeeMenuItem" mnemonicParsing="false" onAction="#showEmployeeAddScreen" text="Add" />
+                      <MenuItem fx:id="searchEmployeeMenuItem" mnemonicParsing="false" onAction="#showEmployeeSearchScreen" text="Search" />
+                  </items>
+              </Menu>
+              <Menu mnemonicParsing="false" text="Meetings">
+                  <items>
+                      <MenuItem fx:id="addMeetingMenuItem" mnemonicParsing="false" onAction="#showMeetingAddScreen" text="Add" />
+                      <MenuItem fx:id="searchMeetingMenuItem" mnemonicParsing="false" onAction="#showMeetingSearchScreen" text="Search" />
+                  </items>
+              </Menu>
+          </menus>
         <opaqueInsets>
             <Insets />
         </opaqueInsets>
