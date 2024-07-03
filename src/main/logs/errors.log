@@ -1,48 +1,48 @@
-2024-07-03 02:04:33,523 INFO [main] j.p.HelloApplication [HelloApplication.java:50] Launching JavaFX application
-2024-07-03 02:04:33,591 INFO [main] j.p.HelloApplication [HelloApplication.java:53] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
-2024-07-03 02:04:33,791 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:59] User isn't logged in: [currently null]
-2024-07-03 02:04:33,791 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: null
-2024-07-03 02:04:41,942 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:122] Showing home screen
-2024-07-03 02:04:41,950 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:59] User isn't logged in: [currently null]
-2024-07-03 02:04:41,950 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: null
-2024-07-03 02:04:44,962 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:122] Showing home screen
-2024-07-03 02:04:44,968 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:59] User isn't logged in: [currently null]
-2024-07-03 02:04:44,969 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: null
-2024-07-03 02:05:00,886 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User user logged in.
-2024-07-03 02:05:00,887 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:122] Showing home screen
-2024-07-03 02:05:00,893 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: USER
-2024-07-03 02:05:07,824 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:150] Showing location search screen
-2024-07-03 02:05:07,830 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: USER
-2024-07-03 02:05:11,320 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:136] Showing location add screen
-2024-07-03 02:05:11,327 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: USER
-2024-07-03 02:05:17,770 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:192] Showing client search screen
-2024-07-03 02:05:17,776 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: USER
-2024-07-03 02:05:32,476 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:219] Showing project search screen
-2024-07-03 02:05:32,483 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: USER
-2024-07-03 02:05:45,269 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:246] Showing employee search screen
-2024-07-03 02:05:45,275 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: USER
-2024-07-03 02:05:56,091 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:274] Showing meeting add screen
-2024-07-03 02:05:56,098 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: USER
-2024-07-03 02:05:59,583 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:288] Showing meeting search screen
-2024-07-03 02:05:59,588 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: USER
-2024-07-03 02:05:59,606 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:577] prep2325: SELECT * FROM MEETING WHERE 1=1
-2024-07-03 02:05:59,607 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:590] rs5139: columns: 6 rows: 4 pos: -1
-2024-07-03 02:06:04,305 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:577] prep2463: SELECT * FROM MEETING WHERE 1=1 AND LOCATION_ID = ?
-2024-07-03 02:06:04,305 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:590] rs5424: columns: 6 rows: 1 pos: -1
-2024-07-03 02:06:08,219 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:288] Showing meeting search screen
-2024-07-03 02:06:08,224 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: USER
-2024-07-03 02:06:08,237 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:577] prep2587: SELECT * FROM MEETING WHERE 1=1
-2024-07-03 02:06:08,238 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:590] rs5687: columns: 6 rows: 4 pos: -1
-2024-07-03 02:06:11,749 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:122] Showing home screen
-2024-07-03 02:06:11,753 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: USER
-2024-07-03 02:06:21,371 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
-2024-07-03 02:06:21,371 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:122] Showing home screen
-2024-07-03 02:06:21,375 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: ADMIN
-2024-07-03 02:06:25,351 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:164] Showing transaction add screen
-2024-07-03 02:06:25,357 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: ADMIN
-2024-07-03 02:06:27,972 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:178] Showing transaction search screen
-2024-07-03 02:06:27,976 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: ADMIN
-2024-07-03 02:06:30,418 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:219] Showing project search screen
-2024-07-03 02:06:30,421 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: ADMIN
-2024-07-03 02:06:33,437 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:232] Showing project add screen
-2024-07-03 02:06:33,442 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:63] User role: ADMIN
+2024-07-03 20:44:49,017 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
+2024-07-03 20:44:49,093 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-07-03 20:44:49,294 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
+2024-07-03 20:45:00,447 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
+2024-07-03 20:45:00,448 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-03 20:45:02,891 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:170] Showing location search screen
+2024-07-03 20:45:29,127 INFO [JavaFX Application Thread] j.p.l.LocationAddController [LocationAddController.java:108] Location before update: Address{id=1, street='ILICA', houseNumber='55', city='Zagreb'}
+2024-07-03 20:45:29,131 INFO [JavaFX Application Thread] j.p.l.LocationAddController [LocationAddController.java:114] Location after update: Address{id=1, street='ILICA', houseNumber='57', city='Zagreb'}
+2024-07-03 20:48:29,699 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
+2024-07-03 20:48:29,771 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-07-03 20:48:29,969 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
+2024-07-03 20:48:37,876 ERROR [JavaFX Application Thread] j.p.HelloController [HelloController.java:89] Failed login attempt for user admin.
+2024-07-03 20:48:40,630 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
+2024-07-03 20:48:40,631 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-03 20:48:42,840 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:170] Showing location search screen
+2024-07-03 20:50:38,264 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
+2024-07-03 20:50:38,337 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-07-03 20:50:38,542 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
+2024-07-03 20:50:44,594 ERROR [JavaFX Application Thread] j.p.HelloController [HelloController.java:89] Failed login attempt for user a.
+2024-07-03 20:50:49,327 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
+2024-07-03 20:50:49,328 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-03 20:50:50,806 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:170] Showing location search screen
+2024-07-03 20:50:56,992 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-03 20:51:03,431 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User user logged in.
+2024-07-03 20:51:03,432 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-03 20:51:05,352 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:170] Showing location search screen
+2024-07-03 20:54:13,134 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
+2024-07-03 20:54:13,206 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-07-03 20:54:13,406 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
+2024-07-03 20:54:21,316 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
+2024-07-03 20:54:21,316 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-03 20:54:23,114 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:170] Showing location search screen
+2024-07-03 20:54:30,033 ERROR [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:621] An error occurred while deleting location from the database!
+2024-07-03 20:54:32,861 ERROR [JavaFX Application Thread] j.p.l.LocationSearchController [LocationSearchController.java:161] Cannot delete location! It is referenced by another entity.
+2024-07-03 20:54:40,239 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-03 20:54:46,232 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User user logged in.
+2024-07-03 20:54:46,233 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-03 20:54:47,410 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:170] Showing location search screen
+2024-07-03 20:55:04,480 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-03 20:55:12,388 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
+2024-07-03 20:55:12,389 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-03 20:55:13,696 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:170] Showing location search screen
+2024-07-03 20:57:03,999 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
+2024-07-03 20:57:04,079 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-07-03 20:57:04,319 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
+2024-07-03 20:57:09,960 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User user logged in.
+2024-07-03 20:57:09,961 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-03 20:57:17,060 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:170] Showing location search screen

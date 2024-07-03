@@ -1,25 +1,23 @@
 package javafx.prod.location;
 
+import app.prod.exception.EntityEditException;
 import app.prod.exception.ValidationException;
 import app.prod.model.Address;
 import app.prod.model.Location;
 import app.prod.model.VirtualLocation;
 import app.prod.utils.DatabaseUtils;
 import javafx.fxml.FXML;
-import javafx.prod.HelloApplication;
+import javafx.prod.utils.JavaFxUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javafx.prod.utils.*;
-
 public class LocationAddController {
     Logger logger = LoggerFactory.getLogger(LocationAddController.class);
-
+    private Location locationToEdit;
 
     @FXML
     private ComboBox<String> locationTypeComboBox;
@@ -60,7 +58,6 @@ public class LocationAddController {
         boolean isAddress = "Address".equals(selectedType);
         boolean isVirtualLocation = "VirtualLocation".equals(selectedType);
 
-        // Toggle visibility for Address fields
         streetLabel.setVisible(isAddress);
         streetTextField.setVisible(isAddress);
         houseNumberLabel.setVisible(isAddress);
@@ -68,7 +65,6 @@ public class LocationAddController {
         cityLabel.setVisible(isAddress);
         cityTextField.setVisible(isAddress);
 
-        // Toggle visibility for VirtualLocation fields
         meetingLinkLabel.setVisible(isVirtualLocation);
         meetingLinkTextField.setVisible(isVirtualLocation);
         platformLabel.setVisible(isVirtualLocation);
@@ -80,15 +76,14 @@ public class LocationAddController {
         try {
             String selectedType = locationTypeComboBox.getSelectionModel().getSelectedItem().replace(" ", "");
             validateInputs(selectedType);
-            Location location = null;
-            if ("Address".equals(selectedType)) location = createAddress();
-            else if ("VirtualLocation".equals(selectedType)) location = createVirtualLocation();
-            if (location != null) {
-                DatabaseUtils.saveLocation(location, selectedType);
-                JavaFxUtils.clearForm(streetTextField, houseNumberTextField, cityTextField, meetingLinkTextField, platformTextField);
-                JavaFxUtils.showAlert(Alert.AlertType.INFORMATION, "Success", "Location added successfully.");
+            if (locationToEdit == null) {
+                addNewLocation(selectedType);
+            } else {
+                updateExistingLocation(selectedType);
             }
-        } catch (ValidationException e) {
+            JavaFxUtils.clearForm(streetTextField, houseNumberTextField, cityTextField, meetingLinkTextField, platformTextField);
+            JavaFxUtils.showAlert(Alert.AlertType.INFORMATION, "Success", "Location saved successfully.");
+        } catch (ValidationException | EntityEditException e) {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
             logger.warn(e.getMessage());
         } catch (NullPointerException e) {
@@ -97,17 +92,35 @@ public class LocationAddController {
         }
     }
 
-    private Address createAddress() {
-        String street = streetTextField.getText().trim();
-        String houseNumber = houseNumberTextField.getText().trim();
-        String city = cityTextField.getText().trim();
-        return new Address(street, houseNumber, city);
+    private void addNewLocation(String selectedType) {
+        Location location = null;
+        if ("Address".equals(selectedType)) {
+            location = new Address(streetTextField.getText().trim(), houseNumberTextField.getText().trim(), cityTextField.getText().trim());
+        } else if ("VirtualLocation".equals(selectedType)) {
+            location = new VirtualLocation(meetingLinkTextField.getText().trim(), platformTextField.getText().trim());
+        }
+        if (location != null) {
+            DatabaseUtils.saveLocation(location, selectedType);
+        }
     }
 
-    private VirtualLocation createVirtualLocation() {
-        String meetingLink = meetingLinkTextField.getText().trim();
-        String platform = platformTextField.getText().trim();
-        return new VirtualLocation(meetingLink, platform);
+    private void updateExistingLocation(String selectedType) throws EntityEditException {
+        logger.info("Location before update: " + locationToEdit);
+        if ("Address".equals(selectedType) && locationToEdit instanceof Address address) {
+            address.setStreet(streetTextField.getText().trim());
+            address.setHouseNumber(houseNumberTextField.getText().trim());
+            address.setCity(cityTextField.getText().trim());
+            DatabaseUtils.updateLocation(address);
+            logger.info("Location after update: " + address);
+        } else if ("VirtualLocation".equals(selectedType) && locationToEdit instanceof VirtualLocation virtualLocation) {
+            virtualLocation.setMeetingLink(meetingLinkTextField.getText().trim());
+            virtualLocation.setPlatform(platformTextField.getText().trim());
+            DatabaseUtils.updateLocation(virtualLocation);
+            logger.info("Location after update:  " + virtualLocation);
+        }
+        else {
+            throw new EntityEditException("Error updating location: Please select the correct location type.");
+        }
     }
 
     private void validateInputs(String selectedType) throws ValidationException {
@@ -122,5 +135,19 @@ public class LocationAddController {
         }
     }
 
-
+    public void setLocationToEdit(Location location) {
+        this.locationToEdit = location;
+        if (location instanceof Address address) {
+            locationTypeComboBox.setValue("Address");
+            streetTextField.setText(address.getStreet());
+            houseNumberTextField.setText(address.getHouseNumber());
+            cityTextField.setText(address.getCity());
+            handleLocationTypeChange();
+        } else if (location instanceof VirtualLocation virtualLocation) {
+            locationTypeComboBox.setValue("VirtualLocation");
+            meetingLinkTextField.setText(virtualLocation.getMeetingLink());
+            platformTextField.setText(virtualLocation.getPlatform());
+            handleLocationTypeChange();
+        }
+    }
 }

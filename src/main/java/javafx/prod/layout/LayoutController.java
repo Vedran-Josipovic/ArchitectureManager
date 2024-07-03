@@ -44,6 +44,8 @@ public class LayoutController {
     private MenuItem addMeetingMenuItem;
     @FXML
     private MenuItem searchMeetingMenuItem;
+    @FXML
+    private MenuItem changeLogMenuItem;
 
 
     private static final Logger logger = LoggerFactory.getLogger(LayoutController.class);
@@ -60,11 +62,12 @@ public class LayoutController {
         }
         finally {
             configureMenuItemsForRole(userRole);
-            logger.info("User role: " + userRole);
+            logger.debug("User role: " + userRole);
         }
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             Platform.runLater(() -> {
+                logger.debug("Refreshing account balance");
                 AccountBalance.setText("Account balance: " + BankAccountThread.getAccountBalance() + " €");
             });
         }));
@@ -87,6 +90,7 @@ public class LayoutController {
             searchEmployeeMenuItem.setVisible(true);
             addMeetingMenuItem.setVisible(true);
             searchMeetingMenuItem.setVisible(true);
+            changeLogMenuItem.setVisible(false);
         }
         else if ("ADMIN".equals(role)) {
             addLocationMenuItem.setVisible(true);
@@ -101,6 +105,7 @@ public class LayoutController {
             searchEmployeeMenuItem.setVisible(true);
             addMeetingMenuItem.setVisible(true);
             searchMeetingMenuItem.setVisible(true);
+            changeLogMenuItem.setVisible(true);
         }
         else {
             addLocationMenuItem.setVisible(false);
@@ -115,6 +120,7 @@ public class LayoutController {
             searchEmployeeMenuItem.setVisible(false);
             addMeetingMenuItem.setVisible(false);
             searchMeetingMenuItem.setVisible(false);
+            changeLogMenuItem.setVisible(false);
         }
     }
 
@@ -125,6 +131,20 @@ public class LayoutController {
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.width, HelloApplication.height);
             scene.getStylesheets().add(css);
             HelloApplication.getMainStage().setTitle("Home");
+            HelloApplication.getMainStage().setScene(scene);
+            HelloApplication.getMainStage().show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void showChangeLogScreen() {
+        logger.info("Showing change log screen");
+        FXMLLoader fxmlLoader = new FXMLLoader(javafx.prod.HelloApplication.class.getResource("/javafx/prod/changes/changeLog.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.width, HelloApplication.height);
+            scene.getStylesheets().add(css);
+            HelloApplication.getMainStage().setTitle("Change Log");
             HelloApplication.getMainStage().setScene(scene);
             HelloApplication.getMainStage().show();
         } catch (IOException e) {

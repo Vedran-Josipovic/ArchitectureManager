@@ -9,6 +9,7 @@ import java.sql.*;
 
 import app.prod.enumeration.Status;
 import app.prod.enumeration.TransactionType;
+import app.prod.exception.EntityDeleteException;
 import app.prod.exception.NoSuchTransactionTypeException;
 import app.prod.model.*;
 import app.prod.service.DatabaseService;
@@ -604,5 +605,45 @@ public class DatabaseUtils {
         contacts.addAll(getClients());
         contacts.addAll(getEmployees());
         return contacts;
+    }
+
+    public static void deleteLocation(Location location) throws EntityDeleteException {
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "DELETE FROM LOCATION WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            if (location instanceof Address address) {
+                preparedStatement.setLong(1, address.getId());
+            } else if (location instanceof VirtualLocation virtualLocation) {
+                preparedStatement.setLong(1, virtualLocation.getId());
+            }
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException ex) {
+            logger.error("An error occurred while deleting location from the database!");
+            throw new EntityDeleteException("Cannot delete location! It is referenced by another entity.");
+        }
+    }
+
+    public static void updateLocation(Location location) {
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery;
+            if (location instanceof Address) {
+                sqlQuery = "UPDATE LOCATION SET STREET = ?, HOUSE_NUMBER = ?, CITY = ? WHERE ID = ?";
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                preparedStatement.setString(1, ((Address) location).getStreet());
+                preparedStatement.setString(2, ((Address) location).getHouseNumber());
+                preparedStatement.setString(3, ((Address) location).getCity());
+                preparedStatement.setLong(4, ((Address) location).getId());
+                preparedStatement.executeUpdate();
+            } else if (location instanceof VirtualLocation) {
+                sqlQuery = "UPDATE LOCATION SET MEETING_LINK = ?, PLATFORM = ? WHERE ID = ?";
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                preparedStatement.setString(1, ((VirtualLocation) location).getMeetingLink());
+                preparedStatement.setString(2, ((VirtualLocation) location).getPlatform());
+                preparedStatement.setLong(3, ((VirtualLocation) location).getId());
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException | IOException ex) {
+            logger.error("An error occurred while updating location in the database!", ex);
+        }
     }
 }

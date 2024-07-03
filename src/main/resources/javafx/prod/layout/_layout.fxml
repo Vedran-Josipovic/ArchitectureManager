@@ -51,6 +51,11 @@
                       <MenuItem fx:id="searchMeetingMenuItem" mnemonicParsing="false" onAction="#showMeetingSearchScreen" text="Search" />
                   </items>
               </Menu>
+              <Menu mnemonicParsing="false" text="Changes">
+                  <items>
+                      <MenuItem fx:id="changeLogMenuItem" mnemonicParsing="false" onAction="#showChangeLogScreen" text="Edit history" />
+                  </items>
+              </Menu>
           </menus>
         <opaqueInsets>
             <Insets />

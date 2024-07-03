@@ -27,6 +27,10 @@ public class HelloApplication extends Application {
         return user;
     }
 
+    public static boolean isAdmin() {
+        return getUser().getRole().equals("ADMIN");
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
         mainStage = stage;

@@ -115,6 +115,7 @@ public class ProjectSearchController {
         ProjectBalanceThread.startBalanceRefresher();
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
             Platform.runLater(() -> {
+                logger.debug("Refreshing project table view");
                 projectTableView.refresh();
             });
         }));

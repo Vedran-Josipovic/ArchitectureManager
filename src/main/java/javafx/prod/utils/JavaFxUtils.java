@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 public class JavaFxUtils {
     private static final Logger logger = LoggerFactory.getLogger(JavaFxUtils.class);
@@ -79,6 +80,16 @@ public class JavaFxUtils {
                 }
             }
         });
+    }
+
+    public static boolean showConfirmationDialog(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
     }
 
 }
