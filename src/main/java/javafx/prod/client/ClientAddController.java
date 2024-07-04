@@ -1,6 +1,5 @@
 package javafx.prod.client;
 
-import app.prod.exception.EntityEditException;
 import app.prod.exception.ValidationException;
 import app.prod.model.ChangeLogEntry;
 import app.prod.model.Client;
@@ -37,7 +36,7 @@ public class ClientAddController {
             }
             JavaFxUtils.clearForm(clientNameTextField, clientEmailTextField, companyNameTextField);
             JavaFxUtils.showAlert(Alert.AlertType.INFORMATION, "Success", "Client saved successfully.");
-        } catch (ValidationException | EntityEditException e) {
+        } catch (ValidationException e) {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
             logger.warn(e.getMessage());
         } catch (NullPointerException e) {
@@ -61,7 +60,7 @@ public class ClientAddController {
         FileUtils.logChange(entry);
     }
 
-    private void updateExistingClient() throws EntityEditException {
+    private void updateExistingClient() {
         logger.info("Client before update: " + clientToEdit);
 
         Client oldValue = new Client(clientToEdit.getName(), clientToEdit.getEmail(), clientToEdit.getCompanyName());

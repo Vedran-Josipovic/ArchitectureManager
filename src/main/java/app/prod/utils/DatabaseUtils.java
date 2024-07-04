@@ -673,4 +673,33 @@ public class DatabaseUtils {
         }
     }
 
+    public static void deleteProject(Long projectId) throws EntityDeleteException {
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "DELETE FROM PROJECT WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, projectId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException ex) {
+            logger.error("An error occurred while deleting project from the database!");
+            throw new EntityDeleteException("Cannot delete project! It is referenced by another entity.");
+        }
+    }
+
+    public static void updateProject(Project project) {
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "UPDATE PROJECT SET NAME = ?, DESCRIPTION = ?, START_DATE = ?, DEADLINE = ?, STATUS = ?, CLIENT_ID = ? WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, project.getName());
+            preparedStatement.setString(2, project.getDescription());
+            preparedStatement.setDate(3, Date.valueOf(project.getStartDate()));
+            preparedStatement.setDate(4, Date.valueOf(project.getDeadline()));
+            preparedStatement.setString(5, project.getStatus().name());
+            preparedStatement.setLong(6, project.getClient().getId());
+            preparedStatement.setLong(7, project.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException ex) {
+            logger.error("An error occurred while updating project in the database!", ex);
+        }
+    }
+
 }

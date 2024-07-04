@@ -1,20 +1,87 @@
-2024-07-04 02:55:45,911 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
-2024-07-04 02:55:45,984 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
-2024-07-04 02:55:46,242 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
-2024-07-04 02:55:53,684 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
-2024-07-04 02:55:53,684 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
-2024-07-04 02:55:56,882 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:212] Showing client search screen
-2024-07-04 02:56:03,973 ERROR [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:657] An error occurred while deleting client from the database!
-2024-07-04 02:56:06,653 WARN [JavaFX Application Thread] j.p.c.ClientSearchController [ClientSearchController.java:135] Cannot delete client! It is referenced by another entity.
-2024-07-04 02:57:16,717 INFO [JavaFX Application Thread] j.p.c.ClientAddController [ClientAddController.java:65] Client before update: Horvat d.o.o.
-2024-07-04 02:57:16,746 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T02:57:16.721538, entity='Client', changeType='UPDATE', oldValue=Horvat d.o.o., newValue=Horvat d.o.o. GmbH, userRole='ADMIN'}
-2024-07-04 02:57:16,749 INFO [JavaFX Application Thread] j.p.c.ClientAddController [ClientAddController.java:84] Client after update: Horvat d.o.o. GmbH
-2024-07-04 02:57:21,053 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:212] Showing client search screen
-2024-07-04 02:57:37,317 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:142] Showing change log screen
-2024-07-04 02:58:19,210 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:226] Showing client add screen
-2024-07-04 02:58:38,935 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:133] Client saved successfully.
-2024-07-04 02:58:38,940 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T02:58:38.936059300, entity='Client', changeType='CREATE', oldValue=null, newValue=Klijentovina d.o.o., userRole='ADMIN'}
-2024-07-04 02:58:41,388 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:212] Showing client search screen
-2024-07-04 02:59:18,589 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T02:59:18.582427400, entity='Client', changeType='DELETE', oldValue=Klijentovina d.o.o., newValue=null, userRole='ADMIN'}
-2024-07-04 02:59:23,225 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:212] Showing client search screen
-2024-07-04 02:59:28,544 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:142] Showing change log screen
+2024-07-04 04:49:15,349 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
+2024-07-04 04:49:15,415 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-07-04 04:49:15,606 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
+2024-07-04 04:49:21,832 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
+2024-07-04 04:49:21,833 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-04 04:49:23,081 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:142] Showing change log screen
+2024-07-04 04:49:23,115 ERROR [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:86] Deserialization error
+java.io.InvalidClassException: app.prod.model.ChangeLogEntry; local class incompatible: stream classdesc serialVersionUID = -1154813761813297114, local class serialVersionUID = 6024221660520028013
+	at java.base/java.io.ObjectStreamClass.initNonProxy(ObjectStreamClass.java:598)
+	at java.base/java.io.ObjectInputStream.readNonProxyDesc(ObjectInputStream.java:2078)
+	at java.base/java.io.ObjectInputStream.readClassDesc(ObjectInputStream.java:1927)
+	at java.base/java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:2252)
+	at java.base/java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1762)
+	at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:540)
+	at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:498)
+	at java.base/java.util.ArrayList.readObject(ArrayList.java:981)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.io.ObjectStreamClass.invokeReadObject(ObjectStreamClass.java:1102)
+	at java.base/java.io.ObjectInputStream.readSerialData(ObjectInputStream.java:2444)
+	at java.base/java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:2284)
+	at java.base/java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1762)
+	at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:540)
+	at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:498)
+	at javafx.prod.architecturemanager/app.prod.utils.FileUtils.deserializeChangeLog(FileUtils.java:75)
+	at javafx.prod.architecturemanager/javafx.prod.changes.ChangeLogController.initialize(ChangeLogController.java:42)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at javafx.base@21-ea/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21-ea/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21-ea/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2688)
+	at javafx.fxml@21-ea/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21-ea/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at javafx.prod.architecturemanager/javafx.prod.layout.LayoutController.showChangeLogScreen(LayoutController.java:145)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at javafx.base@21-ea/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21-ea/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21-ea/javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1855)
+	at javafx.fxml@21-ea/javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1726)
+	at javafx.base@21-ea/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@21-ea/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21-ea/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21-ea/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21-ea/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21-ea/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21-ea/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.base@21-ea/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.controls@21-ea/javafx.scene.control.MenuItem.fire(MenuItem.java:459)
+	at javafx.controls@21-ea/com.sun.javafx.scene.control.ContextMenuContent$MenuItemContainer.doSelect(ContextMenuContent.java:1415)
+	at javafx.controls@21-ea/com.sun.javafx.scene.control.ContextMenuContent$MenuItemContainer.lambda$createChildren$12(ContextMenuContent.java:1368)
+	at javafx.base@21-ea/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at javafx.base@21-ea/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at javafx.base@21-ea/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21-ea/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21-ea/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21-ea/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21-ea/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21-ea/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21-ea/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21-ea/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21-ea/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21-ea/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21-ea/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21-ea/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21-ea/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@21-ea/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21-ea/javafx.scene.Scene$MouseHandler.process(Scene.java:3984)
+	at javafx.graphics@21-ea/javafx.scene.Scene.processMouseEvent(Scene.java:1890)
+	at javafx.graphics@21-ea/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2708)
+	at javafx.graphics@21-ea/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:411)
+	at javafx.graphics@21-ea/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:301)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21-ea/com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$2(GlassViewEventHandler.java:450)
+	at javafx.graphics@21-ea/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at javafx.graphics@21-ea/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:449)
+	at javafx.graphics@21-ea/com.sun.glass.ui.View.handleMouseEvent(View.java:551)
+	at javafx.graphics@21-ea/com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at javafx.graphics@21-ea/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21-ea/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)

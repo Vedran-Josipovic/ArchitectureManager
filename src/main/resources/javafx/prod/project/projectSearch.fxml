@@ -120,16 +120,17 @@
             </font></Button>
             <TableView fx:id="projectTableView" GridPane.columnSpan="2" GridPane.rowIndex="8">
                 <columns>
-                    <TableColumn fx:id="projectNameColumn" prefWidth="270.0" text="Name" />
-                    <TableColumn fx:id="projectDescriptionColumn" prefWidth="230.0" text="Description" />
-                    <TableColumn fx:id="projectClientColumn" prefWidth="124.0" text="Client" />
-                    <TableColumn fx:id="projectStartDateColumn" prefWidth="91.0" text="Start Date" />
-                    <TableColumn fx:id="projectEndDateColumn" prefWidth="99.0" text="End Date" />
-                    <TableColumn fx:id="projectStatusColumn" prefWidth="104.0" text="Status" />
-                    <TableColumn fx:id="projectTransactionsColumn" prefWidth="335.0" text="Transactions" />
+                    <TableColumn fx:id="projectNameColumn" prefWidth="190.0" text="Name" />
+                    <TableColumn fx:id="projectDescriptionColumn" prefWidth="180.0" text="Description" />
+                    <TableColumn fx:id="projectClientColumn" prefWidth="114.0" text="Client" />
+                    <TableColumn fx:id="projectStartDateColumn" prefWidth="99.0" text="Start Date" />
+                    <TableColumn fx:id="projectEndDateColumn" prefWidth="103.0" text="End Date" />
+                    <TableColumn fx:id="projectStatusColumn" prefWidth="103.0" text="Status" />
+                    <TableColumn fx:id="projectTransactionsColumn" prefWidth="284.0" text="Transactions" />
                     <TableColumn fx:id="projectValueColumn" prefWidth="146.0" text="Project value" />
                     <TableColumn fx:id="estimatedProgressColumn" prefWidth="128.0" text="Progress" />
-                    <TableColumn fx:id="projectEmployeesColumn" prefWidth="347.0" text="Assignees" />
+                    <TableColumn fx:id="projectEmployeesColumn" prefWidth="314.0" text="Assignees" />
+                    <TableColumn fx:id="editOrDeleteColumn" prefWidth="213.0" text="Actions" />
                 </columns>
             </TableView>
             <Label id="title" fx:id="title" alignment="CENTER" prefHeight="35.0" prefWidth="285.0" text="Project Search" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
