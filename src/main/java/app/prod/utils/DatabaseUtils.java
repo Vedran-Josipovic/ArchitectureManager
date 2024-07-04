@@ -702,4 +702,31 @@ public class DatabaseUtils {
         }
     }
 
+    public static void deleteEmployee(Long employeeId) throws EntityDeleteException {
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "DELETE FROM EMPLOYEE WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, employeeId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException ex) {
+            logger.error("An error occurred while deleting employee from the database!");
+            throw new EntityDeleteException("Cannot delete employee! It is referenced by another entity.");
+        }
+    }
+
+    public static void updateEmployee(Employee employee) {
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "UPDATE EMPLOYEE SET NAME = ?, EMAIL = ?, POSITION = ?, PROJECT_ID = ? WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, employee.getName());
+            preparedStatement.setString(2, employee.getEmail());
+            preparedStatement.setString(3, employee.getPosition());
+            preparedStatement.setLong(4, employee.getProject().getId());
+            preparedStatement.setLong(5, employee.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException ex) {
+            logger.error("An error occurred while updating employee in the database!", ex);
+        }
+    }
+
 }

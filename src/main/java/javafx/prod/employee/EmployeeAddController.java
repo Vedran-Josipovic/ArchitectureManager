@@ -1,6 +1,10 @@
 package javafx.prod.employee;
 
+import app.prod.exception.EntityEditException;
+import app.prod.model.ChangeLogEntry;
+import app.prod.utils.FileUtils;
 import javafx.fxml.FXML;
+import javafx.prod.HelloApplication;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -12,11 +16,12 @@ import app.prod.model.Employee;
 import app.prod.model.Project;
 import javafx.prod.utils.JavaFxUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class EmployeeAddController {
     private static final Logger logger = LoggerFactory.getLogger(EmployeeAddController.class);
-
+    private Employee employeeToEdit;
     @FXML
     private TextField employeeNameTextField;
     @FXML
@@ -27,27 +32,71 @@ public class EmployeeAddController {
     private ComboBox<Project> projectComboBox;
 
     public void initialize() {
-        List<Project> projects = DatabaseUtils.getProjects();
-        projectComboBox.getItems().setAll(projects);
+        projectComboBox.getItems().setAll(DatabaseUtils.getProjects());
     }
 
-    public void addEmployee() {
+    @FXML
+    private void addEmployee() {
         try {
             validateInputs();
-            String name = employeeNameTextField.getText().trim();
-            String email = employeeEmailTextField.getText().trim();
-            String position = employeePositionTextField.getText().trim();
-            Project project = projectComboBox.getValue();
-
-            Employee employee = new Employee(name, email, position, project);
-            DatabaseUtils.saveEmployee(employee);
-
+            if (employeeToEdit == null) {
+                addNewEmployee();
+            } else {
+                updateExistingEmployee();
+            }
             JavaFxUtils.clearForm(employeeNameTextField, employeeEmailTextField, employeePositionTextField, projectComboBox);
-            JavaFxUtils.showAlert(Alert.AlertType.INFORMATION, "Success", "Employee added successfully.");
-        } catch (ValidationException ex) {
+            JavaFxUtils.showAlert(Alert.AlertType.INFORMATION, "Success", "Employee saved successfully.");
+        } catch (ValidationException | EntityEditException ex) {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Validation Error", ex.getMessage());
-            logger.error("Error while adding employee: " + ex.getMessage());
+            logger.error("Error while saving employee: ", ex);
         }
+    }
+
+    private void addNewEmployee() {
+        Employee employee = new Employee(
+                employeeNameTextField.getText().trim(),
+                employeeEmailTextField.getText().trim(),
+                employeePositionTextField.getText().trim(),
+                projectComboBox.getValue()
+        );
+
+        DatabaseUtils.saveEmployee(employee);
+
+        ChangeLogEntry<Employee> entry = new ChangeLogEntry<>(
+                LocalDateTime.now(),
+                "Employee",
+                "CREATE",
+                null,
+                employee,
+                HelloApplication.getUser().getRole()
+        );
+        FileUtils.logChange(entry);
+    }
+
+    private void updateExistingEmployee() throws EntityEditException {
+        Employee oldValue = new Employee(
+                employeeToEdit.getName(),
+                employeeToEdit.getEmail(),
+                employeeToEdit.getPosition(),
+                employeeToEdit.getProject()
+        );
+
+        employeeToEdit.setName(employeeNameTextField.getText().trim());
+        employeeToEdit.setEmail(employeeEmailTextField.getText().trim());
+        employeeToEdit.setPosition(employeePositionTextField.getText().trim());
+        employeeToEdit.setProject(projectComboBox.getValue());
+
+        DatabaseUtils.updateEmployee(employeeToEdit);
+
+        ChangeLogEntry<Employee> entry = new ChangeLogEntry<>(
+                LocalDateTime.now(),
+                "Employee",
+                "UPDATE",
+                oldValue,
+                employeeToEdit,
+                HelloApplication.getUser().getRole()
+        );
+        FileUtils.logChange(entry);
     }
 
     private void validateInputs() throws ValidationException {
@@ -60,5 +109,13 @@ public class EmployeeAddController {
         if (!employeeEmailTextField.getText().contains("@")) {
             throw new ValidationException("Please provide a valid email address.");
         }
+    }
+
+    public void setEmployeeToEdit(Employee employee) {
+        this.employeeToEdit = employee;
+        employeeNameTextField.setText(employee.getName());
+        employeeEmailTextField.setText(employee.getEmail());
+        employeePositionTextField.setText(employee.getPosition());
+        projectComboBox.setValue(employee.getProject());
     }
 }

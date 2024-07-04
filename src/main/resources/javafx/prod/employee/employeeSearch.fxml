@@ -75,9 +75,10 @@
             <TableView fx:id="employeeTableView" GridPane.columnSpan="2" GridPane.rowIndex="5">
                 <columns>
                     <TableColumn fx:id="employeeNameColumn" prefWidth="200.0" text="Name" />
-                    <TableColumn fx:id="employeeEmailColumn" prefWidth="404.0" text="Email" />
+                    <TableColumn fx:id="employeeEmailColumn" prefWidth="304.0" text="Email" />
                     <TableColumn fx:id="employeePositionColumn" minWidth="0.0" prefWidth="329.0" text="Position" />
-                    <TableColumn fx:id="employeeProjectColumn" minWidth="0.0" prefWidth="941.0" text="Project" />
+                    <TableColumn fx:id="employeeProjectColumn" minWidth="0.0" prefWidth="821.0" text="Project" />
+                    <TableColumn fx:id="editOrDeleteColumn" prefWidth="220.0" text="Actions" />
                 </columns>
             </TableView>
             <Label id="title" fx:id="title" alignment="CENTER" prefHeight="35.0" prefWidth="285.0" text="Employee Search" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
