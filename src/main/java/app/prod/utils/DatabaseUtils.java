@@ -729,4 +729,47 @@ public class DatabaseUtils {
         }
     }
 
+    public static void deleteMeeting(Long meetingId) throws EntityDeleteException {
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "DELETE FROM MEETING WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, meetingId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException ex) {
+            logger.error("An error occurred while deleting meeting from the database!");
+            throw new EntityDeleteException("Cannot delete meeting! It is referenced by another entity.");
+        }
+    }
+
+    public static void updateMeeting(Meeting meeting) {
+        String sqlQuery = "UPDATE MEETING SET NAME = ?, MEETING_START = ?, MEETING_END = ?, LOCATION_ID = ?, NOTES = ? WHERE ID = ?";
+
+        try (Connection connection = connectToDatabase();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+
+            preparedStatement.setString(1, meeting.getName());
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(meeting.getMeetingStart()));
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(meeting.getMeetingEnd()));
+
+            if (meeting.getLocation() instanceof Address) {
+                Address address = (Address) meeting.getLocation();
+                preparedStatement.setLong(4, address.getId());
+            } else if (meeting.getLocation() instanceof VirtualLocation) {
+                VirtualLocation virtualLocation = (VirtualLocation) meeting.getLocation();
+                preparedStatement.setLong(4, virtualLocation.getId());
+            }
+            preparedStatement.setString(5, meeting.getNotes());
+            preparedStatement.setLong(6, meeting.getId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException ex) {
+            logger.error("An error occurred while updating meeting in the database!", ex);
+        }
+    }
+
+
+
+
+
+
 }

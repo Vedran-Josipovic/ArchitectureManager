@@ -14,3 +14,88 @@
 2024-07-04 05:06:10,866 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:266] Showing employee search screen
 2024-07-04 05:06:14,423 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:239] Showing project search screen
 2024-07-04 05:06:19,893 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:142] Showing change log screen
+2024-07-04 05:59:41,197 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
+2024-07-04 05:59:41,263 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-07-04 05:59:41,455 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
+2024-07-04 05:59:49,236 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
+2024-07-04 05:59:49,237 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-04 05:59:52,345 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:308] Showing meeting search screen
+2024-07-04 05:59:52,399 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep0: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 05:59:52,400 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs17: columns: 6 rows: 4 pos: -1
+2024-07-04 06:00:07,182 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep19: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:00:07,182 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs88: columns: 6 rows: 4 pos: -1
+2024-07-04 06:00:12,948 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep38: SELECT * FROM MEETING WHERE 1=1 AND LOCATION_ID = ?
+2024-07-04 06:00:12,949 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs134: columns: 6 rows: 1 pos: -1
+2024-07-04 06:00:16,173 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:308] Showing meeting search screen
+2024-07-04 06:00:16,195 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep43: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:00:16,196 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs152: columns: 6 rows: 4 pos: -1
+2024-07-04 06:01:26,615 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep62: SELECT * FROM MEETING WHERE 1=1 AND LOWER(NAME) LIKE ?
+2024-07-04 06:01:26,617 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs461: columns: 6 rows: 1 pos: -1
+2024-07-04 06:01:29,439 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep67: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:01:29,439 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs479: columns: 6 rows: 4 pos: -1
+2024-07-04 06:01:37,262 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep86: SELECT * FROM MEETING WHERE 1=1 AND MEETING_START >= ? AND MEETING_END <= ?
+2024-07-04 06:01:37,263 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs538: columns: 6 rows: 0 pos: -1
+2024-07-04 06:01:40,736 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep87: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:01:40,736 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs554: columns: 6 rows: 4 pos: -1
+2024-07-04 06:01:42,758 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:294] Showing meeting add screen
+2024-07-04 06:01:46,000 ERROR [JavaFX Application Thread] j.p.m.MeetingAddController [MeetingAddController.java:100] Error while saving meeting: Please fill in all required fields.
+2024-07-04 06:01:57,763 ERROR [JavaFX Application Thread] j.p.m.MeetingAddController [MeetingAddController.java:100] Error while saving meeting: Meeting start date cannot be after meeting end date.
+2024-07-04 06:01:58,939 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:308] Showing meeting search screen
+2024-07-04 06:01:58,960 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep110: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:01:58,960 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs685: columns: 6 rows: 4 pos: -1
+2024-07-04 06:02:08,460 ERROR [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:739] An error occurred while deleting meeting from the database!
+2024-07-04 06:02:09,777 WARN [JavaFX Application Thread] j.p.m.MeetingSearchController [MeetingSearchController.java:140] Cannot delete meeting! It is referenced by another entity.
+2024-07-04 06:02:50,319 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T06:02:50.287523500, entity='Meeting', changeType='UPDATE', oldValue=Meeting{meetingStart=2024-07-01T00:00, meetingEnd=2024-07-02T00:00, location=Address{street='Ivanićgradska', houseNumber='8', city='Ivanić Grad'}, participants=[Ivan Ivić [Senior Arhitekt], Horvat d.o.o. GmbH], notes='Tu sam u hotelu Ankaran
+A na ruci čuči novi Rollie Malalan
+Svi koji ste sumnjali, ma hvala vam
+Bez vas, ne bi bio tu gdje sada sam'} Entity{name='Sastanak u hotelu Ankaran'}, newValue=Meeting{meetingStart=2024-07-01T00:00, meetingEnd=2024-07-02T00:00, location=Address{street='Korzo', houseNumber='17', city='Rijeka'}, participants=[Ivan Ivić [Senior Arhitekt], Dalibor Dalić [Dizajner], Kovačić Gradnja], notes='Tu sam u hotelu Ankaran
+A na ruci čuči novi Rollie Malalan
+Svi koji ste sumnjali, ma hvala vam'} Entity{name='Ankaran Sastanak'}, userRole='ADMIN'}
+2024-07-04 06:02:52,561 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:308] Showing meeting search screen
+2024-07-04 06:02:52,580 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep135: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:02:52,580 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs1073: columns: 6 rows: 4 pos: -1
+2024-07-04 06:04:08,019 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:294] Showing meeting add screen
+2024-07-04 06:04:28,109 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:441] Participants saved successfully.
+2024-07-04 06:04:28,110 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:424] Meeting saved successfully.
+2024-07-04 06:04:28,121 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T06:04:28.111341900, entity='Meeting', changeType='CREATE', oldValue=null, newValue=Meeting{meetingStart=2024-07-04T00:00, meetingEnd=2024-07-04T00:00, location=VirtualLocation{id=4, meetingLink='https://zoom.us/j/1234567890', platform='Zoom'}, participants=[Marković Projekt, Kovačić Gradnja], notes='a'} Entity{name='a'}, userRole='ADMIN'}
+2024-07-04 06:04:31,089 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:308] Showing meeting search screen
+2024-07-04 06:04:31,106 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep160: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:04:31,106 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs1928: columns: 6 rows: 5 pos: -1
+2024-07-04 06:04:34,826 ERROR [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:739] An error occurred while deleting meeting from the database!
+2024-07-04 06:04:37,148 WARN [JavaFX Application Thread] j.p.m.MeetingSearchController [MeetingSearchController.java:140] Cannot delete meeting! It is referenced by another entity.
+2024-07-04 06:04:43,249 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T06:04:43.239702800, entity='Meeting', changeType='UPDATE', oldValue=Meeting{meetingStart=2024-07-04T00:00, meetingEnd=2024-07-04T00:00, location=VirtualLocation{id=4, meetingLink='https://zoom.us/j/1234567890', platform='Zoom'}, participants=[Marković Projekt, Kovačić Gradnja], notes='a'} Entity{name='a'}, newValue=Meeting{meetingStart=2024-07-04T00:00, meetingEnd=2024-07-04T00:00, location=VirtualLocation{id=4, meetingLink='https://zoom.us/j/1234567890', platform='Zoom'}, participants=[], notes='a'} Entity{name='a'}, userRole='ADMIN'}
+2024-07-04 06:04:45,889 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:308] Showing meeting search screen
+2024-07-04 06:04:45,907 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep187: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:04:45,908 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs2123: columns: 6 rows: 5 pos: -1
+2024-07-04 06:05:00,926 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T06:05:00.918030, entity='Meeting', changeType='UPDATE', oldValue=Meeting{meetingStart=2024-07-04T00:00, meetingEnd=2024-07-04T00:00, location=VirtualLocation{id=4, meetingLink='https://zoom.us/j/1234567890', platform='Zoom'}, participants=[Marković Projekt, Kovačić Gradnja], notes='a'} Entity{name='a'}, newValue=Meeting{meetingStart=2024-07-04T00:00, meetingEnd=2024-07-04T00:00, location=VirtualLocation{id=4, meetingLink='https://zoom.us/j/1234567890', platform='Zoom'}, participants=[], notes='ab'} Entity{name='a'}, userRole='ADMIN'}
+2024-07-04 06:05:09,246 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:308] Showing meeting search screen
+2024-07-04 06:05:09,260 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep213: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:05:09,260 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs2465: columns: 6 rows: 5 pos: -1
+2024-07-04 06:05:13,359 ERROR [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:739] An error occurred while deleting meeting from the database!
+2024-07-04 06:05:14,301 WARN [JavaFX Application Thread] j.p.m.MeetingSearchController [MeetingSearchController.java:140] Cannot delete meeting! It is referenced by another entity.
+2024-07-04 06:05:31,632 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:142] Showing change log screen
+2024-07-04 06:05:47,072 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:308] Showing meeting search screen
+2024-07-04 06:05:47,090 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep235: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:05:47,090 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs3040: columns: 6 rows: 5 pos: -1
+2024-07-04 06:07:34,673 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
+2024-07-04 06:07:34,743 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-07-04 06:07:34,948 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
+2024-07-04 06:07:42,282 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
+2024-07-04 06:07:42,283 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-04 06:07:45,047 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:308] Showing meeting search screen
+2024-07-04 06:07:45,097 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep0: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:07:45,098 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs16: columns: 6 rows: 5 pos: -1
+2024-07-04 06:07:48,181 ERROR [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:739] An error occurred while deleting meeting from the database!
+2024-07-04 06:07:48,906 WARN [JavaFX Application Thread] j.p.m.MeetingSearchController [MeetingSearchController.java:140] Cannot delete meeting! It is referenced by another entity.
+2024-07-04 06:07:53,984 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T06:07:53.949798300, entity='Meeting', changeType='UPDATE', oldValue=Meeting{meetingStart=2024-07-04T00:00, meetingEnd=2024-07-04T00:00, location=VirtualLocation{id=4, meetingLink='https://zoom.us/j/1234567890', platform='Zoom'}, participants=[Marković Projekt, Kovačić Gradnja], notes='ab'} Entity{name='a'}, newValue=Meeting{meetingStart=2024-07-04T00:00, meetingEnd=2024-07-04T00:00, location=VirtualLocation{id=4, meetingLink='https://zoom.us/j/1234567890', platform='Zoom'}, participants=[], notes='ab'} Entity{name='a'}, userRole='ADMIN'}
+2024-07-04 06:07:56,517 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:308] Showing meeting search screen
+2024-07-04 06:07:56,538 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep27: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:07:56,538 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs101: columns: 6 rows: 5 pos: -1
+2024-07-04 06:08:07,437 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T06:08:07.425106100, entity='Meeting', changeType='UPDATE', oldValue=Meeting{meetingStart=2024-07-04T00:00, meetingEnd=2024-07-04T00:00, location=VirtualLocation{id=4, meetingLink='https://zoom.us/j/1234567890', platform='Zoom'}, participants=[Marković Projekt, Kovačić Gradnja], notes='ab'} Entity{name='a'}, newValue=Meeting{meetingStart=2024-07-04T00:00, meetingEnd=2024-07-04T00:00, location=VirtualLocation{id=4, meetingLink='https://zoom.us/j/1234567890', platform='Zoom'}, participants=[Dalibor Dalić [Dizajner], Zaposlenik Zaposleniković [Pripravnik]], notes='ab'} Entity{name='a'}, userRole='ADMIN'}
+2024-07-04 06:08:11,538 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:308] Showing meeting search screen
+2024-07-04 06:08:11,558 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:578] prep53: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:08:11,559 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:591] rs232: columns: 6 rows: 5 pos: -1
+2024-07-04 06:09:31,560 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:239] Showing project search screen
+2024-07-04 06:09:33,916 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:252] Showing project add screen
+2024-07-04 06:09:35,005 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:239] Showing project search screen
+2024-07-04 06:09:37,462 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:212] Showing client search screen
