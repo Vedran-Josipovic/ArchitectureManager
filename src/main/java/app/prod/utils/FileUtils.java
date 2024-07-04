@@ -18,7 +18,6 @@ public class FileUtils {
     private static final String FILE_PATH = "src/main/files/";
     private static final String USERS_PATH = FILE_PATH + "users.txt";
     private static final String CHANGELOG_PATH = FILE_PATH + "changelog.dat";
-    //private static List<ChangeLogEntry<?>> changeLog = new ArrayList<>();
 
     public static String hashPassword(String password) {
         try {
