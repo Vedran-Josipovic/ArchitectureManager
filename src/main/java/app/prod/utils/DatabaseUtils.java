@@ -646,4 +646,31 @@ public class DatabaseUtils {
             logger.error("An error occurred while updating location in the database!", ex);
         }
     }
+
+    public static void deleteClient(Long clientId) throws EntityDeleteException {
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "DELETE FROM CLIENT WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, clientId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException ex) {
+            logger.error("An error occurred while deleting client from the database!");
+            throw new EntityDeleteException("Cannot delete client! It is referenced by another entity.");
+        }
+    }
+
+    public static void updateClient(Client client) {
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "UPDATE CLIENT SET NAME = ?, EMAIL = ?, COMPANY_NAME = ? WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, client.getName());
+            preparedStatement.setString(2, client.getEmail());
+            preparedStatement.setString(3, client.getCompanyName());
+            preparedStatement.setLong(4, client.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException ex) {
+            logger.error("An error occurred while updating client in the database!", ex);
+        }
+    }
+
 }

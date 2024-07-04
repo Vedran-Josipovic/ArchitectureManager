@@ -86,7 +86,6 @@ public class Transaction extends Entity implements Serializable {
                 ", description='" + description + '\'' +
                 ", date=" + date +
                 ", project=" + project +
-                ", id=" + id +
                 ", name='" + name + '\'' +
                 "} " + super.toString();
     }

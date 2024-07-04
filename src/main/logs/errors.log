@@ -1,30 +1,20 @@
-2024-07-04 00:42:12,685 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
-2024-07-04 00:42:12,751 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
-2024-07-04 00:42:12,970 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
-2024-07-04 00:42:24,243 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
-2024-07-04 00:42:24,243 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
-2024-07-04 00:42:26,462 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:142] Showing change log screen
-2024-07-04 00:42:26,495 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:76] Change log file not found. Creating file.
-2024-07-04 00:42:38,761 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:170] Showing location search screen
-2024-07-04 00:42:46,656 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:76] Change log file not found. Creating file.
-2024-07-04 00:42:46,666 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T00:42:46.656100500, entity='Location', changeType='DELETE', oldValue=Address{id=65, street='Nova', houseNumber='5', city='Novigrad na moru'}, newValue=null, userRole='ADMIN'}
-2024-07-04 00:43:02,457 INFO [JavaFX Application Thread] j.p.l.LocationAddController [LocationAddController.java:123] Location before update: Address{id=1, street='ILICA', houseNumber='57', city='Zagreb'}
-2024-07-04 00:43:02,463 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T00:43:02.460079800, entity='Location', changeType='UPDATE', oldValue=Address{id=1, street='ILICA', houseNumber='59', city='Zagreb'}, newValue=Address{id=1, street='ILICA', houseNumber='59', city='Zagreb'}, userRole='ADMIN'}
-2024-07-04 00:43:02,464 INFO [JavaFX Application Thread] j.p.l.LocationAddController [LocationAddController.java:143] Location after update: Address{id=1, street='ILICA', houseNumber='59', city='Zagreb'}
-2024-07-04 00:43:07,689 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:156] Showing location add screen
-2024-07-04 00:43:27,729 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:296] Virtual location saved successfully
-2024-07-04 00:43:27,732 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T00:43:27.730265600, entity='Location', changeType='CREATE', oldValue=null, newValue=VirtualLocation{id=null, meetingLink='omegle.com/meet/45215', platform='Omegle'}, userRole='ADMIN'}
-2024-07-04 00:43:31,042 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:170] Showing location search screen
-2024-07-04 00:43:36,439 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:142] Showing change log screen
-2024-07-04 00:51:35,780 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
-2024-07-04 00:51:35,847 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
-2024-07-04 00:51:36,039 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
-2024-07-04 00:51:44,449 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
-2024-07-04 00:51:44,449 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
-2024-07-04 00:51:45,855 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:142] Showing change log screen
-2024-07-04 01:02:21,381 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
-2024-07-04 01:02:21,471 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
-2024-07-04 01:02:21,725 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
-2024-07-04 01:02:30,221 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
-2024-07-04 01:02:30,223 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
-2024-07-04 01:02:31,548 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:142] Showing change log screen
+2024-07-04 02:55:45,911 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
+2024-07-04 02:55:45,984 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-07-04 02:55:46,242 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
+2024-07-04 02:55:53,684 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
+2024-07-04 02:55:53,684 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-04 02:55:56,882 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:212] Showing client search screen
+2024-07-04 02:56:03,973 ERROR [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:657] An error occurred while deleting client from the database!
+2024-07-04 02:56:06,653 WARN [JavaFX Application Thread] j.p.c.ClientSearchController [ClientSearchController.java:135] Cannot delete client! It is referenced by another entity.
+2024-07-04 02:57:16,717 INFO [JavaFX Application Thread] j.p.c.ClientAddController [ClientAddController.java:65] Client before update: Horvat d.o.o.
+2024-07-04 02:57:16,746 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T02:57:16.721538, entity='Client', changeType='UPDATE', oldValue=Horvat d.o.o., newValue=Horvat d.o.o. GmbH, userRole='ADMIN'}
+2024-07-04 02:57:16,749 INFO [JavaFX Application Thread] j.p.c.ClientAddController [ClientAddController.java:84] Client after update: Horvat d.o.o. GmbH
+2024-07-04 02:57:21,053 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:212] Showing client search screen
+2024-07-04 02:57:37,317 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:142] Showing change log screen
+2024-07-04 02:58:19,210 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:226] Showing client add screen
+2024-07-04 02:58:38,935 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:133] Client saved successfully.
+2024-07-04 02:58:38,940 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T02:58:38.936059300, entity='Client', changeType='CREATE', oldValue=null, newValue=Klijentovina d.o.o., userRole='ADMIN'}
+2024-07-04 02:58:41,388 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:212] Showing client search screen
+2024-07-04 02:59:18,589 INFO [JavaFX Application Thread] a.p.u.FileUtils [FileUtils.java:87] Change logged: ChangeLogEntry{timestamp=2024-07-04T02:59:18.582427400, entity='Client', changeType='DELETE', oldValue=Klijentovina d.o.o., newValue=null, userRole='ADMIN'}
+2024-07-04 02:59:23,225 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:212] Showing client search screen
+2024-07-04 02:59:28,544 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:142] Showing change log screen

@@ -72,7 +72,7 @@ public class Address implements Location, Serializable {
 
     @Override
     public String toString() {
-        return "Address{" + "id=" + id + ", street='" + street + '\'' + ", houseNumber='" + houseNumber + '\'' + ", city='" + city + '\'' + '}';
+        return "Address{" + "street='" + street + '\'' + ", houseNumber='" + houseNumber + '\'' + ", city='" + city + '\'' + '}';
     }
 
 

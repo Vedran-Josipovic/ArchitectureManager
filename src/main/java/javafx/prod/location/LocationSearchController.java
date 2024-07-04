@@ -51,7 +51,7 @@ public class LocationSearchController {
 
         fullLocationDetailsColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getFullLocationDetails()));
 
-        addButtonToTable();
+        JavaFxUtils.addButtonToTable(editOrDeleteColumn, this::handleEdit, this::handleDelete);
     }
 
     @FXML
@@ -70,6 +70,7 @@ public class LocationSearchController {
         locationTableView.setItems(FXCollections.observableArrayList(locations));
     }
 
+    /*
     private void addButtonToTable() {
         Callback<TableColumn<Location, Void>, TableCell<Location, Void>> cellFactory = new Callback<>() {
             @Override
@@ -117,7 +118,7 @@ public class LocationSearchController {
         };
         editOrDeleteColumn.setCellFactory(cellFactory);
     }
-
+     */
     public void handleEdit(Location selectedLocation) {
         if (selectedLocation != null) {
             boolean confirmed = JavaFxUtils.showConfirmationDialog("Edit Location", "Are you sure you want to edit this location?");

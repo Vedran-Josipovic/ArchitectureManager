@@ -4,10 +4,14 @@ import app.prod.enumeration.TransactionType;
 import app.prod.exception.TransactionAmountException;
 import app.prod.exception.ValidationException;
 import app.prod.exception.EntityInitializationException;
+import app.prod.model.ChangeLogEntry;
+import app.prod.model.Location;
 import app.prod.model.Project;
 import app.prod.model.Transaction;
 import app.prod.utils.DatabaseUtils;
+import app.prod.utils.FileUtils;
 import javafx.fxml.FXML;
+import javafx.prod.HelloApplication;
 import javafx.prod.utils.JavaFxUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
@@ -18,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class TransactionAddController {
@@ -63,6 +68,16 @@ public class TransactionAddController {
                     .build();
 
             DatabaseUtils.saveTransaction(transaction);
+
+            ChangeLogEntry<Transaction> entry = new ChangeLogEntry<>(
+                    LocalDateTime.now(),
+                    "Transaction",
+                    "CREATE",
+                    null,
+                    transaction,
+                    HelloApplication.getUser().getRole()
+            );
+            FileUtils.logChange(entry);
 
             JavaFxUtils.clearForm(transactionNameTextField, transactionTypeComboBox, amountTextField, descriptionTextField, dateDatePicker, projectComboBox);
 

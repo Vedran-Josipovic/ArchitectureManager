@@ -1,24 +1,35 @@
 package javafx.prod.client;
 
+import app.prod.exception.EntityDeleteException;
 import app.prod.exception.ValidationException;
+import app.prod.model.ChangeLogEntry;
 import app.prod.model.Client;
 import app.prod.model.Entity;
 import app.prod.model.Project;
 import app.prod.service.DatabaseService;
+import app.prod.utils.FileUtils;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.prod.HelloApplication;
 import javafx.prod.utils.JavaFxUtils;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import app.prod.utils.DatabaseUtils;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 public class ClientSearchController {
     @FXML
@@ -37,6 +48,8 @@ public class ClientSearchController {
     private TableColumn<Client, String> companyNameColumn;
     @FXML
     private TableColumn<Client, String> clientProjectsColumn;
+    @FXML
+    private TableColumn<Client, Void> editOrDeleteColumn;
 
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private static final Logger logger = LoggerFactory.getLogger(ClientSearchController.class);
@@ -53,8 +66,9 @@ public class ClientSearchController {
 
         List<Client> clients = DatabaseService.getClientsByFilters(new Client());
         clientList.setAll(clients);
-
         clientTableView.setItems(clientList);
+
+        JavaFxUtils.addButtonToTable(editOrDeleteColumn, this::handleEdit, this::handleDelete);
     }
 
     @FXML
@@ -74,4 +88,55 @@ public class ClientSearchController {
 
     }
 
+    public void handleEdit(Client selectedClient) {
+        if (selectedClient != null) {
+            boolean confirmed = JavaFxUtils.showConfirmationDialog("Edit Client", "Are you sure you want to edit this client?");
+            if (confirmed) {
+                try {
+                    FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/javafx/prod/client/clientAdd.fxml"));
+                    Scene scene = new Scene(loader.load(), HelloApplication.width, HelloApplication.height);
+                    scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("/javafx/prod/styles/style.css")).toExternalForm());
+                    ClientAddController controller = loader.getController();
+                    controller.setClientToEdit(selectedClient);
+
+                    Stage primaryStage = (Stage) clientTableView.getScene().getWindow();
+                    primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/javafx/prod/images/icon.png"))));
+                    primaryStage.setScene(scene);
+                    primaryStage.setTitle("Edit Client");
+                } catch (IOException e) {
+                    logger.error("Error loading the edit client screen", e);
+                }
+            }
+        } else {
+            JavaFxUtils.showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a client to edit.");
+        }
+    }
+
+    public void handleDelete(Client selectedClient) {
+        if (selectedClient != null) {
+            boolean confirmed = JavaFxUtils.showConfirmationDialog("Delete Client", "Are you sure you want to delete this client?");
+            if (confirmed) {
+                try {
+                    DatabaseUtils.deleteClient(selectedClient.getId());
+
+                    ChangeLogEntry<Client> entry = new ChangeLogEntry<>(
+                            LocalDateTime.now(),
+                            "Client",
+                            "DELETE",
+                            selectedClient,
+                            null,
+                            HelloApplication.getUser().getRole()
+                    );
+                    FileUtils.logChange(entry);
+
+                    clientList.remove(selectedClient);
+                } catch (EntityDeleteException e) {
+                    JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Deletion Error", e.getMessage());
+                    logger.warn("Cannot delete client! It is referenced by another entity.");
+                }
+            }
+        } else {
+            JavaFxUtils.showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a client to delete.");
+        }
+    }
 }
