@@ -60,11 +60,12 @@ public class ClientSearchController {
         companyNameColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getCompanyName()));
 
         clientProjectsColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(
-                DatabaseService.getProjectsByClientId(param.getValue().getId()).stream()
+                DatabaseUtils.getProjectsByClientId(param.getValue().getId()).stream()
                 .map(Entity::getName)
                 .reduce((a, b) -> a + ", " + b).orElse("")));
 
         List<Client> clients = DatabaseService.getClientsByFilters(new Client());
+        clients = DatabaseService.sortClients(clients, "Company Name");
         clientList.setAll(clients);
         clientTableView.setItems(clientList);
 
@@ -79,6 +80,8 @@ public class ClientSearchController {
             String companyName = companyNameTextField.getText().trim();
 
             List<Client> clients = DatabaseService.getClientsByFilters(new Client(name, email, companyName));
+            clients = DatabaseService.sortClients(clients, "Company Name");
+
             clientList.setAll(clients);
         } catch (Exception ex) {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Error", "An error occurred while searching for clients: " + ex.getMessage());

@@ -58,6 +58,8 @@ public class EmployeeSearchController {
         employeeProjectColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getProject().getName()));
 
         List<Employee> employees = DatabaseService.getEmployeesByFilters(new Employee());
+        employees = DatabaseService.sortEmployees(employees, "Name");
+
         employeeList.setAll(employees);
         employeeTableView.setItems(employeeList);
 
@@ -77,6 +79,8 @@ public class EmployeeSearchController {
             filter.setPosition(position);
 
             List<Employee> employees = DatabaseService.getEmployeesByFilters(filter);
+            employees = DatabaseService.sortEmployees(employees, "Name");
+
             employeeList.setAll(employees);
         } catch (Exception ex) {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Error", "An error occurred while searching for employees: " + ex.getMessage());

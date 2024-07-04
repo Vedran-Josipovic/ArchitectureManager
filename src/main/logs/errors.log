@@ -99,3 +99,28 @@ Svi koji ste sumnjali, ma hvala vam'} Entity{name='Ankaran Sastanak'}, userRole=
 2024-07-04 06:09:33,916 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:252] Showing project add screen
 2024-07-04 06:09:35,005 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:239] Showing project search screen
 2024-07-04 06:09:37,462 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:212] Showing client search screen
+2024-07-04 06:16:58,380 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
+2024-07-04 06:16:58,444 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-07-04 06:16:58,655 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
+2024-07-04 06:17:06,464 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
+2024-07-04 06:17:06,464 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-04 06:17:09,043 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:142] Showing change log screen
+2024-07-04 06:17:16,895 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:266] Showing employee search screen
+2024-07-04 06:17:21,700 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:212] Showing client search screen
+2024-07-04 06:17:23,835 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:226] Showing client add screen
+2024-07-04 06:17:24,665 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:212] Showing client search screen
+2024-07-04 06:17:27,571 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:239] Showing project search screen
+2024-07-04 06:32:50,758 INFO [main] j.p.HelloApplication [HelloApplication.java:54] Launching JavaFX application
+2024-07-04 06:32:50,825 INFO [main] j.p.HelloApplication [HelloApplication.java:57] Connected to database: jdbc:h2:tcp://localhost:9090/~/app
+2024-07-04 06:32:51,016 WARN [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:61] User isn't logged in: [currently null]
+2024-07-04 06:32:57,806 INFO [JavaFX Application Thread] j.p.HelloController [HelloController.java:83] User admin logged in.
+2024-07-04 06:32:57,806 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:128] Showing home screen
+2024-07-04 06:32:59,546 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:170] Showing location search screen
+2024-07-04 06:33:08,193 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:198] Showing transaction search screen
+2024-07-04 06:33:22,635 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:212] Showing client search screen
+2024-07-04 06:33:29,348 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:239] Showing project search screen
+2024-07-04 06:33:57,379 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:266] Showing employee search screen
+2024-07-04 06:34:22,938 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:308] Showing meeting search screen
+2024-07-04 06:34:22,961 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:592] prep1176: SELECT * FROM MEETING WHERE 1=1
+2024-07-04 06:34:22,961 INFO [JavaFX Application Thread] a.p.u.DatabaseUtils [DatabaseUtils.java:605] rs1559: columns: 6 rows: 5 pos: -1
+2024-07-04 06:34:33,579 INFO [JavaFX Application Thread] j.p.l.LayoutController [LayoutController.java:142] Showing change log screen

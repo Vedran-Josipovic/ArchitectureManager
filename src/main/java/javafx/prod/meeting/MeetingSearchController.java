@@ -4,6 +4,7 @@ import app.prod.exception.EntityDeleteException;
 import app.prod.model.ChangeLogEntry;
 import app.prod.model.Location;
 import app.prod.model.Meeting;
+import app.prod.service.DatabaseService;
 import app.prod.utils.DatabaseUtils;
 import app.prod.utils.FileUtils;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -70,6 +71,8 @@ public class MeetingSearchController {
         meetingNotesColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getNotes()));
 
         List<Meeting> meetings = DatabaseUtils.getMeetingsByFilters(new Meeting());
+        meetings = DatabaseService.sortMeetings(meetings);
+
         meetingList.setAll(meetings);
         meetingTableView.setItems(meetingList);
 
@@ -86,6 +89,7 @@ public class MeetingSearchController {
 
             Meeting filter = new Meeting(name, meetingStart, meetingEnd, location, null, null);
             List<Meeting> meetings = DatabaseUtils.getMeetingsByFilters(filter);
+            meetings = DatabaseService.sortMeetings(meetings);
             meetingTableView.setItems(FXCollections.observableArrayList(meetings));
         } catch (Exception ex) {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Error", "An error occurred while searching for meetings: " + ex.getMessage());

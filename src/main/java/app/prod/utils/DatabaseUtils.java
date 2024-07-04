@@ -156,7 +156,7 @@ public class DatabaseUtils {
     private static List<Project> mapResultSetToProjectList(ResultSet resultSet) throws SQLException {
         List<Project> projects = new ArrayList<>();
         while (resultSet.next()) {
-            Client client = DatabaseService.getClientById(resultSet.getLong("CLIENT_ID"));
+            Client client = DatabaseUtils.getClientById(resultSet.getLong("CLIENT_ID"));
             Project project = new Project(
                     resultSet.getLong("ID"),
                     resultSet.getString("NAME"),
@@ -165,7 +165,7 @@ public class DatabaseUtils {
                     resultSet.getDate("DEADLINE").toLocalDate(),
                     Status.valueOf(resultSet.getString("STATUS")),
                     client,
-                    DatabaseService.getTransactionsByProjectId(resultSet.getLong("ID")),
+                    DatabaseUtils.getTransactionsByProjectId(resultSet.getLong("ID")),
                     null
             );
             projects.add(project);
@@ -215,7 +215,7 @@ public class DatabaseUtils {
             preparedStatement.setLong(1, projectId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                Client client = DatabaseService.getClientById(resultSet.getLong("CLIENT_ID"));
+                Client client = DatabaseUtils.getClientById(resultSet.getLong("CLIENT_ID"));
                 project = new Project(
                         resultSet.getLong("ID"),
                         resultSet.getString("NAME"),
@@ -510,7 +510,7 @@ public class DatabaseUtils {
                 long participantId = resultSet.getLong("PARTICIPANT_ID");
                 String participantType = resultSet.getString("PARTICIPANT_TYPE");
                 if ("CLIENT".equals(participantType)) {
-                    participants.add(DatabaseService.getClientById(participantId));
+                    participants.add(DatabaseUtils.getClientById(participantId));
                 } else if ("EMPLOYEE".equals(participantType)) {
                     participants.add(getEmployeeById(participantId));
                 }
@@ -519,6 +519,20 @@ public class DatabaseUtils {
             logger.error("An error occurred while retrieving participants by meeting ID!", ex);
         }
         return participants;
+    }
+
+    private static Set<Transaction> getTransactionsByProjectId(Long projectId) {
+        Set<Transaction> transactions = new HashSet<>();
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT * FROM TRANSACTION WHERE PROJECT_ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, projectId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            transactions.addAll(mapResultSetToTransactionList(resultSet));
+        } catch (SQLException | IOException e) {
+            logger.error("An error occurred while retrieving transactions by project id from the database!", e);
+        }
+        return transactions;
     }
 
     private static Employee getEmployeeById(long employeeId) throws SQLException, IOException {
@@ -621,6 +635,43 @@ public class DatabaseUtils {
             logger.error("An error occurred while deleting location from the database!");
             throw new EntityDeleteException("Cannot delete location! It is referenced by another entity.");
         }
+    }
+
+    public static List<Project> getProjectsByClientId(Long clientId) {
+        List<Project> projects = new ArrayList<>();
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT * FROM PROJECT WHERE CLIENT_ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, clientId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            projects = mapResultSetToProjectList(resultSet);
+        } catch (SQLException | IOException e) {
+            String message = "An error occurred while connecting to the database!";
+            logger.error(message, e);
+            System.out.println(message);
+        }
+        return projects;
+    }
+
+    private static Client getClientById(Long clientId) {
+        Client client = null;
+        try (Connection connection = connectToDatabase()) {
+            String sqlQuery = "SELECT * FROM CLIENT WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, clientId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                client = new Client(
+                        resultSet.getLong("ID"),
+                        resultSet.getString("NAME"),
+                        resultSet.getString("EMAIL"),
+                        resultSet.getString("COMPANY_NAME")
+                );
+            }
+        } catch (SQLException | IOException e) {
+            logger.error("An error occurred while retrieving client by id from the database!", e);
+        }
+        return client;
     }
 
     public static void updateLocation(Location location) {

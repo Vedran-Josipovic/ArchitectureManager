@@ -4,6 +4,7 @@ import app.prod.model.*;
 import app.prod.utils.DatabaseUtils;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -84,22 +85,22 @@ public class DatabaseService {
                         .orElse(true))
                 .collect(Collectors.toList());
     }
-    public static List<Project> getProjectsByClientId(Long clientId) {
-        return DatabaseUtils.getProjects().stream()
-                .filter(p -> p.getClient().getId().equals(clientId))
-                .collect(Collectors.toList());
-    }
-    public static Client getClientById(Long clientId) {
-        return DatabaseUtils.getClients().stream()
-                .filter(client -> client.getId().equals(clientId))
-                .findFirst()
-                .orElse(null);
-    }
-    public static Set<Transaction> getTransactionsByProjectId(Long projectId) {
-        return DatabaseUtils.getTransactions().stream()
-                .filter(transaction -> transaction.getProject().getId().equals(projectId))
-                .collect(Collectors.toSet());
-    }
+//    public static List<Project> getProjectsByClientId(Long clientId) {
+//        return DatabaseUtils.getProjects().stream()
+//                .filter(p -> p.getClient().getId().equals(clientId))
+//                .collect(Collectors.toList());
+//    }
+//    public static Client getClientById(Long clientId) {
+//        return DatabaseUtils.getClients().stream()
+//                .filter(client -> client.getId().equals(clientId))
+//                .findFirst()
+//                .orElse(null);
+//    }
+//    public static Set<Transaction> getTransactionsByProjectId(Long projectId) {
+//        return DatabaseUtils.getTransactions().stream()
+//                .filter(transaction -> transaction.getProject().getId().equals(projectId))
+//                .collect(Collectors.toSet());
+//    }
     public static List<Employee> getEmployeesByFilters(Employee employeeFilter) {
         return DatabaseUtils.getEmployees().stream()
                 .filter(e -> Optional.ofNullable(employeeFilter.getId())
@@ -119,4 +120,53 @@ public class DatabaseService {
                         .orElse(true))
                 .collect(Collectors.toList());
     }
+
+    public static List<Client> sortClients(List<Client> clients, String sortBy) {
+        return clients.stream()
+                .sorted((c1, c2) -> {
+                    if (sortBy == null) return 0;
+                    if (sortBy.equals("Name")) return c1.getName().compareTo(c2.getName());
+                    if (sortBy.equals("Email")) return c1.getEmail().compareTo(c2.getEmail());
+                    if (sortBy.equals("Company Name")) return c1.getCompanyName().compareTo(c2.getCompanyName());
+                    return 0;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public static List<Employee> sortEmployees(List<Employee> employees, String sortBy) {
+        return employees.stream()
+                .sorted((e1, e2) -> {
+                    if (sortBy == null) return 0;
+                    if (sortBy.equals("Name")) return e1.getName().compareTo(e2.getName());
+                    if (sortBy.equals("Email")) return e1.getEmail().compareTo(e2.getEmail());
+                    if (sortBy.equals("Position")) return e1.getPosition().compareTo(e2.getPosition());
+                    return 0;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public static List<Location> sortLocations(List<Location> locations) {
+        return locations.stream()
+                .sorted(Comparator.comparing(Location::getFullLocationDetails))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Meeting> sortMeetings(List<Meeting> meetings) {
+        return meetings.stream()
+                .sorted(Comparator.comparing(Meeting::getMeetingStart).reversed())
+                .collect(Collectors.toList());
+    }
+
+    public static List<Project> sortProjects(List<Project> projects) {
+        return projects.stream()
+                .sorted(Comparator.comparing(Project::getStatus).thenComparing(Project::getName))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Transaction> sortTransactions(List<Transaction> transactions) {
+        return transactions.stream()
+                .sorted(Comparator.comparing(Transaction::getDate).reversed())
+                .collect(Collectors.toList());
+    }
+
 }

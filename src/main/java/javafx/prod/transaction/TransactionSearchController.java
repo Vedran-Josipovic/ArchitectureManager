@@ -70,6 +70,8 @@ public class TransactionSearchController {
         transactionProjectTableColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().getProject().getName()));
 
         List<Transaction> filteredTransactions = DatabaseService.getTransactionsByFilters(new Transaction(), BigDecimal.valueOf(Long.MIN_VALUE), BigDecimal.valueOf(Long.MAX_VALUE));
+        filteredTransactions = DatabaseService.sortTransactions(filteredTransactions);
+
         transactionTableView.setItems(FXCollections.observableArrayList(filteredTransactions));
     }
 
@@ -99,6 +101,7 @@ public class TransactionSearchController {
 
         Transaction filter = createTransactionFilter();
         List<Transaction> filteredTransactions = DatabaseService.getTransactionsByFilters(filter, minAmount, maxAmount);
+        filteredTransactions = DatabaseService.sortTransactions(filteredTransactions);
         transactionTableView.setItems(FXCollections.observableArrayList(filteredTransactions));
     }
 

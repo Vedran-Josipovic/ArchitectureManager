@@ -46,6 +46,8 @@ public class LocationSearchController {
     @FXML
     public void initialize() {
         List<Location> locations = DatabaseUtils.getLocations();
+        locations = DatabaseService.sortLocations(locations);
+
         locationList.setAll(locations);
         locationTableView.setItems(locationList);
 
@@ -66,6 +68,8 @@ public class LocationSearchController {
         } else {
             locations = DatabaseUtils.getLocations();
         }
+
+        locations = DatabaseService.sortLocations(locations);
 
         locationTableView.setItems(FXCollections.observableArrayList(locations));
     }

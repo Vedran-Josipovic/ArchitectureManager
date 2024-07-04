@@ -89,8 +89,6 @@ public class ProjectSearchController {
                 .map(transaction -> transaction.getName() + "[" + transaction.getTransactionType().getName()+ " - " + transaction.getAmount() + "]")
                 .reduce((a, b) -> a + ", " + b).orElse("")));
 
-
-
         projectValueColumn.setCellValueFactory(param -> {
             BigDecimal balance = ProjectBalanceThread.getProjectBalance(param.getValue().getId());
             return new ReadOnlyStringWrapper(balance.toString() + " €");
@@ -117,6 +115,8 @@ public class ProjectSearchController {
 
 
         List<Project> projects = DatabaseService.getProjectsByFilters(new Project());
+        projects = DatabaseService.sortProjects(projects);
+
         projectList.setAll(projects);
         projectTableView.setItems(projectList);
 
@@ -149,6 +149,7 @@ public class ProjectSearchController {
 
             Project filter = new Project(name, description, startDate, endDate, status, client, null, null);
             List<Project> projects = DatabaseService.getProjectsByFilters(filter);
+            projects = DatabaseService.sortProjects(projects);
             projectList.setAll(projects);
         } catch (Exception ex) {
             JavaFxUtils.showAlert(Alert.AlertType.ERROR, "Error", "An error occurred while searching for projects: " + ex.getMessage());
